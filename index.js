@@ -546,7 +546,7 @@ var handles = [
                    { text: 'Snap To Grid',iconCss : 'sf-icon-Selection'},
                    { text: 'Snap To Object',iconCss : 'sf-icon-Selection'},
                    { text: 'Show Ruler',iconCss: 'sf-icon-Selection'},
-                   { text: 'Show Page Breaks'},
+                   { text: 'Show Page Breaks',iconCss: 'sf-icon-Selection'},
                    { separator: true },
                    { text: 'Fit To Width'},
                    { text: 'Fit To Page'},
@@ -606,7 +606,7 @@ var handles = [
         clicked:toolbarClick,
         items: [
             { prefixIcon: 'sf-icon-Cut', tooltipText: 'New Diagram' },
-            { prefixIcon: 'e-icons e-copy', tooltipText: 'Open Diagram' },
+            { prefixIcon: 'e-icons e-copy', tooltipText: 'Open Diagram', },
             { prefixIcon: 'sf-icon-Save', tooltipText: 'Save Diagram' },
             { prefixIcon: 'e-print e-icons', tooltipText: 'Print Diagram'},
             { type: 'Input', tooltipText: 'Export Diagram',template: '<button id="custombtn" style="width:100%;"></button>'},
@@ -631,16 +631,16 @@ var handles = [
                       {  prefixIcon: 'e-icons e-italic', tooltipText: 'Italic',disabled:true },
                        { type: 'Separator' },
                        { prefixIcon:'e-icons e-font',type: 'Input' ,tooltipText:'Font Family',template:'<button id="fontFamilyBtn" style="width:100%;"></button>'},
-                       { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Size',template:'<button id="fontSizeBtn" style="width:100%;"></button>'},
-                       { prefixIcon:'e-icons e-fontSize',tooltipText:'Font Color'},
+                       { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Size',template:' <input type="text" id="fontSizeBtn" min="0" max="50" step="1" value="12">'},
+                       { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Color',template:'<input id="fontcolor" type="color">'},
                        {type:'Separator'},
                        {
                         prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true 
                        },
                        {
-                        prefixIcon: '',tooltipText:'Reset'
+                        prefixIcon: 'e-icons e-align-center',tooltipText:'Reset'
                        },
-            { prefixIcon: 'sf-icon-ColorPickers tb-icons', mode: 'Palette', tooltipText: 'Fill Color', cssClass: 'tb-item-start tb-item-fill',disabled:true},  
+            { prefixIcon: 'sf-icon-ColorPickers tb-icons',template:'<input type="color" id="fillcolor">', mode: 'Palette', tooltipText: 'Fill Color', cssClass: 'tb-item-start tb-item-fill',},  
             { prefixIcon: 'e-icons e-undo', tooltipText: 'Undo',disabled:true  },
             { prefixIcon: 'e-icons e-redo', tooltipText: 'Redo',disabled:true  },
                     {type: 'Separator' },
@@ -702,13 +702,45 @@ var fontFamilyBtn = new ej.dropdowns.DropDownList({
 });
 var  fontSize = new ej.inputs.NumericTextBox({
     value: 0, min: 1,
-    max: 8, width: '100%',
+    max: 20, width: '100%',
     format: '##.##',
     step: 2,
     change: function () { updateAnnotation('fontsize', fontSize); }
 });
 
+var uploadObj = new ej.inputs.Uploader({
+    asyncSettings: {
+        saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+        removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
+    },
+    success: onUploadSuccess,
+    showFileList:false
+});
+uploadObj.appendTo('#fileupload');
 
+   //Colorpicker used to apply for Color of the Annotation
+var fontColor = new ej.inputs.ColorPicker({
+    value: '#000',  mode: 'Palette',
+    
+     change: function (arg) {
+        let nodes = diagram.selectedItems.nodes;
+        let connectors = diagram.selectedItems.connectors;
+        if(nodes.length>0){
+        updateFontColor(nodes);
+        }
+        if(connectors.length>0)
+        {
+            updateFontColor(connectors)
+        }
+       
+    }
+});
+fontColor.appendTo('#fontcolor');
+
+
+
+// var fillColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+// fillColorIconBtn.appendTo('#fillColorIconBtn');
 
  toolbarObj.appendTo('#toolbar_default');
  fontFamilyBtn.appendTo('#fontFamilyBtn');
@@ -739,6 +771,7 @@ var  fontSize = new ej.inputs.NumericTextBox({
             onselectExport(args);
             break;
         case 'Open':
+            document.getElementsByClassName('e-file-select-wrap')[0].querySelector('button').click();
             break;
         case 'Undo':
             diagram.undo();
@@ -840,9 +873,11 @@ var  fontSize = new ej.inputs.NumericTextBox({
             diagram.rulerSettings.showRulers = !diagram.rulerSettings.showRulers;
             break;
         case 'Show Page Breaks':
-            diagram.pageSettings.showPageBreaks = true;
+            args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-Selection';
+            diagram.pageSettings.showPageBreaks = !diagram.pageSettings.showPageBreaks;
             break;
         case 'Fit To Width':
+            diagram.fitToPage({mode:'Width'});
             break;
         case 'Fit To Page':
             diagram.fitToPage();
@@ -888,7 +923,7 @@ var  fontSize = new ej.inputs.NumericTextBox({
             diagram.reset();
             break;
         case 'Fill Color':
-            showColorPicker('nodeFillColor', 'tb-item-fill')
+            // showColorPicker('nodeFillColor', 'tb-item-fill')
             break;
         case 'Cut':
             diagram.cut();
@@ -934,6 +969,19 @@ var  fontSize = new ej.inputs.NumericTextBox({
             options.mode = 'Data';
             diagram.print(options)
             break;
+        case 'Font Color':
+            // document.getElementById('fontcolor').onchange=(args) =>{
+            //     let nodes = diagram.selectedItems.nodes;
+            //     let connectors = diagram.selectedItems.connectors;
+            //     if(nodes.length>0){
+            //     updateFontColor(nodes,args);
+            //     }
+            //     if(connectors.length>0)
+            //     {
+            //         updateFontColor(connectors,args)
+            //     }  
+            // }
+            break;
         case 'Save Diagram':
             download(diagram.saveDiagram());
             break;
@@ -946,6 +994,18 @@ var  fontSize = new ej.inputs.NumericTextBox({
 
     }
  }
+
+ function onUploadSuccess(args) {
+    var file1 = args.file;
+    var file = file1.rawFile;
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onloadend = loadDiagram;
+}
+//Load the diagraming object.
+function loadDiagram(event) {
+    diagram.loadDiagram(event.target.result);
+}
 
  function showColorPicker (propertyName, toolbarName) {
     var fillElement =
@@ -990,6 +1050,32 @@ function updateAnnotationStyle(value,annotationStyle,fontSize,fontFamily)
     } 
     diagram.dataBind();
 }
+
+function updateFontColor(obj,args)
+{
+    for (var i = 0; i < obj.length; i++) {
+        var node = obj[i];
+        for (var j = 0; j < node.annotations.length; j++) {
+            node.annotations[j].style.color = args.target.value;
+            diagram.dataBind();
+        }
+    }
+}
+function updateFillColor(obj,args)
+{
+    for (var i = 0; i < obj.length; i++) {
+        if(obj[i].sourceID!== undefined){
+            obj[i].style.strokeColor = args.target.value;
+            obj[i].style.fill = args.target.value;
+            obj[i].targetDecorator.style.strokeColor = args.target.value;
+            obj[i].targetDecorator.style.fill = args.target.value;
+        }else{
+            obj[i].style.fill = args.target.value;
+        }
+            diagram.dataBind();
+        }
+}
+
 
 function lockObject (args) {
     for (var i = 0; i < diagram.selectedItems.nodes.length; i++) {
@@ -1062,8 +1148,9 @@ function lockObject (args) {
         toolbarObj.items[10].disabled = false;
         toolbarObj.items[11].disabled = false;
         toolbarObj.items[12].disabled = false;
+        // toolbarObj.items[16].disabled = false;
         toolbarObj.items[18].disabled = false;
-        toolbarObj.items[20].disabled = false;
+        // toolbarObj.items[20].disabled = false;
         toolbarObj.items[30].disabled = false;
         toolbarObj.items[31].disabled = false;
         toolbarObj.items[33].disabled = false;
@@ -1088,8 +1175,9 @@ function lockObject (args) {
         toolbarObj.items[10].disabled = isTrue;
         toolbarObj.items[11].disabled = isTrue;
         toolbarObj.items[12].disabled = isTrue;
+        // toolbarObj.items[16].disabled = isTrue;
         toolbarObj.items[18].disabled = isTrue;
-        toolbarObj.items[20].disabled = isTrue;
+        // toolbarObj.items[20].disabled = isTrue;
         toolbarObj.items[30].disabled = isTrue;
         toolbarObj.items[31].disabled = isTrue;
         toolbarObj.items[33].disabled = isTrue;
@@ -1104,6 +1192,7 @@ var diagram = new ej.diagrams.Diagram({
     nodes: nodes,
     connectors:connectors,
     drawingObject:{type:'Orthogonal'},
+    pageSettings:{showPageBreaks:true},
     // pageSettings:{height:600,width:1500,showPageBreaks:true},
     getNodeDefaults: getNodeDefaults,
     getConnectorDefaults:getConnectorDefaults,
@@ -1558,6 +1647,30 @@ var palette = new ej.diagrams.SymbolPalette({
     getNodeDefaults: function (symbol) {
         symbol.style.strokeColor = '#757575';
     },
+
+    
 });
+document.getElementById('fontcolor').onchange = (args) =>{
+    let nodes = diagram.selectedItems.nodes;
+    let connectors = diagram.selectedItems.connectors;
+    if(nodes.length>0){
+    updateFontColor(nodes,args);
+    }
+    if(connectors.length>0)
+    {
+        updateFontColor(connectors,args)
+    }  
+}
+document.getElementById('fillcolor').onchange = (args) =>{
+    let nodes = diagram.selectedItems.nodes;
+    let connectors = diagram.selectedItems.connectors;
+    if(nodes.length>0){
+        updateFillColor(nodes,args);
+        }
+        if(connectors.length>0)
+        {
+            updateFillColor(connectors,args)
+        }  
+}
 
 palette.appendTo('#symbolpalette');

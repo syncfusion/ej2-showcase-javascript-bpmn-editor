@@ -499,17 +499,15 @@ var handles = [
                 { text: 'Size', iconCss: 'em-icons e-copy',
                 items:[
                      { text: 'Letter', value: 'Letter' },
-                     { text: 'Folio',  },
                      { text: 'Legal', value: 'Legal' },
-                     { text: 'Ledger',  },
+                     { text: 'Ledger',value: 'Ledger'  },
                      { text: 'A5', value:'A5' },
                      { text: 'A4',  value:'A4' },
                      { text: 'A3', value:'A3'  },
                      { text: 'A2', value:'A2'  },
                      { text: 'A1', value:'A1'  },
                      { text: 'A0', value:'A0'  },
-                     { text: 'Custom', value: 'Custom'},
-
+                     
                 ]
                 },
             ]
@@ -630,9 +628,10 @@ var handles = [
                     
                       {  prefixIcon: 'e-icons e-italic', tooltipText: 'Italic',disabled:true },
                        { type: 'Separator' },
-                       { prefixIcon:'e-icons e-font',type: 'Input' ,tooltipText:'Font Family',template:'<button id="fontFamilyBtn" style="width:100%;"></button>'},
-                       { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Size',template:' <input type="text" id="fontSizeBtn" min="0" max="50" step="1" value="12">'},
-                       { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Color',template:'<input id="fontcolor" type="color">'},
+                       { prefixIcon:'e-icons e-font',type: 'Input',tooltipText:'Font Family',template:'<input type="text" id="fontFamilyBtn" style="width:100%;">'},
+                       { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Size',template:' <input type="number" id="fontSizeBtn" min="0" max="50" step="1" value="12">'},
+            
+            { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Color',template:'<input id="fontcolor" type="color"/>'},
                        {type:'Separator'},
                        {
                         prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true 
@@ -640,7 +639,7 @@ var handles = [
                        {
                         prefixIcon: 'e-icons e-align-center',tooltipText:'Reset'
                        },
-            { prefixIcon: 'sf-icon-ColorPickers tb-icons',template:'<input type="color" id="fillcolor">', mode: 'Palette', tooltipText: 'Fill Color', cssClass: 'tb-item-start tb-item-fill',},  
+            { prefixIcon: 'sf-icon-ColorPickers tb-icons', mode: 'Palette', tooltipText: 'Fill Color', cssClass: 'tb-item-start tb-item-fill',template:'<input type="color" id="fillcolor">'},  
             { prefixIcon: 'e-icons e-undo', tooltipText: 'Undo',disabled:true  },
             { prefixIcon: 'e-icons e-redo', tooltipText: 'Redo',disabled:true  },
                     {type: 'Separator' },
@@ -700,13 +699,7 @@ var fontFamilyBtn = new ej.dropdowns.DropDownList({
         updateAnnotation('fontfamily', null, fontFamilyBtn);
     }
 });
-var  fontSize = new ej.inputs.NumericTextBox({
-    value: 0, min: 1,
-    max: 20, width: '100%',
-    format: '##.##',
-    step: 2,
-    change: function () { updateAnnotation('fontsize', fontSize); }
-});
+
 
 var uploadObj = new ej.inputs.Uploader({
     asyncSettings: {
@@ -736,6 +729,9 @@ var fontColor = new ej.inputs.ColorPicker({
     }
 });
 fontColor.appendTo('#fontcolor');
+// var defaultObj = new ej.inputs.ColorPicker({}, '#color-picker');
+    
+// var defaultObj = new ej.inputs.ColorPicker({}, '#color-picker');
 
 
 
@@ -746,7 +742,7 @@ fontColor.appendTo('#fontcolor');
  fontFamilyBtn.appendTo('#fontFamilyBtn');
  btnObj.appendTo('#custombtn');
  conTypeBtn.appendTo('#conTypeBtn');
- fontSize.appendTo('#fontSizeBtn');
+
 
  function onMenuSelect(args)
  {
@@ -845,6 +841,8 @@ fontColor.appendTo('#fontcolor');
             diagram.tool = ej.diagrams.DiagramTools.ZoomPan;
             break;
         case 'Connector Tool':
+            diagram.drawingObject.sourceID = "";
+            diagram.dataBind();
             diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
             break;
         case 'Orthogonal':
@@ -939,15 +937,13 @@ fontColor.appendTo('#fontcolor');
             break;
         case 'Select Tool':
             diagram.tool = ej.diagrams.DiagramTools.Default;
-            diagram.dataBind();
             break;
         case 'Pan Tool':
             diagram.tool = ej.diagrams.DiagramTools.ZoomPan;
-            diagram.dataBind();
             break;
         case 'Connector Tool':
+            diagram.drawingObject.sourceID = '';
             diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
-            diagram.dataBind();
             break;
         case 'Rotate Clockwise':
             diagram.rotate(diagram.selectedItems,90);
@@ -988,11 +984,8 @@ fontColor.appendTo('#fontcolor');
         case 'Open Diagram':
             document.getElementsByClassName('e-file-select-wrap')[0].querySelector('button').click();
             break;
-        case 'Export Diagram':
-
-
-
     }
+    diagram.dataBind();
  }
 
  function onUploadSuccess(args) {
@@ -1148,6 +1141,8 @@ function lockObject (args) {
         toolbarObj.items[10].disabled = false;
         toolbarObj.items[11].disabled = false;
         toolbarObj.items[12].disabled = false;
+        // toolbarObj.items[14].disabled = false;
+        // toolbarObj.items[15].disabled = false;
         // toolbarObj.items[16].disabled = false;
         toolbarObj.items[18].disabled = false;
         // toolbarObj.items[20].disabled = false;
@@ -1175,6 +1170,8 @@ function lockObject (args) {
         toolbarObj.items[10].disabled = isTrue;
         toolbarObj.items[11].disabled = isTrue;
         toolbarObj.items[12].disabled = isTrue;
+        // toolbarObj.items[14].disabled = isTrue;
+        // toolbarObj.items[15].disabled = isTrue;
         // toolbarObj.items[16].disabled = isTrue;
         toolbarObj.items[18].disabled = isTrue;
         // toolbarObj.items[20].disabled = isTrue;
@@ -1202,6 +1199,7 @@ var diagram = new ej.diagrams.Diagram({
     onUserHandleMouseDown:UserHandleClick,
     historyChange:historyChange, 
     click:onfocus,
+    drop:onfocus,
     mouseEnter:onfocus,
     selectionChange:selectionChange,
     // selectedItems: { constraints: ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles },
@@ -1303,6 +1301,8 @@ function UserHandleClick(args)
            diagram.paste(diagram.selectedItems.selectedObjects);
            break;
         case 'Draw':
+            diagram.drawingObject.sourceID = diagram.selectedItems.nodes[diagram.selectedItems.nodes.length-1].id;
+            diagram.dataBind();
             break;
     }
 }
@@ -1634,6 +1634,28 @@ function contextMenuOpen(args) {
 }
 
     diagram.appendTo('#diagram');
+
+function minValue(){
+    var size;
+    if(diagram.selectedItems.nodes.length>0)
+    {
+      size =   diagram.selectedItems.nodes[0].annotations[0].style.fontSize;
+    }
+    else if(diagram.selectedItems.connectors.length>0){
+        size =   diagram.selectedItems.connectors[0].annotations[0].style.fontSize;
+    }
+    return size;
+}
+    var  fontSize = new ej.inputs.NumericTextBox({
+        value: minValue(), min: 10,
+        max: 20, width: '100%',
+        format: '##.##',
+        step: 2,
+        change: function (args) { updateAnnotation('fontsize', fontSize); }
+    });
+
+    fontSize.appendTo('#fontSizeBtn');
+
     var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange });
     btnZoomIncrement.appendTo('#btnZoomIncrement');
 

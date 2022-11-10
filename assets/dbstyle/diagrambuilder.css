@@ -158,7 +158,7 @@ input, button, select, textarea {
 }
 
 .sidebar.show-overview .db-palette-parent {
-    height:calc(100% - 228px);
+    height:calc(100% );
 }
 
 .db-palette-more-shapes {
@@ -682,7 +682,7 @@ input, button, select, textarea {
 }
 
 #toolbarNodeInsert {
-    width: 68px !important;
+    width: 34px !important;
 }
 
 .db-property-editor-container .e-toolbar .e-toolbar-items .e-toolbar-item:not(.e-separator) {

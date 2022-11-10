@@ -1,3 +1,16 @@
 .e-file-select-wrap {
     display: none;
 }
+.sb-mobile-palette {
+    width:240px;
+    height:100%;
+    float:left;
+}
+.sb-mobile-diagram {
+    width:calc(100% - 242px);
+    height: 100%;
+    float: left;
+}
+
+
+

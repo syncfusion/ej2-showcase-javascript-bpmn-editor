@@ -4,6 +4,188 @@ ej.diagrams.SymbolPalette.Inject(ej.diagrams.BpmnDiagrams);
 var btnObj;
 var conTypeBtn;
 
+window.onload = function()
+{
+    document.getElementById('btnHideToolbar').onclick = hideMenuBar.bind(this);
+    document.onmouseover = menumouseover.bind(this);
+    zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
+}
+
+var NodeProperties = (function () {
+    function NodeProperties() {
+        this.m_offsetX = 0;
+        this.m_offsetY = 0;
+        this.m_width = 0;
+        this.m_height = 0;
+        this.m_rotateAngle = 0;
+        this.m_fillColor = '#ffffff';
+        this.m_strokeColor = '#000000';
+        this.m_strokeStyle = 'None';
+        this.m_strokeWidth = 1;
+        this.m_opacity = 0;
+        this.opacityText = '0%';
+        this.m_aspectRatio = false;
+        this.m_gradient = false;
+        this.m_gradientDirection = 'BottomToTop';
+        this.m_gradientColor = '#ffffff';
+    }
+
+    NodeProperties.prototype.triggerPropertyChange = function (propertyName, propertyValue) {
+        if (!ej.base.isNullOrUndefined(this.propertyChange)) {
+            this.propertyChange.call(this, { propertyName: propertyName, propertyValue: propertyValue });
+        }
+    };
+    NodeProperties.prototype.getGradient = function (node) {
+        var gradientValue = this.getGradientDirectionValue(nodeProperties.gradientDirection.value);
+        node.style.gradient = {
+            type: 'Linear',
+            x1: gradientValue.x1, x2: gradientValue.x2, y1: gradientValue.y1, y2: gradientValue.y2,
+            stops: [
+                { color: node.style.fill, offset: 0 },
+                { color: getColor(nodeProperties.gradientColor.value), offset: 1 }
+            ]
+        };
+    };
+    NodeProperties.prototype.getGradientDirectionValue = function (direction) {
+        var gradientValue = {};
+        var x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+        if (direction === 'LeftToRight') {
+            x1 = 100;
+        }
+        else if (direction === 'BottomToTop') {
+            y2 = 100;
+        }
+        else if (direction === 'RightToLeft') {
+            x2 = 100;
+        }
+        else {
+            y1 = 100;
+        }
+        gradientValue = { x1: x1, y1: y1, x2: x2, y2: y2 };
+        return gradientValue;
+    };
+    NodeProperties.prototype.getColor = function (colorName) {
+        if (window.navigator.msSaveBlob && colorName.length === 9) {
+            return colorName.substring(0, 7);
+        }
+        return colorName;
+    };
+
+    return NodeProperties;
+}());
+
+var nodeProperties = new NodeProperties();
+
+var ConnectorProperties = (function () {
+    function ConnectorProperties() {
+        this.m_lineColor = '#ffffff';
+    }
+    ConnectorProperties.prototype.triggerPropertyChange = function (propertyName, propertyValue) {
+        if (!ej.base.isNullOrUndefined(this.propertyChange)) {
+            this.propertyChange.call(this, { propertyName: propertyName, propertyValue: propertyValue });
+        }
+    };
+    return ConnectorProperties;
+}());
+
+var connectorProperties = new ConnectorProperties();
+
+var TextProperties = (function () {
+    function TextProperties() {
+        this.m_textPosition = '';
+        this.m_fontFamily = 'Arial';
+        this.m_fontColor = '#ffffff';
+        this.textPositionDataSource = this.getNodeTextPositions();
+    }
+    TextProperties.prototype.getNodeTextPositions = function () {
+        return [
+            { text: 'TopLeft', value: 'TopLeft' }, { text: 'TopCenter', value: 'TopCenter' },
+            { text: 'TopRight', value: 'TopRight' }, { text: 'MiddleLeft', value: 'MiddleLeft' },
+            { text: 'Center', value: 'Center' }, { text: 'MiddleRight', value: 'MiddleRight' },
+            { text: 'BottomLeft', value: 'BottomLeft' }, { text: 'BottomCenter', value: 'BottomCenter' },
+            { text: 'BottomRight', value: 'BottomRight' },
+        ];
+    };
+    TextProperties.prototype.getConnectorTextPositions = function () {
+        return [
+            { text: 'Before', value: 'Before' }, { text: 'Center', value: 'Center' },
+            { text: 'After', value: 'After' },
+        ];
+    };
+    TextProperties.prototype.triggerPropertyChange = function (propertyName, propertyValue) {
+        if (!ej.base.isNullOrUndefined(this.propertyChange)) {
+            this.propertyChange.call(this, { propertyName: propertyName, propertyValue: propertyValue });
+        }
+    };
+    return TextProperties;
+}());
+
+var textProperties = new TextProperties();
+
+
+var ExportSettings = (function () {
+    function ExportSettings() {
+        this.m_fileName = 'Diagram';
+        this.m_format = 'JPG';
+        this.m_region = 'PageSettings';
+    }
+    Object.defineProperty(ExportSettings.prototype, "fileName", {
+        get: function () {
+            return this.m_fileName;
+        },
+        set: function (fileName) {
+            this.m_fileName = fileName;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ExportSettings.prototype, "format", {
+        get: function () {
+            return this.m_format;
+        },
+        set: function (format) {
+            this.m_format = format;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ExportSettings.prototype, "region", {
+        get: function () {
+            return this.m_region;
+        },
+        set: function (region) {
+            this.m_region = region;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return ExportSettings;
+}());
+
+var exportSettings = new ExportSettings();
+
+
+function renameDiagram(args) {
+    document.getElementsByClassName('db-diagram-name-container')[0].classList.add('db-edit-name');
+    var element = document.getElementById('diagramEditable');
+    element.value = document.getElementById('diagramName').innerHTML;
+    element.focus();
+    element.select();
+}
+
+function diagramNameKeyDown(args) {
+    if (args.which === 13) {
+        document.getElementById('diagramName').innerHTML = document.getElementById('diagramEditable').value;
+        document.getElementsByClassName('db-diagram-name-container')[0].classList.remove('db-edit-name');
+    }
+}
+
+function diagramNameChange(args) {
+    document.getElementById('diagramName').innerHTML = document.getElementById('diagramEditable').value;
+    document.getElementsByClassName('db-diagram-name-container')[0].classList.remove('db-edit-name');
+    document.getElementById("exportfileName").value = document.getElementById('diagramName').innerHTML;
+}
+
 // window.onload = function(){
 //     zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
 // }
@@ -442,111 +624,405 @@ var handles = [
     },
 ];
 
-    // Menu items definition 
-    var menuItems = [
-        {
-            text: 'File',
-            // iconCss: 'em-icons e-file',
-            items: [
-                { text: 'New', iconCss: 'sf-icon-New' },
-                { text: 'Open', iconCss: 'sf-icon-Open' },
-                { separator: true },
-                { text: 'Save', iconCss: 'sf-icon-Save' },
-                { separator: true },
-                { text: 'Export', iconCss: 'sf-icon-Export',
-                    items:[
-                        {text:'JPG'},{text:'PNG'},{text:'BMP'},{text:'SVG'}
-                    ] },
-                { text: 'Print', iconCss: 'sf-icon-Print' },
+var btnFileMenu = new ej.splitbuttons.DropDownButton({
+    cssClass: 'db-dropdown-menu',
+    items: getFileMenuItems(),
+    content: 'File',
+    select: menuClick,
+    beforeItemRender: beforeItemRender,
+    beforeOpen: arrangeMenuBeforeOpen,
+    beforeClose: arrangeMenuBeforeClose
+});
+btnFileMenu.appendTo('#btnFileMenu');
 
-            ]
-        },
-        {
-            text: 'Edit',
-            // iconCss: 'em-icons e-edit',
-            items: [
-                { text: 'Undo', iconCss: 'sf-icon-Undo' },
-                { text: 'Redo', iconCss: 'sf-icon-Redo' },
-                { separator: true },
-                { text: 'Cut', iconCss: 'sf-icon-Cut' },
-                { text: 'Copy', iconCss: 'sf-icon-Copy' },
-                { text: 'Paste', iconCss: 'sf-icon-Paste' },
-                { separator: true },
-                { text: 'Rotate Clockwise', iconCss: 'em-icons e-cut' },
-                { text: 'Rotate Counter Clockwise', iconCss: 'em-icons e-copy' },
-                { text: 'Delete', iconCss: 'sf-icon-Delete' },
-                { separator: true },
-                { text: 'Bring To Front', iconCss: 'sf-icon-BringFront' },
-                { text: 'Send To Back', iconCss: 'sf-icon-Sendback' },
-            ]
-        },
-        {
-            text: 'Design',
-            // iconCss: 'em-icons e-edit',
-            items: [
-                { text: 'Orientation', iconCss: 'em-icons e-cut',
-                items:[
-                    { text: 'Landscape', iconCss: 'em-icons e-copy' },
-                    { text: 'Portrait', iconCss: 'em-icons e-paste' }
-                ]    
-                },
-                { text: 'Size', iconCss: 'em-icons e-copy',
-                items:[
-                     { text: 'Letter', value: 'Letter' },
-                     { text: 'Legal', value: 'Legal' },
-                     { text: 'Ledger',value: 'Ledger'  },
-                     { text: 'A5', value:'A5' },
-                     { text: 'A4',  value:'A4' },
-                     { text: 'A3', value:'A3'  },
-                     { text: 'A2', value:'A2'  },
-                     { text: 'A1', value:'A1'  },
-                     { text: 'A0', value:'A0'  },
-                     
-                ]
-                },
-            ]
-        },
-        {
-            text: 'Select',
-            // iconCss: 'em-icons e-edit',
-            items: [
-                { text: 'Select All', iconCss: 'em-icons e-cut' },
-                { text: 'Select All Nodes', iconCss: 'em-icons e-copy' },
-                { text: 'Select All Connectors', iconCss: 'em-icons e-paste' },
-                { text: 'Deselect All', iconCss: 'em-icons e-paste' }
+var btnEditMenu = new ej.splitbuttons.DropDownButton({
+    cssClass: 'db-dropdown-menu',
+    items: getEditMenuItems(),
+    content: 'Edit',
+    select: menuClick,
+   beforeItemRender: beforeItemRender,
+   beforeOpen: arrangeMenuBeforeOpen,
+   beforeClose: arrangeMenuBeforeClose
+});
+btnEditMenu.appendTo('#btnEditMenu');
 
-            ]
-        },
-        {
-            text: 'Tools',
-            items: [
-                { text: 'Selection Tool',iconCss: 'sf-icon-Selector tb-icons' },
-                { text: 'Pan Tool', iconCss: 'sf-icon-Pan tb-icons' },
-                { text: 'Connector Tool' ,iconCss:'sf-icon-ConnectorMode'},
-                { text: 'Connectors',items:[
-                    {text:'Straight',iconCss: 'sf-icon-StraightLine'},
-                    {text:'Orthogonal',iconCss: 'sf-icon-ConnectorMode'},
-                    {text:'Bezier',iconCss: 'sf-icon-BeizerLine'},
-                ] }
+var btnWindowMenu = new ej.splitbuttons.DropDownButton({
+    cssClass: 'db-dropdown-menu',
+    items: getDesignMenuItems(),
+    content: 'Design',
+    select: menuClick,
+    beforeItemRender: beforeItemRender,
+    beforeOpen: arrangeMenuBeforeOpen,
+    beforeClose: arrangeMenuBeforeClose
+});
+btnWindowMenu.appendTo('#btnDesignMenu');
 
-            ]
-        },
-        {
-            text: 'View',
-            items: [
-                   { text: 'Show Lines',iconCss: 'sf-icon-Selection'},
-                   { text: 'Snap To Grid',iconCss : 'sf-icon-Selection'},
-                   { text: 'Snap To Object',iconCss : 'sf-icon-Selection'},
-                   { text: 'Show Ruler',iconCss: 'sf-icon-Selection'},
-                   { text: 'Show Page Breaks',iconCss: 'sf-icon-Selection'},
-                   { separator: true },
-                   { text: 'Fit To Width'},
-                   { text: 'Fit To Page'},
-                   { text: 'Reset View'},
+var btnHelpMenu = new ej.splitbuttons.DropDownButton({
+    cssClass: 'db-dropdown-menu',
+    items: getSelectMenuItems(),
+    content: 'Select',
+    select: menuClick,
+    beforeItemRender: beforeItemRender,
+    beforeOpen: arrangeMenuBeforeOpen,
+    beforeClose: arrangeMenuBeforeClose
+});
+btnHelpMenu.appendTo('#btnSelectMenu');
 
-            ]
+var btnArrangeMenu = new ej.splitbuttons.DropDownButton({
+    cssClass: 'db-dropdown-menu',
+    items: getToolsMenuItems(),
+    content: 'Tools',
+    select: menuClick,
+    beforeItemRender: beforeItemRender,
+    beforeOpen: arrangeMenuBeforeOpen,
+    beforeClose: arrangeMenuBeforeClose
+});
+btnArrangeMenu.appendTo('#btnToolsMenu');
+
+var btnViewMenu = new ej.splitbuttons.DropDownButton({
+    cssClass: 'db-dropdown-menu',
+    items: getViewMenuItems(),
+    content: 'View',
+    select: menuClick,
+    beforeItemRender: beforeItemRender,
+    beforeOpen: arrangeMenuBeforeOpen,
+    beforeClose: arrangeMenuBeforeClose
+});
+btnViewMenu.appendTo('#btnViewMenu');
+
+
+
+
+function getFileMenuItems()
+{
+    var items = [
+        { text: 'New', iconCss: 'sf-icon-New' },
+        { text: 'Open', iconCss: 'sf-icon-Open' },
+        { separator: true },
+        { text: 'Save', iconCss: 'sf-icon-Save' },
+        { separator: true },
+        { text: 'Export', iconCss: 'sf-icon-Export',
+            items:[
+                {text:'JPG'},{text:'PNG'},{text:'BMP'},{text:'SVG'}
+            ] },
+        { text: 'Print', iconCss: 'sf-icon-Print' },
+
+    ]
+    return items;
+};
+
+function getEditMenuItems()
+{
+    var items = [
+        { text: 'Undo', iconCss: 'sf-icon-Undo' },
+        { text: 'Redo', iconCss: 'sf-icon-Redo' },
+        { separator: true },
+        { text: 'Cut', iconCss: 'sf-icon-Cut' },
+        { text: 'Copy', iconCss: 'sf-icon-Copy' },
+        { text: 'Paste', iconCss: 'sf-icon-Paste' },
+        { separator: true },
+        { text: 'Rotate Clockwise', iconCss: 'em-icons e-cut' },
+        { text: 'Rotate Counter Clockwise', iconCss: 'em-icons e-copy' },
+        { text: 'Delete', iconCss: 'sf-icon-Delete' },
+        { separator: true },
+        { text: 'Bring To Front', iconCss: 'sf-icon-BringFront' },
+        { text: 'Send To Back', iconCss: 'sf-icon-Sendback' },
+    ]
+    return items;
+};
+
+function getDesignMenuItems()
+{
+    var items = [
+        { text: 'Orientation', iconCss: 'em-icons e-cut',
+        items:[
+            { text: 'Landscape', iconCss: 'em-icons e-copy' },
+            { text: 'Portrait', iconCss: 'em-icons e-paste' }
+        ]    
         },
-    ];
+        { text: 'Size', iconCss: 'em-icons e-copy',
+        items:paperList()
+        },
+    ]
+    return items;
+};
+
+function getSelectMenuItems()
+{
+    var items = [
+        { text: 'Select All', iconCss: 'em-icons e-cut' },
+        { text: 'Select All Nodes', iconCss: 'em-icons e-copy' },
+        { text: 'Select All Connectors', iconCss: 'em-icons e-paste' },
+        { text: 'Deselect All', iconCss: 'em-icons e-paste' }
+    ]
+    return items;
+};
+
+function getToolsMenuItems()
+{
+    var items1 = [
+        { text: 'Selection Tool',iconCss: 'sf-icon-Selector tb-icons' },
+        { text: 'Pan Tool', iconCss: 'sf-icon-Pan tb-icons' },
+        { text: 'Connector Tool' ,iconCss:'sf-icon-ConnectorMode'},
+        { text: 'Connectors',items:[
+            {text:'Straight',iconCss: 'sf-icon-StraightLine'},
+            {text:'Orthogonal',iconCss: 'sf-icon-ConnectorMode'},
+            {text:'Bezier',iconCss: 'sf-icon-BeizerLine'},
+        ] }
+    ]
+    return items1;
+};
+
+function getViewMenuItems()
+{
+    var items = [
+        { text: 'Show Lines',iconCss: 'sf-icon-Selection'},
+        { text: 'Snap To Grid',iconCss : 'sf-icon-Selection'},
+        { text: 'Snap To Object',iconCss : 'sf-icon-Selection'},
+        { text: 'Show Ruler',iconCss: 'sf-icon-Selection'},
+        { text: 'Show Page Breaks',iconCss: 'sf-icon-Selection'},
+        { separator: true },
+        { text: 'Fit To Width'},
+        { text: 'Fit To Page'},
+        { text: 'Reset View'},
+    ]
+    return items;
+};
+
+function toolsContextMenuOpen (args) {
+    if (args.element.classList.contains('e-menu-parent')) {
+        var popup = document.querySelector('#btnArrangeMenu-popup');
+        args.element.style.left = ej.base.formatUnit(parseInt(args.element.style.left, 10) - parseInt(popup.style.left, 10));
+        args.element.style.top = ej.base.formatUnit(parseInt(args.element.style.top, 10) - parseInt(popup.style.top, 10));
+    }
+}
+
+function arrangeMenuBeforeOpen(args)
+{
+    //Handling sub menu items
+    // for (var i = 0; i  < args.items.length; i++) {
+    //     if(args.items[i].text === 'Undo' || args.items[i].text === 'Redo')
+    //     {
+    //         if(args.items[i].text === 'Undo' && diagram.historyManager.undoStack.length<1){
+    //             btnEditMenu.enableItems([args.items[i].text], false, false);
+    //         }
+    //         if(args.items[i].text === 'Redo' && diagram.historyManager.redoStack.length<1){
+    //             btnEditMenu.enableItems([args.items[i].text], false, false);
+    //         }
+    //     }
+    //     if(!(diagram.commandHandler.clipboardData.pasteIndex !== undefined
+    //         && diagram.commandHandler.clipboardData.clipObject !==undefined))
+    //         {
+    //             if(pasteItem.indexOf(args.items[i].text)> -1)
+    //             {
+    //                 btnEditMenu.enableItems([args.items[i].text], false, false);
+    //             }
+    //         }
+    //     if(!(diagram.selectedItems.nodes.length>0 || diagram.selectedItems.connectors.length>0)){
+    //         if (disabledItems.indexOf(args.items[i].text) > -1) {
+    //             btnEditMenu.enableItems([args.items[i].text], false, false);
+    //         }
+    //         if(rotateItems.indexOf(args.items[i].text)> -1){
+    //             btnEditMenu.enableItems([args.items[i].text], false, false);
+    //         }
+    // }
+    //     else if(diagram.selectedItems.nodes.length<1 && diagram.selectedItems.connectors.length>0)
+    //     {
+    //         if(rotateItems.indexOf(args.items[i].text)> -1){
+    //             btnEditMenu.enableItems([args.items[i].text], false, false);
+    //         }
+    //     }
+    // }
+    for (var i = 0; i < args.element.children.length; i++) {
+        args.element.children[i].style.display = 'block';
+    }
+    //(args.element.children[0]).style.display = 'block';
+    if (args.event && ej.base.closest(args.event.target, '.e-dropdown-btn') !== null) {
+        args.cancel = true;
+    }
+}
+
+function arrangeMenuBeforeClose(args)
+{
+    if (args.event && ej.base.closest(args.event.target, '.e-dropdown-btn') !== null) {
+        args.cancel = true;
+    }
+    if (!args.element) {
+        args.cancel = true;
+    }
+}
+
+function beforeItemRender(args) {
+    var shortCutText = getShortCutKey(args.item.text);
+    if (shortCutText) {
+        var shortCutSpan = document.createElement('span');
+        var text = args.item.text;
+        shortCutSpan.textContent = shortCutText;
+        shortCutSpan.style.pointerEvents = 'none';
+        args.element.appendChild(shortCutSpan);
+        shortCutSpan.setAttribute('class', 'db-shortcut');
+    }
+    var status = enableMenuItems(args.item.text, diagram);
+    if (status) {
+        args.element.classList.add('e-disabled');
+    } else {
+        if (args.element.classList.contains('e-disabled')) {
+            args.element.classList.remove('e-disabled');
+        }
+    }
+}
+
+function getShortCutKey(menuItem) {
+    var shortCutKey = navigator.platform.indexOf('Mac') > -1 ? 'Cmd' : 'Ctrl';
+    switch (menuItem) {
+        case 'New':
+            shortCutKey = 'Shift' + '+N';
+            break;
+        case 'Open':
+            shortCutKey = shortCutKey + '+O';
+            break;
+        case 'Save':
+            shortCutKey = shortCutKey + '+S';
+            break;
+        case 'Undo':
+            shortCutKey = shortCutKey + '+Z';
+            break;
+        case 'Redo':
+            shortCutKey = shortCutKey + '+Y';
+            break;
+        case 'Cut':
+            shortCutKey = shortCutKey + '+X';
+            break;
+        case 'Copy':
+            shortCutKey = shortCutKey + '+C';
+            break;
+        case 'Paste':
+            shortCutKey = shortCutKey + '+V';
+            break;
+        case 'Delete':
+            shortCutKey = 'Delete';
+            break;
+        case 'Duplicate':
+            shortCutKey = shortCutKey + '+D';
+            break;
+        case 'Select All':
+            shortCutKey = shortCutKey + '+A';
+            break;
+        case 'Zoom In':
+            shortCutKey = shortCutKey + '++';
+            break;
+        case 'Zoom Out':
+            shortCutKey = shortCutKey + '+-';
+            break;
+        case 'Group':
+            shortCutKey = shortCutKey + '+G';
+            break;
+        case 'Ungroup':
+            shortCutKey = shortCutKey + '+U';
+            break;
+        case 'Send To Back':
+            shortCutKey = shortCutKey + '+Shift+B';
+            break;
+        case 'Bring To Front':
+            shortCutKey = shortCutKey + '+Shift+F';
+            break;
+        default:
+            shortCutKey = '';
+            break;
+    }
+    return shortCutKey;
+}
+
+function enableMenuItems(itemText, diagram) {
+    var selectedItems = diagram.selectedItems.nodes;
+    selectedItems = selectedItems.concat(diagram.selectedItems.connectors);
+    if (itemText) {
+        var commandType = itemText.replace(/[' ']/g, '');
+        if (selectedItems.length === 0) {
+            switch (commandType.toLowerCase()) {
+                case 'cut':
+                    return true;
+                case 'copy':
+                    return true;
+                case 'delete':
+                    return true;
+            }
+        }
+        if (!(diagram.commandHandler.clipboardData.pasteIndex !== undefined
+            && diagram.commandHandler.clipboardData.clipObject !==undefined) && itemText === 'Paste') {
+            return true;
+        }
+        if (itemText === 'Undo' && diagram.historyManager.undoStack.length<1) {
+            return true;
+        }
+        if (itemText === 'Redo' && diagram.historyManager.redoStack.length<1) {
+            return true;
+        }
+        if(itemText === 'Rotate Clockwise' && diagram.selectedItems.nodes.length < 1)
+        {
+            return true;
+        }
+        if(itemText === 'Rotate Counter Clockwise' && diagram.selectedItems.nodes.length < 1)
+        {
+            return true;
+        }
+        if(itemText === 'Send To Back' && selectedItems.length === 0)
+        {
+            return true;
+        }
+        if(itemText === 'Bring To Front' && selectedItems.length === 0)
+        {
+            return true;
+        }
+    }
+    return false;
+};
+
+function menumouseover(args) {
+    var target = args.target;
+    if (target && (target.className === 'e-control e-dropdown-btn e-lib e-btn db-dropdown-menu' ||
+        target.className === 'e-control e-dropdown-btn e-lib e-btn db-dropdown-menu e-ddb-active')) {
+        if (this.buttonInstance && this.buttonInstance.id !== target.id) {
+            if (this.buttonInstance.getPopUpElement().classList.contains('e-popup-open')) {
+                this.buttonInstance.toggle();
+                var buttonElement = document.getElementById(this.buttonInstance.element.id);
+                buttonElement.classList.remove('e-btn-hover');
+            }
+        }
+        var button1 = target.ej2_instances[0];
+        this.buttonInstance = button1;
+        if (button1.getPopUpElement().classList.contains('e-popup-close')) {
+            button1.toggle();
+            if (button1.element.id === 'btnToolsMenu') {
+                enableToolsMenuItems(diagram);
+            }
+            var buttonElement1 = document.getElementById(this.buttonInstance.element.id);
+            buttonElement1.classList.add('e-btn-hover');
+        }
+    } else {
+        if (ej.base.closest(target, '.e-dropdown-popup') === null && ej.base.closest(target, '.e-dropdown-btn') === null) {
+            if (this.buttonInstance && this.buttonInstance.getPopUpElement().classList.contains('e-popup-open')) {
+                this.buttonInstance.toggle();
+                var buttonElement2 = document.getElementById(this.buttonInstance.element.id);
+                buttonElement2.classList.remove('e-btn-hover');
+            }
+        }
+    }
+};
+function enableToolsMenuItems(diagram) {
+    var contextInstance = document.getElementById('ToolsContextMenu');
+    var contextMenu = contextInstance.ej2_instances[0];
+    var selectedItems = diagram.selectedItems.nodes;
+    selectedItems = selectedItems.concat(diagram.selectedItems.connectors);
+    for (var i = 0; i < contextMenu.items.length; i++) {
+        contextMenu.enableItems([contextMenu.items[i].text], false);
+    }
+        
+            contextMenu.enableItems(['Connectors'], true);
+            contextMenu.enableItems(['Selection Tool', 'Pan Tool', 'Connector Tool']);
+                   
+};
+
     var disabledItems = ['Cut','Copy','Send To Back','Bring To Front','Delete'];
     var undoRedoItems = ['Undo','Redo'];
     var rotateItems = ['Rotate Clockwise','Rotate Counter Clockwise'];
@@ -554,50 +1030,50 @@ var handles = [
     
 
     //Menu initialization
-    var menuObj = new ej.navigations.Menu({ items: menuItems,height:'10px',
-    beforeOpen: function (args) {
-        //Handling sub menu items
-        for (var i = 0; i  < args.items.length; i++) {
-            if(args.items[i].text === 'Undo' || args.items[i].text === 'Redo')
-            {
-                if(args.items[i].text === 'Undo' && diagram.historyManager.undoStack.length<1){
-                    menuObj.enableItems([args.items[i].text], false, false);
-                }
-                if(args.items[i].text === 'Redo' && diagram.historyManager.redoStack.length<1){
-                    menuObj.enableItems([args.items[i].text], false, false);
-                }
-            }
-            if(!(diagram.commandHandler.clipboardData.pasteIndex !== undefined
-                && diagram.commandHandler.clipboardData.clipObject !==undefined))
-                {
-                    if(pasteItem.indexOf(args.items[i].text)> -1)
-                    {
-                        menuObj.enableItems([args.items[i].text], false, false);
-                    }
-                }
-            if(!(diagram.selectedItems.nodes.length>0 || diagram.selectedItems.connectors.length>0)){
-                if (disabledItems.indexOf(args.items[i].text) > -1) {
-                    menuObj.enableItems([args.items[i].text], false, false);
-                }
-                if(rotateItems.indexOf(args.items[i].text)> -1){
-                    menuObj.enableItems([args.items[i].text], false, false);
-                }
-        }
-            else if(diagram.selectedItems.nodes.length<1 && diagram.selectedItems.connectors.length>0)
-            {
-                if(rotateItems.indexOf(args.items[i].text)> -1){
-                    menuObj.enableItems([args.items[i].text], false, false);
-                }
-            }
-        }
-    } ,select:onMenuSelect}, '#menu');
+    // var menuObj = new ej.navigations.Menu({ items: menuItems,height:'10px',
+    // beforeOpen: function (args) {
+    //     //Handling sub menu items
+    //     for (var i = 0; i  < args.items.length; i++) {
+    //         if(args.items[i].text === 'Undo' || args.items[i].text === 'Redo')
+    //         {
+    //             if(args.items[i].text === 'Undo' && diagram.historyManager.undoStack.length<1){
+    //                 menuObj.enableItems([args.items[i].text], false, false);
+    //             }
+    //             if(args.items[i].text === 'Redo' && diagram.historyManager.redoStack.length<1){
+    //                 menuObj.enableItems([args.items[i].text], false, false);
+    //             }
+    //         }
+    //         if(!(diagram.commandHandler.clipboardData.pasteIndex !== undefined
+    //             && diagram.commandHandler.clipboardData.clipObject !==undefined))
+    //             {
+    //                 if(pasteItem.indexOf(args.items[i].text)> -1)
+    //                 {
+    //                     menuObj.enableItems([args.items[i].text], false, false);
+    //                 }
+    //             }
+    //         if(!(diagram.selectedItems.nodes.length>0 || diagram.selectedItems.connectors.length>0)){
+    //             if (disabledItems.indexOf(args.items[i].text) > -1) {
+    //                 menuObj.enableItems([args.items[i].text], false, false);
+    //             }
+    //             if(rotateItems.indexOf(args.items[i].text)> -1){
+    //                 menuObj.enableItems([args.items[i].text], false, false);
+    //             }
+    //     }
+    //         else if(diagram.selectedItems.nodes.length<1 && diagram.selectedItems.connectors.length>0)
+    //         {
+    //             if(rotateItems.indexOf(args.items[i].text)> -1){
+    //                 menuObj.enableItems([args.items[i].text], false, false);
+    //             }
+    //         }
+    //     }
+    // } ,select:menuClick}, '#menu');
     // menuObj.enableItems(disabledItems, false, false);
 
     //Initialize Toolbar component
     var toolbarObj = new ej.navigations.Toolbar({
         clicked:toolbarClick,
         items: [
-            { prefixIcon: 'sf-icon-Cut', tooltipText: 'New Diagram' },
+            { prefixIcon: 'e-ddb-icons e-new', tooltipText: 'New Diagram' },
             { prefixIcon: 'e-icons e-copy', tooltipText: 'Open Diagram', },
             { prefixIcon: 'sf-icon-Save', tooltipText: 'Save Diagram' },
             { prefixIcon: 'e-print e-icons', tooltipText: 'Print Diagram'},
@@ -625,7 +1101,7 @@ var handles = [
                        { prefixIcon:'e-icons e-font',type: 'Input',tooltipText:'Font Family',template:'<input type="text" id="fontFamilyBtn" style="width:100%;">'},
                        { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Size',template:' <input type="number" id="fontSizeBtn" min="0" max="50" step="1" value="12">'},
             
-            { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Color',template:'<input id="fontcolor" type="color"/>'},
+                        { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Color',template:'<input id="fontcolor" type="color"/>',},
                        {type:'Separator'},
                        {
                         prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true 
@@ -633,7 +1109,7 @@ var handles = [
                        {
                         prefixIcon: 'e-icons e-align-center',tooltipText:'Reset'
                        },
-            { prefixIcon: 'sf-icon-ColorPickers tb-icons', mode: 'Palette', tooltipText: 'Fill Color', cssClass: 'tb-item-start tb-item-fill',template:'<input type="color" id="fillcolor">'},  
+            { prefixIcon: 'sf-icon-ColorPickers tb-icons',mode:'palette', tooltipText: 'Fill Color',template:'<input id="fillcolor" type="color"/>'},  
             { prefixIcon: 'e-icons e-undo', tooltipText: 'Undo',disabled:true  },
             { prefixIcon: 'e-icons e-redo', tooltipText: 'Redo',disabled:true  },
                     {type: 'Separator' },
@@ -655,7 +1131,8 @@ var handles = [
             { prefixIcon: 'sf-icon-Sendback' , tooltipText: 'Send To Back',disabled:true  },
                      { type: 'Separator' },
         
-         ],height:30,width:'100%'
+         ],
+         width:'100%'
  });
  //Render initialized Toolbar component
  var items = [{ text: 'JPG' }, { text: 'PNG' }, { text: 'BMP' }, { text: 'SVG' }];
@@ -732,14 +1209,20 @@ fontColor.appendTo('#fontcolor');
 // var fillColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
 // fillColorIconBtn.appendTo('#fillColorIconBtn');
 
- toolbarObj.appendTo('#toolbar_default');
+ toolbarObj.appendTo('#toolbarEditor');
+ var btnHideToolbar = new ej.buttons.Button({ iconCss: 'sf-icon-Collapse tb-icons' });
+ btnHideToolbar.appendTo('#btnHideToolbar');
  fontFamilyBtn.appendTo('#fontFamilyBtn');
  btnObj.appendTo('#custombtn');
  conTypeBtn.appendTo('#conTypeBtn');
 
 
- function onMenuSelect(args)
+ function menuClick(args)
  {
+    var buttonElement = document.getElementsByClassName('e-btn-hover')[0];
+    if (buttonElement) {
+        buttonElement.classList.remove('e-btn-hover');
+    }
     var option = args.item.text;
     switch(option)
     {
@@ -753,6 +1236,9 @@ fontColor.appendTo('#fontcolor');
             var options = {};
             options.mode = 'Data';
             diagram.print(options)
+            break;
+        case 'Export':
+            exportDialog.show();
             break;
         case 'JPG':
         case 'PNG':
@@ -808,7 +1294,7 @@ fontColor.appendTo('#fontcolor');
         case 'A3':
         case 'A4':
         case 'A5':
-        case 'Ledger':
+        case 'Tabloid':
             paperListChange(args)
             break;
         case 'Select All':
@@ -915,7 +1401,7 @@ fontColor.appendTo('#fontcolor');
             diagram.reset();
             break;
         case 'Fill Color':
-            // showColorPicker('nodeFillColor', 'tb-item-fill')
+             showColorPicker('nodeFillColor', 'tb-item-fill')
             break;
         case 'Cut':
             diagram.cut();
@@ -960,17 +1446,7 @@ fontColor.appendTo('#fontcolor');
             diagram.print(options)
             break;
         case 'Font Color':
-            // document.getElementById('fontcolor').onchange=(args) =>{
-            //     let nodes = diagram.selectedItems.nodes;
-            //     let connectors = diagram.selectedItems.connectors;
-            //     if(nodes.length>0){
-            //     updateFontColor(nodes,args);
-            //     }
-            //     if(connectors.length>0)
-            //     {
-            //         updateFontColor(connectors,args)
-            //     }  
-            // }
+            showColorPicker('nodeFillColor', 'tb-item-fill')
             break;
         case 'Save Diagram':
             download(diagram.saveDiagram());
@@ -1185,6 +1661,12 @@ var diagram = new ej.diagrams.Diagram({
     drawingObject:{type:'Orthogonal'},
     pageSettings:{showPageBreaks:true},
     // pageSettings:{height:600,width:1500,showPageBreaks:true},
+    pageSettings: {
+        background: { color: 'white' }, width: 600, height: 1460, margin: { left: 5, top: 5 },
+        orientation: 'Landscape',showPageBreaks:true,
+        // multiplePage: true,
+    },
+    scrollSettings: { canAutoScroll: true, scrollLimit: 'Infinity', minZoom: 0.25, maxZoom: 30 },
     getNodeDefaults: getNodeDefaults,
     getConnectorDefaults:getConnectorDefaults,
     contextMenuSettings: contextMenu,
@@ -1192,11 +1674,10 @@ var diagram = new ej.diagrams.Diagram({
     contextMenuOpen:contextMenuOpen,
     onUserHandleMouseDown:UserHandleClick,
     historyChange:historyChange, 
-    click:onfocus,
-    drop:onfocus,
-    mouseEnter:onfocus,
     selectionChange:selectionChange,
-    // selectedItems: { constraints: ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles },
+    positionChange:positionChange,
+    sizeChange:sizeChange,
+    rotateChange:rotateChange,
     rulerSettings: {
         showRulers: true, dynamicGrid: true, horizontalRuler: {
             interval: 10,
@@ -1220,7 +1701,7 @@ function download(data) {
         var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(data);
         var a = document.createElement('a');
         a.href = dataStr;
-        a.download = 'Diagram.json';
+        a.download = document.getElementById('diagramName').innerHTML+'.json';
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -1262,20 +1743,165 @@ function getConnectorDefaults(obj)
     }
     return obj;
 }
-// function getTool()
 
 function selectionChange(args)
 {
     if(args.newValue.length>0 && args.newValue[0] instanceof ej.diagrams.Node){
-     diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All|ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles },
-
+     diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All|ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles };
+        var showTextPanel = checkTextAnnotation();
         onClickDisable(false)
+        if(diagram.selectedItems.nodes.length>0){
+        bindNodeProperties(args.newValue[0]);
+        }
+        document.getElementById('dimen').style.display = 'block';
+        if(args.newValue.length>1)
+        {
+            document.getElementById('dimen').style.display = 'none';
+        }
+        document.getElementById('diagramPropertyContainer').style.display = 'none';
+        document.getElementById('textPropertyContainer').style.display = 'none';
+        document.getElementById('connectorPropertyContainer').style.display = 'none';
+        document.getElementById('nodePropertyContainer').style.display = 'block';
+        if(showTextPanel){
+        document.getElementById('textPropertyContainer').style.display = 'block';
+        bindTextProperties(args.newValue[0].annotations[0].style);
+        }
+
     }
     else{
      diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All&~ej.diagrams.SelectorConstraints.UserHandle },
 
         onClickDisable(true)
+        var showConTextPanel = checkTextAnnotation();
+        if(args.newValue.length>0 && args.newValue[0] instanceof ej.diagrams.Connector){
+            document.getElementById('diagramPropertyContainer').style.display = 'none';
+            document.getElementById('nodePropertyContainer').style.display = 'none';
+            document.getElementById('textPropertyContainer').style.display = 'none';
+            document.getElementById('connectorPropertyContainer').style.display = 'block';
+            if(showConTextPanel){
+                document.getElementById('textPropertyContainer').style.display = 'block';
+                bindTextProperties(args.newValue[0].annotations[0].style)
+                }
+            bindConnectorProperties(args.newValue[0]);
+
+        }
+        else{
+            
+            document.getElementById('nodePropertyContainer').style.display = 'none';
+            document.getElementById('connectorPropertyContainer').style.display = 'none';
+            document.getElementById('textPropertyContainer').style.display = 'none';
+            document.getElementById('diagramPropertyContainer').style.display = 'block';
+        }
     }
+}
+
+function positionChange(args)
+{
+    if(diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors).length===1){
+    nodeProperties.offsetX.value = args.newValue.offsetX;
+    nodeProperties.offsetY.value = args.newValue.offsetY;
+}
+}
+
+function sizeChange(args)
+{
+    if(diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors).length===1){
+    nodeProperties.width.value = args.newValue.width;
+    nodeProperties.height.value = args.newValue.height;
+    nodeProperties.offsetX.value = args.newValue.offsetX;
+    nodeProperties.offsetY.value = args.newValue.offsetY;
+    }
+}
+
+function rotateChange(args)
+{
+    if(diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors).length===1){
+        nodeProperties.rotateAngle.value = args.newValue.rotateAngle;
+    }
+}
+
+function bindNodeProperties(node)
+{
+   nodeProperties.offsetX.value = node.offsetX;
+   nodeProperties.offsetY.value = node.offsetY;
+   nodeProperties.width.value = node.width;
+   nodeProperties.height.value = node.height;
+   nodeProperties.rotateAngle.value = node.rotateAngle;
+   nodeProperties.rotateAngle.value = node.rotateAngle;
+   nodeProperties.fillColor.value = getHexColor(node.style.fill);
+   nodeProperties.strokeColor.value = getHexColor(node.style.strokeColor);
+   nodeProperties.strokeWidth.value = node.style.strokeWidth;
+   nodeProperties.strokeStyle.value = node.style.strokeDashArray ? node.style.strokeDashArray : 'None';
+   nodeProperties.opacity.value = node.style.opacity * 100;
+}
+
+function bindConnectorProperties(connector)
+{
+    connectorProperties.lineType.value  = connector.type;
+    connectorProperties.lineColor.value = this.getHexColor(connector.style.strokeColor);
+    connectorProperties.lineStyle.value = connector.style.strokeDashArray ? connector.style.strokeDashArray : 'None';
+    connectorProperties.lineWidth.value = connector.style.strokeWidth;
+    connectorProperties.sourceType.value = connector.sourceDecorator.shape;
+    connectorProperties.sourceSize.value = connector.sourceDecorator.width;
+    connectorProperties.targetType.value = connector.targetDecorator.shape;
+    connectorProperties.targetSize.value = connector.targetDecorator.width;
+    connectorProperties.opacity.value = connector.style.opacity * 100;
+    connectorProperties.lineJumpSize.value = connector.bridgeSpace;
+    connectorProperties.lineJump.checked = connector.constraints & ej.diagrams.ConnectorConstraints.Bridging ? true : false;
+}
+
+function bindTextProperties(text)
+{
+    textProperties.fontColor.value = this.getHexColor(text.color);
+    textProperties.fontFamily.value = text.fontFamily;
+    textProperties.fontSize.value = text.fontSize;
+    textProperties.opacity.value = text.opacity * 100;
+    var toolbarTextStyle = document.getElementById('toolbarTextStyle');
+    if (toolbarTextStyle) {
+        toolbarTextStyle = toolbarTextStyle.ej2_instances[0];
+    }
+    if (toolbarTextStyle) {
+        toolbarTextStyle.items[0].cssClass = text.bold ? 'tb-item-start tb-item-selected' : 'tb-item-start';
+        toolbarTextStyle.items[1].cssClass = text.italic ? 'tb-item-middle tb-item-selected' : 'tb-item-middle';
+        toolbarTextStyle.items[2].cssClass = text.textDecoration === 'Underline' ? 'tb-item-end tb-item-selected' : 'tb-item-end';
+    }
+    this.updateTextAlign(text.textAlign);
+
+}
+
+function updateTextAlign(textAlign)
+{
+    var toolbarTextSubAlignment = document.getElementById('toolbarTextSubAlignment');
+    if (toolbarTextSubAlignment) {
+        toolbarTextSubAlignment = toolbarTextSubAlignment.ej2_instances[0];
+    }
+    if (toolbarTextSubAlignment) {
+        for (var i = 0; i < toolbarTextSubAlignment.items.length; i++) {
+            toolbarTextSubAlignment.items[i].cssClass = toolbarTextSubAlignment.items[i].cssClass.replace(' tb-item-selected', '');
+        }
+        var index = textAlign === 'Left' ? 0 : (textAlign === 'Center' ? 1 : 2);
+        toolbarTextSubAlignment.items[index].cssClass = toolbarTextSubAlignment.items[index].cssClass + ' tb-item-selected';
+    }
+}
+
+function checkTextAnnotation()
+{
+    var selectedObjects = diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors);
+    var showPanel = false;
+    for(i = 0; i < selectedObjects.length; i++)
+    {
+        if(selectedObjects[i].annotations.length)
+        {
+            for(j = 0; j < selectedObjects[i].annotations.length; j++)
+            {
+                if(selectedObjects[i].annotations[j].content)
+                {
+                    showPanel = true;
+                }
+            }
+        }
+    }
+    return showPanel;
 }
 
 function historyChange()
@@ -1283,6 +1909,16 @@ function historyChange()
     diagram.historyManager.undoStack.length>0?toolbarObj.items[21].disabled = false:toolbarObj.items[21].disabled = true
     diagram.historyManager.redoStack.length>0?toolbarObj.items[22].disabled = false:toolbarObj.items[22].disabled = true
 }
+
+function getHexColor(colorStr) {
+    var a = document.createElement('div');
+    a.style.color = colorStr;
+    var colors = window.getComputedStyle(document.body.appendChild(a)).color.match(/\d+/g).map(function (a) {
+        return parseInt(a, 10);
+    });
+    document.body.removeChild(a);
+    return (colors.length >= 3) ? '#' + (((1 << 24) + (colors[0] << 16) + (colors[1] << 8) + colors[2]).toString(16).substr(1)) : '';
+};
 
 function UserHandleClick(args)
 {
@@ -1319,7 +1955,7 @@ function getPaperSize(args)
                 paperSize.pageWidth = 816;
                 paperSize.pageHeight = 1344;
                 break;
-            case 'Ledger':
+            case 'Tabloid':
                 paperSize.pageWidth = 1056;
                 paperSize.pageHeight = 1632;
                 break;
@@ -1347,14 +1983,19 @@ function getPaperSize(args)
                 paperSize.pageWidth = 559;
                 paperSize.pageHeight = 793;
                 break;
-           
+            case 'A6':
+                paperSize.pageWidth = 396;
+                paperSize.pageHeight = 559;
+                break;
         }
         return paperSize
 }
 
 function paperListChange(args)
 {
-    var value = args.item.value;
+    document.getElementById('pageDimension').style.display = 'none';
+    document.getElementById('pageOrientation').style.display = '';
+    var value = args.value;
     var paperSize = getPaperSize(value);
     var pageWidth = paperSize.pageWidth;
     var pageHeight = paperSize.pageHeight;
@@ -1377,6 +2018,10 @@ function paperListChange(args)
         diagram.pageSettings.height = pageHeight;
         diagram.dataBind();
     }
+    else{
+        document.getElementById('pageOrientation').style.display = 'none';
+        document.getElementById('pageDimension').style.display = '';
+    }
 }
 
 
@@ -1393,7 +2038,8 @@ function getNodePorts(obj) {
 
 function created()
 {
-    diagram.fitToPage();
+    diagram.fitToPage({mode: 'Page',
+    region: 'Content',});
 }
 
 function contextMenuClick(args) {
@@ -1485,7 +2131,6 @@ function contextMenuClick(args) {
     if (args.item.id === 'SelectAll'){
         diagram.selectAll();
     }
-    document.getElementById('menu').focus();
 }
 function contextMenuOpen(args) {
     var hiddenId = [];
@@ -1629,6 +2274,17 @@ function contextMenuOpen(args) {
 
     diagram.appendTo('#diagram');
 
+    var ToolsContextMenu = new ej.navigations.ContextMenu({
+        animationSettings: { effect: 'None' },
+        items: getToolsMenuItems(),
+        onOpen: toolsContextMenuOpen,
+        cssClass: "ToolsMenu",
+        beforeItemRender: beforeItemRender,
+        select: menuClick,
+        beforeClose: arrangeMenuBeforeClose
+    });
+    ToolsContextMenu.appendTo('#ToolsContextMenu');
+
 function minValue(){
     var size;
     if(diagram.selectedItems.nodes.length>0)
@@ -1666,27 +2322,1284 @@ var palette = new ej.diagrams.SymbolPalette({
 
     
 });
-document.getElementById('fontcolor').onchange = (args) =>{
-    let nodes = diagram.selectedItems.nodes;
-    let connectors = diagram.selectedItems.connectors;
-    if(nodes.length>0){
-    updateFontColor(nodes,args);
-    }
-    if(connectors.length>0)
-    {
-        updateFontColor(connectors,args)
-    }  
-}
-document.getElementById('fillcolor').onchange = (args) =>{
-    let nodes = diagram.selectedItems.nodes;
-    let connectors = diagram.selectedItems.connectors;
-    if(nodes.length>0){
-        updateFillColor(nodes,args);
-        }
-        if(connectors.length>0)
-        {
-            updateFillColor(connectors,args)
-        }  
-}
+// document.getElementById('fontcolor').onchange = (args) =>{
+//     let nodes = diagram.selectedItems.nodes;
+//     let connectors = diagram.selectedItems.connectors;
+//     if(nodes.length>0){
+//     updateFontColor(nodes,args);
+//     }
+//     if(connectors.length>0)
+//     {
+//         updateFontColor(connectors,args)
+//     }  
+// }
+// document.getElementById('fillcolor').onchange = (args) =>{
+//     let nodes = diagram.selectedItems.nodes;
+//     let connectors = diagram.selectedItems.connectors;
+//     if(nodes.length>0){
+//         updateFillColor(nodes,args);
+//         }
+//         if(connectors.length>0)
+//         {
+//             updateFillColor(connectors,args)
+//         }  
+// }
 
 palette.appendTo('#symbolpalette');
+
+// Property panel
+
+var pageSettingsList = new ej.dropdowns.DropDownList({
+    dataSource: paperList(),
+    change: function (args) { paperListChange(args); },
+    fields: { text: 'text', value: 'value' },
+    index: 0
+});
+pageSettingsList.appendTo('#pageSettingsList');
+
+var pagePortrait = new ej.buttons.RadioButton({
+    label: 'Portrait',
+    name: 'pageSettings',
+    checked: false,
+    change: function (args) { pageOrientationChange(args); },
+});
+pagePortrait.appendTo('#pagePortrait');
+
+ var pageLandscape = new ej.buttons.RadioButton({
+    label: 'Landscape',
+    name: 'pageSettings',
+    checked: true,
+    change: function (args) { pageOrientationChange(args); },
+});
+pageLandscape.appendTo('#pageLandscape');
+
+var pageWidth = new ej.inputs.NumericTextBox({
+    min: 100,
+    format: 'n0',
+    value: diagram.pageSettings.width,
+    change: function (args) { pageDimensionChange(args); }
+});
+pageWidth.appendTo('#pageWidth');
+
+var pageHeight = new ej.inputs.NumericTextBox({
+    min: 100,
+    format: 'n0',
+    value: diagram.pageSettings.height,
+    change: function (args) { pageDimensionChange(args); }
+});
+pageHeight.appendTo('#pageHeight');
+
+var pageBgColor = new ej.inputs.ColorPicker({
+    mode: 'Palette',
+    width: '100%',
+    value: diagram.pageSettings.background.color,
+    change: function (args) { pageBackgroundChange1(args); }
+});
+pageBgColor.appendTo('#pageBgColor');
+var pageBgColorPickerBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+    pageBgColorPickerBtn.appendTo('#pageBgColorPickerBtn');
+
+    var showPageBreaks = new ej.buttons.CheckBox({ label: 'Page Breaks', checked: diagram.pageSettings.showPageBreaks, change: function (args) { pageBreaksChange(args); } });
+    showPageBreaks.appendTo('#showPageBreaks');
+
+    var nodeOffsetX = new ej.inputs.NumericTextBox({
+        format: 'n0',
+        change: function(args) {
+            if(args.isInteracted) {
+               nodeProperties.offsetX.value = args.value;
+               
+               nodePropertyChange({ propertyName: 'offsetX', propertyValue: args });
+            }
+        }
+    });
+    nodeOffsetX.appendTo('#nodeOffsetX');
+    nodeProperties.offsetX = nodeOffsetX;
+
+    var nodeOffsetY = new ej.inputs.NumericTextBox({
+        format: 'n0',
+        change: function(args) {
+            if(args.isInteracted) {
+              nodeProperties.offsetY.value = args.value;
+              nodePropertyChange({ propertyName: 'offsetY', propertyValue: args });
+            }
+        }
+    });
+    nodeOffsetY.appendTo('#nodeOffsetY');
+    nodeProperties.offsetY = nodeOffsetY;
+
+    var nodeWidth = new ej.inputs.NumericTextBox({
+        format: 'n0',
+        min: 1,
+        change: function(args) {
+            if(args.isInteracted) {
+              nodeProperties.width.value = args.value;
+              nodePropertyChange({ propertyName: 'width', propertyValue: args });
+            }
+        }
+    });
+    nodeWidth.appendTo('#nodeWidth');
+    nodeProperties.width = nodeWidth;
+
+    var nodeHeight = new ej.inputs.NumericTextBox({
+        format: 'n0',
+        min: 1,
+        change: function(args) {
+            if(args.isInteracted) {
+              nodeProperties.height.value = args.value;
+              nodePropertyChange({ propertyName: 'height', propertyValue: args });
+            }
+        }
+    });
+    nodeHeight.appendTo('#nodeHeight');
+   nodeProperties.height = nodeHeight;
+
+   var aspectRatio = new ej.buttons.CheckBox({ label: 'Aspect Ratio',
+   change: function(args) {
+       nodePropertyChange({propertyName: 'aspectRatio', propertyValue: args.checked});
+      }
+   });
+   aspectRatio.appendTo('#aspectRatio');
+   nodeProperties.aspectRatio = aspectRatio;
+
+   var rotateIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-Rotate1 tb-icons' });
+   rotateIconBtn.appendTo('#rotateIconBtn');
+
+   var nodeRotateAngle = new ej.inputs.NumericTextBox({
+       format: 'n0',
+       change: function(args) {
+           nodeProperties.rotateAngle.value = args.value;
+           nodePropertyChange({ propertyName: 'rotateAngle', propertyValue: args });
+       }
+   });
+   nodeRotateAngle.appendTo('#nodeRotateAngle');
+   nodeProperties.rotateAngle = nodeRotateAngle;
+
+   var toolbarNodeInsert = new ej.navigations.Toolbar({
+    overflowMode: 'Scrollable',
+    clicked: toolbarInsertClick,
+    items: [
+        { prefixIcon: 'sf-icon-InsertLink tb-icons', tooltipText: 'Insert Link', cssClass: 'tb-item-start' },
+        // { prefixIcon: 'sf-icon-InsertImage tb-icons', tooltipText: 'Insert Image', cssClass: 'tb-item-end' }
+    ]
+});
+toolbarNodeInsert.appendTo('#toolbarNodeInsert');
+
+var nodeFillColor = new ej.inputs.ColorPicker({
+    mode: 'Palette',
+    change: function(args) {
+        nodePropertyChange({propertyName: 'fillColor', propertyValue: args.currentValue.hex});
+    }
+});
+nodeFillColor.appendTo('#nodeFillColor');
+nodeProperties.fillColor = nodeFillColor;
+
+var gradient = new ej.buttons.CheckBox({ label: 'Gradient',
+    change: function(args) {
+        var gradientElement = document.getElementById('gradientStyle');
+        if (args.checked) {
+            gradientElement.className = 'row db-prop-row db-gradient-style-show';
+        }
+        else {
+            gradientElement.className = 'row db-prop-row db-gradient-style-hide';
+        }
+        nodePropertyChange({ propertyName: 'gradient', propertyValue: args });
+      }
+    });
+    gradient.appendTo('#gradient');
+    nodeProperties.gradient = gradient;
+
+var fillColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+fillColorIconBtn.appendTo('#fillColorIconBtn');
+
+var gradientDirectionDropdown = new ej.dropdowns.DropDownList({
+    dataSource: gradientDirections(),
+    fields: { text: 'text', value: 'value' },
+    popupWidth: '200px',
+    index: 0,
+    change: function(args) {
+        nodeProperties.gradientDirection.value = args.itemData.text;
+        nodePropertyChange({ propertyName: 'gradientDirection', propertyValue: args });
+    }
+});
+gradientDirectionDropdown.appendTo('#gradientDirectionDropdown');
+nodeProperties.gradientDirection = gradientDirectionDropdown;
+
+var nodeGradientColor = new ej.inputs.ColorPicker({
+    mode: 'Palette',
+    change: function(args) {
+        nodeProperties.gradientColor.value = args.currentValue.hex;
+        nodePropertyChange({ propertyName: 'gradientColor', propertyValue: args });
+    }
+});
+nodeGradientColor.appendTo('#nodeGradientColor');
+nodeProperties.gradientColor = nodeGradientColor;
+
+var gradientColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+gradientColorIconBtn.appendTo('#gradientColorIconBtn');
+
+var nodeStrokeColor = new ej.inputs.ColorPicker({
+    mode: 'Palette',
+    change: function(args) {
+        nodeProperties.strokeColor.value = args.currentValue.hex;
+        nodePropertyChange({ propertyName: 'strokeColor', propertyValue: args });
+    }
+});
+nodeStrokeColor.appendTo('#nodeStrokeColor');
+nodeProperties.strokeColor = nodeStrokeColor;
+
+var strokeColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-Pickers tb-icons' });
+strokeColorIconBtn.appendTo('#strokeColorIconBtn');
+
+var nodeBorderStyle = new ej.dropdowns.DropDownList({
+    dataSource: borderStyles(),
+    fields: { text: 'text', value: 'value' },
+    index: 0,
+    popupWidth: '160px',
+    itemTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',
+    valueTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',
+    change: function (args) {
+        nodeProperties.strokeStyle.value= args.itemData.text;
+        nodePropertyChange({ propertyName: 'strokeStyle', propertyValue: args });
+    }
+});
+nodeBorderStyle.appendTo('#nodeBorderStyle');
+nodeProperties.strokeStyle = nodeBorderStyle;
+
+var nodeStrokeWidth = new ej.inputs.NumericTextBox({
+    min: 0,
+    step: 0.5,
+    change: function (args) {
+       nodeProperties.strokeWidth.value= args.value;
+       nodePropertyChange({ propertyName: 'strokeWidth', propertyValue: args });
+   }
+});
+nodeStrokeWidth.appendTo('#nodeStrokeWidth');
+nodeProperties.strokeWidth = nodeStrokeWidth;
+
+var nodeOpacitySlider = new ej.inputs.Slider({
+    min: 0,
+    max: 100,
+    step: 10,
+    type: 'MinRange',
+    value: 1,
+    change: function (args) {
+       nodeProperties.opacity.value= args.value;
+       nodePropertyChange({ propertyName: 'opacity', propertyValue: args });
+   }
+});
+nodeOpacitySlider.appendTo('#nodeOpacitySlider');
+nodeProperties.opacity =  nodeOpacitySlider;
+
+var lineTypeDropdown = new ej.dropdowns.DropDownList({
+    dataSource: lineTypes(),
+    fields: { text: 'text', value: 'value' },
+    change: function(args) {
+        connectorProperties.lineType.value = args.value;
+        connectorPropertyChange({ propertyName: 'lineType', propertyValue: args });
+    }
+});
+lineTypeDropdown.appendTo('#lineTypeDropdown');
+connectorProperties.lineType = lineTypeDropdown;
+
+var lineColor = new ej.inputs.ColorPicker({
+    mode: 'Palette',
+    change: function(args) {
+        connectorProperties.lineColor.value = args.currentValue.hex;
+        connectorPropertyChange({ propertyName: 'lineColor', propertyValue: args });
+    }
+});
+lineColor.appendTo('#lineColor');
+connectorProperties.lineColor = lineColor;
+
+var lineColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-Pickers tb-icons' });
+lineColorIconBtn.appendTo('#lineColorIconBtn');
+
+var lineStyle = new ej.dropdowns.DropDownList({
+    dataSource: borderStyles(),
+    fields: { text: 'text', value: 'value' },
+    itemTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',
+    valueTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',
+    change: function(args) {
+        connectorProperties.lineStyle.value = args.value;
+        connectorPropertyChange({ propertyName: 'lineStyle', propertyValue: args });
+    }
+});
+lineStyle.appendTo('#lineStyle');
+connectorProperties.lineStyle =  lineStyle;
+
+var lineWidth = new ej.inputs.NumericTextBox({
+    min: 0.5,
+    step: 0.5,
+    change: function(args) {
+        connectorProperties.lineWidth.value = args.value;
+        connectorPropertyChange({ propertyName: 'lineWidth', propertyValue: args });
+    }
+});
+lineWidth.appendTo('#lineWidth');
+connectorProperties.lineWidth = lineWidth;
+
+var sourceType = new ej.dropdowns.DropDownList({
+    dataSource: decoratorList(),
+    fields: { text: 'text', value: 'value' },
+    change: function(args) {
+        connectorProperties.sourceType.value = args.value;
+        connectorPropertyChange({ propertyName: 'sourceType', propertyValue: args });
+    }
+});
+sourceType.appendTo('#sourceType');
+connectorProperties.sourceType = sourceType;
+
+var sourceSize = new ej.inputs.NumericTextBox({
+    min: 1,
+    step: 1,
+    change: function(args) {
+        connectorProperties.sourceSize.value = args.value;
+        connectorPropertyChange({ propertyName: 'sourceSize', propertyValue: args });
+    }
+});
+sourceSize.appendTo('#sourceSize');
+connectorProperties.sourceSize = sourceSize;
+
+var targetType = new ej.dropdowns.DropDownList({
+    dataSource: decoratorList(),
+    fields: { text: 'text', value: 'value' },
+    change: function(args) {
+        connectorProperties.targetType.value = args.value;
+        connectorPropertyChange({ propertyName: 'targetType', propertyValue: args });
+    }
+});
+targetType.appendTo('#targetType');
+connectorProperties.targetType = targetType;
+
+var targetSize = new ej.inputs.NumericTextBox({
+    min: 1,
+    step: 1,
+    change: function(args) {
+        connectorProperties.targetSize.value = args.value;
+        connectorPropertyChange({ propertyName: 'targetSize', propertyValue: args });
+    }
+});
+targetSize.appendTo('#targetSize');
+connectorProperties.targetSize = targetSize;
+
+var lineJump = new ej.buttons.CheckBox({ label: 'Bridging',
+    change: function(args) {
+        if (args.checked) {
+            document.getElementById('lineJumpSizeDiv').style.display = '';
+        }
+        else {
+            document.getElementById('lineJumpSizeDiv').style.display = 'none';
+        }
+        connectorPropertyChange({propertyName: 'lineJump', propertyValue: args});
+       }
+    });
+    lineJump.appendTo('#lineJump');
+    connectorProperties.lineJump = lineJump;
+
+    var lineJumpSize = new ej.inputs.NumericTextBox({
+        min: 1,
+        step: 1,
+        change: function(args) {
+            connectorProperties.lineJumpSize.value = args.value;
+            connectorPropertyChange({propertyName: 'lineJumpSize', propertyValue: args});
+         }
+    });
+    lineJumpSize.appendTo('#lineJumpSize');
+    connectorProperties.lineJumpSize = lineJumpSize;
+
+    var default1 = new ej.inputs.Slider({
+        min: 0,
+        max: 100,
+        step: 10,
+        type: 'MinRange',
+        value: 0,
+        change: function (args) {
+            connectorProperties.opacity.value= args.value;
+            connectorPropertyChange({ propertyName: 'opacity', propertyValue: args });
+        }
+   });
+   default1.appendTo('#default1');
+   connectorProperties.opacity = default1;
+
+var fontFamily = new ej.dropdowns.DropDownList({
+dataSource: fontFamilyList(),
+    height: '34px',
+    fields: { text: 'text', value: 'value' },
+    change: function (args) {
+        textProperties.fontFamily.value = args.value;
+        textPropertyChange({propertyName: 'fontFamily', propertyValue: args});
+    }
+});
+fontFamily.appendTo('#fontFamily');
+textProperties.fontFamily = fontFamily;
+
+var fontSizeTextProperties = new ej.inputs.NumericTextBox({
+    min: 1,
+    step: 1,
+    change: function (args) {
+        textProperties.fontSize.value = args.value;
+        textPropertyChange({propertyName: 'fontSize', propertyValue: args});
+    }
+});
+fontSizeTextProperties.appendTo('#fontSizeTextProperties');
+textProperties.fontSize = fontSizeTextProperties;
+
+
+var ddlTextPosition = new ej.dropdowns.DropDownList({
+    dataSource: textPositionDataSource(),
+    fields: { text: 'text', value: 'value' },
+    index: 4,
+    change: function (args) { textPositionChange(args); }
+});
+ddlTextPosition.appendTo('#ddlTextPosition');
+
+var textColor = new ej.inputs.ColorPicker({
+    mode: 'Palette',
+    change: function (args) {
+        textProperties.fontColor.value = args.currentValue.hex;
+        textPropertyChange({propertyName: 'fontColor', propertyValue: args});
+    }
+});
+textColor.appendTo('#textColor');
+textProperties.fontColor = textColor;
+
+var fontColorBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+fontColorBtn.appendTo('#fontColorBtn');
+
+var toolbarTextStyle = new ej.navigations.Toolbar({
+    overflowMode: 'Scrollable',
+    clicked: function (args) { toolbarTextStyleChange(args); },
+    items: [
+        { prefixIcon: 'sf-icon-Bold tb-icons', tooltipText: 'Bold', cssClass: 'tb-item-start' },
+        { prefixIcon: 'sf-icon-Italic tb-icons', tooltipText: 'Italic', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-Underline tb-icons', tooltipText: 'Underline', cssClass: 'tb-item-end' }
+    ]
+});
+toolbarTextStyle.appendTo('#toolbarTextStyle');
+
+var toolbarTextSubAlignment = new ej.navigations.Toolbar({
+    overflowMode: 'Scrollable',
+    clicked:  function (args) { toolbarTextSubAlignChange(args); },
+    items: [
+        { prefixIcon: 'sf-icon-ParaAlignLeft tb-icons', tooltipText: 'Align Text Left', cssClass: 'tb-item-start' },
+        { prefixIcon: 'sf-icon-ParaAlignCenter tb-icons', tooltipText: 'Align Text Center', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-ParaAlignRight tb-icons', tooltipText: 'Align Text Right', cssClass: 'tb-item-end' }
+    ]
+});
+toolbarTextSubAlignment.appendTo('#toolbarTextSubAlignment');
+
+var toolbarTextAlignment = new ej.navigations.Toolbar({
+    overflowMode: 'Scrollable',
+    clicked: function (args) { toolbarTextAlignChange(args); },
+    items: [
+        { prefixIcon: 'sf-icon-TextLeft tb-icons', tooltipText: 'Align Right', cssClass: 'tb-item-start' },
+        { prefixIcon: 'sf-icon-TextVerticalCenter tb-icons', tooltipText: 'Align Center', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-TextRight tb-icons', tooltipText: 'Align Left', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-TextTop tb-icons', tooltipText: 'Align Bottom', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-TextHorizontalCenter tb-icons', tooltipText: 'Align Middle', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-TextBottom tb-icons', tooltipText: 'Align Top', cssClass: 'tb-item-end' }
+    ]
+});
+toolbarTextAlignment.appendTo('#toolbarTextAlignment');
+
+var opacityTextSlider = new ej.inputs.Slider({
+    min: 0,
+    max: 100,
+    step: 10,
+    type: 'MinRange',
+    value: 0,
+    change: function (args) {
+        textProperties.opacity.value= args.value;
+        textPropertyChange({ propertyName: 'opacity', propertyValue: args });
+    }
+});
+opacityTextSlider.appendTo('#opacityTextSlider');
+textProperties.opacity = opacityTextSlider;
+
+function hideMenuBar() {
+    var expandcollapseicon = document.getElementById('btnHideToolbar');
+    var button1 = expandcollapseicon.ej2_instances[0];
+    if (button1.iconCss.indexOf('sf-icon-Collapse tb-icons') > -1) {
+        button1.iconCss = 'sf-icon-DownArrow2 tb-icons';
+    } else {
+        button1.iconCss = 'sf-icon-Collapse tb-icons';
+    }
+    hideElements('hide-menubar', diagram);
+    diagram.refresh();
+};
+
+function hideElements(elementType, diagram, diagramType) {
+    var diagramContainer = document.getElementsByClassName('diagrambuilder-container')[0];
+    if (diagramContainer.classList.contains(elementType)) {
+        if (!(diagramType === 'mindmap-diagram' || diagramType === 'orgchart-diagram')) {
+            diagramContainer.classList.remove(elementType);
+        }
+    }
+    else {
+        diagramContainer.classList.add(elementType);
+    }
+    if (diagram) {
+        diagram.updateViewPort();
+    }
+};
+
+function lineTypes() {
+    var lineTypes = [
+        { text: 'Straight', value: 'Straight' }, { text: 'Orthogonal', value: 'Orthogonal' },
+        { text: 'Bezier', value: 'Bezier' }
+    ];
+    return lineTypes;
+};
+
+function decoratorList() {
+    var decoratorList = [
+        { text: 'None', value: 'None' },
+        { text: 'Arrow', value: 'Arrow' },
+        { text: 'Diamond', value: 'Diamond' },
+        { text: 'OpenArrow', value: 'OpenArrow' },
+        { text: 'Circle', value: 'Circle' },
+        { text: 'Square', value: 'Square' },
+        { text: 'Fletch', value: 'Fletch' },
+        { text: 'OpenFetch', value: 'OpenFetch' },
+        { text: 'IndentedArrow', value: 'IndentedArrow' },
+        { text: 'OutdentedArrow', value: 'OutdentedArrow' },
+        { text: 'DoubleArrow', value: 'DoubleArrow' }
+    ];
+    return decoratorList;
+};
+
+function fontFamilyList()
+{
+    var fontType = [
+        { type: 'Arial', text: 'Arial' },
+        { type: 'Aharoni', text: 'Aharoni' },
+        { type: 'Bell MT', text: 'Bell MT' },
+        { type: 'Fantasy', text: 'Fantasy' },
+        { type: 'Times New Roman', text: 'Times New Roman' },
+        { type: 'Segoe UI', text: 'Segoe UI' },
+        { type: 'Verdana', text: 'Verdana' }
+    ];
+    return fontType;
+}
+
+function textPositionDataSource() {
+    var textPosition = [
+        { text: 'TopLeft', value: 'TopLeft' }, { text: 'TopCenter', value: 'TopCenter' },
+        { text: 'TopRight', value: 'TopRight' }, { text: 'MiddleLeft', value: 'MiddleLeft' },
+        { text: 'Center', value: 'Center' }, { text: 'MiddleRight', value: 'MiddleRight' },
+        { text: 'BottomLeft', value: 'BottomLeft' }, { text: 'BottomCenter', value: 'BottomCenter' },
+        { text: 'BottomRight', value: 'BottomRight' },
+    ];
+    return textPosition;
+};
+
+function textPositionChange(args) {
+    if (args.value !== null) {
+        this.textPropertyChange1('textPosition', args.value);
+    }
+};
+
+function textPropertyChange1(propertyName, propertyValue) {
+    if (!diagram.preventPropertyChange) {
+        var selectedObjects = diagram.selectedItems.nodes;
+        selectedObjects = selectedObjects.concat(diagram.selectedItems.connectors);
+        propertyName = propertyName.toLowerCase();
+        if (selectedObjects.length > 0) {
+            for (var i = 0; i < selectedObjects.length; i++) {
+                var node = selectedObjects[i];
+                if (node instanceof ej.diagrams.Node || node instanceof ej.diagrams.Connector) {
+                    if (node.annotations.length > 0) {
+                        for (var j = 0; j < node.annotations.length; j++) {
+                            var annotation = null;
+                            if (node.annotations[j] instanceof ej.diagrams.ShapeAnnotation) {
+                                annotation = node.annotations[j];
+                                if (propertyName === 'textposition') {
+                                    textProperties.textPosition = propertyValue.toString();
+                                    annotation.offset = getOffset(propertyValue);
+                                }
+                            }
+                            else if (node.annotations[j] instanceof ej.diagrams.PathAnnotation) {
+                                annotation = node.annotations[j];
+                                if (propertyName === 'textposition') {
+                                    textProperties.textPosition = propertyValue.toString();
+                                    annotation.alignment = textProperties.textPosition;
+                                }
+                            }
+                            if (propertyName === 'left' || propertyName === 'right' || propertyName === 'center') {
+                                annotation.horizontalAlignment = propertyValue;
+                                updateHorVertAlign(annotation.horizontalAlignment, annotation.verticalAlignment);
+                            }
+                            else if (propertyName === 'top' || propertyName === 'bottom') {
+                                annotation.verticalAlignment = propertyValue;
+                                updateHorVertAlign(annotation.horizontalAlignment, annotation.verticalAlignment);
+                            }
+                            else if (propertyName === 'middle') {
+                                annotation.verticalAlignment = 'Center';
+                                updateHorVertAlign(annotation.horizontalAlignment, annotation.verticalAlignment);
+                            }
+                            else {
+                                this.updateTextProperties1(propertyName, propertyValue, annotation.style);
+                            }
+                        }
+                    }
+                    else if (node.shape && node.shape.type === 'Text') {
+                        this.updateTextProperties1(propertyName, propertyValue, node.style);
+                    }
+                }
+            }
+            diagram.dataBind();
+        }
+    }
+};
+
+function getOffset (position) {
+    switch (position.toLowerCase()) {
+        case 'topleft':
+            return { x: 0, y: 0 };
+        case 'topcenter':
+            return { x: 0.5, y: 0 };
+        case 'topright':
+            return { x: 1, y: 0 };
+        case 'middleleft':
+            return { x: 0, y: 0.5 };
+        default:
+            return { x: 0.5, y: 0.5 };
+        case 'middleright':
+            return { x: 1, y: 0.5 };
+        case 'bottomleft':
+            return { x: 0, y: 1 };
+        case 'bottomcenter':
+            return { x: 0.5, y: 1 };
+        case 'bottomright':
+            return { x: 1, y: 1 };
+    }
+};
+
+function updateHorVertAlign(horizontalAlignment, verticalAlignment) {
+    var toolbarHorVerAlignment = document.getElementById('toolbarTextAlignment');
+    if (toolbarHorVerAlignment) {
+        toolbarHorVerAlignment = toolbarHorVerAlignment.ej2_instances[0];
+    }
+    if (toolbarHorVerAlignment) {
+        for (var i = 0; i < toolbarHorVerAlignment.items.length; i++) {
+            toolbarHorVerAlignment.items[i].cssClass = toolbarHorVerAlignment.items[i].cssClass.replace(' tb-item-selected', '');
+        }
+        var index = horizontalAlignment === 'Right' ? 0 : (horizontalAlignment === 'Center' ? 1 : 2);
+        toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
+        index = verticalAlignment === 'Bottom' ? 3 : (verticalAlignment === 'Center' ? 4 : 5);
+        toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
+    }
+};
+
+function toolbarTextStyleChange(args) {
+    this.textPropertyChange1(args.item.tooltipText, false);
+};
+function toolbarTextSubAlignChange(args) {
+    var propertyName = args.item.tooltipText.replace(/[' ']/g, '');
+    this.textPropertyChange1(propertyName, propertyName);
+};
+function toolbarTextAlignChange(args) {
+    var propertyName = args.item.tooltipText.replace('Align ', '');
+    this.textPropertyChange1(propertyName, propertyName);
+};
+
+function textPropertyChange(args) {
+    if (!diagram.preventPropertyChange) {
+        if (diagram) {
+            var selectedObjects = diagram.selectedItems.nodes;
+            selectedObjects = selectedObjects.concat(diagram.selectedItems.connectors);
+            var propertyName = args.propertyName.toString().toLowerCase();
+            if (selectedObjects.length > 0) {
+                for (var i = 0; i < selectedObjects.length; i++) {
+                    var node = selectedObjects[i];
+                    if (node instanceof ej.diagrams.Node || node instanceof ej.diagrams.Connector) {
+                        if (node.annotations.length > 0) {
+                            for (var j = 0; j < node.annotations.length; j++) {
+                                var annotation = node.annotations[j].style;
+                                this.updateTextProperties(propertyName, annotation);
+                            }
+                        }
+                    }
+                }
+                diagram.dataBind();
+                this.isModified = true;
+            }
+        }
+    }
+};
+
+function updateTextProperties (propertyName, annotation) {
+    switch (propertyName) {
+        case 'fontfamily':
+            annotation.fontFamily = textProperties.fontFamily.value;
+            break;
+        case 'fontsize':
+            annotation.fontSize = textProperties.fontSize.value;
+            break;
+        case 'fontcolor':
+            annotation.color = this.getColor(textProperties.fontColor.value);
+            break;
+        case 'opacity':
+            annotation.opacity = textProperties.opacity.value / 100;
+            document.getElementById("textOpacityText").value = textProperties.opacity.value + '%';
+            break;
+    }
+};
+function updateTextProperties1 (propertyName, propertyValue, annotation) {
+    switch (propertyName) {
+        case 'bold':
+            annotation.bold = !annotation.bold;
+            this.updateToolbarState('toolbarTextStyle', annotation.bold, 0);
+            break;
+        case 'italic':
+            annotation.italic = !annotation.italic;
+            this.updateToolbarState('toolbarTextStyle', annotation.italic, 1);
+            break;
+        case 'underline':
+            textProperties.textDecoration = !textProperties.textDecoration;
+            annotation.textDecoration = annotation.textDecoration === 'None' || !annotation.textDecoration ? 'Underline' : 'None';
+            this.updateToolbarState('toolbarTextStyle', textProperties.textDecoration, 2);
+            break;
+        case 'aligntextleft':
+        case 'aligntextright':
+        case 'aligntextcenter':
+            annotation.textAlign = propertyValue.toString().replace('AlignText', '');
+            updateTextAlign(annotation.textAlign);
+            break;
+    }
+};
+
+function updateToolbarState (toolbarName, isSelected, index) {
+    var toolbarTextStyle = document.getElementById(toolbarName);
+    if (toolbarTextStyle) {
+        toolbarTextStyle = toolbarTextStyle.ej2_instances[0];
+    }
+    if (toolbarTextStyle) {
+        var cssClass = toolbarTextStyle.items[index].cssClass;
+        toolbarTextStyle.items[index].cssClass = isSelected ? cssClass + ' tb-item-selected' : cssClass.replace(' tb-item-selected', '');
+        toolbarTextStyle.dataBind();
+    }
+};
+
+function pageOrientationChange(args)
+{
+    if (args.event) {
+        var target = args.event.target;
+        switch (target.id) {
+            case 'pagePortrait':
+                diagram.pageSettings.isPortrait = true;
+                diagram.pageSettings.isLandscape = false;
+                diagram.pageSettings.orientation = 'Portrait';
+                break;
+            case 'pageLandscape':
+                diagram.pageSettings.isPortrait = false;
+                diagram.pageSettings.isLandscape = true;
+                diagram.pageSettings.orientation = 'Landscape';
+                break;
+        }
+        diagram.dataBind();
+        // selectedItem.pageSettings.pageWidth = diagram.pageSettings.width;
+        // selectedItem.pageSettings.pageHeight = diagram.pageSettings.height;
+    }
+}
+
+function pageDimensionChange(args)
+{
+    if (args.event) {
+        var pageWidth = Number(diagram.pageSettings.width);
+        var pageHeight = Number(diagram.pageSettings.height);
+        var target = args.event.target;
+        if (target.tagName.toLowerCase() === 'span') {
+            target = target.parentElement.children[0];
+        }
+        if (target.id === 'pageWidth') {
+            pageWidth = Number(target.value.replace(/,/g, ''));
+        }
+        else {
+            pageHeight = Number(target.value.replace(/,/g, ''));
+        }
+        if (pageWidth && pageHeight) {
+            if (pageWidth > pageHeight) {
+                diagram.pageSettings.isPortrait = false;
+                diagram.pageSettings.isLandscape = true;
+                diagram.pageSettings.orientation = 'Landscape';
+            }
+            else {
+                diagram.pageSettings.isPortrait = true;
+                diagram.pageSettings.isLandscape = false;
+                diagram.pageSettings.orientation = 'Portrait';
+            }
+             diagram.pageSettings.width = pageWidth;
+             diagram.pageSettings.height = pageHeight;
+            diagram.dataBind();
+        }
+    }
+}
+function paperList  () {
+    var paperList = [
+        { text: 'Letter (8.5 in x 11 in)', value: 'Letter' }, { text: 'Legal (8.5 in x 14 in)', value: 'Legal' },
+        { text: 'Tabloid (279 mm x 432 mm)', value: 'Tabloid' }, { text: 'A3 (297 mm x 420 mm)', value: 'A3' },
+        { text: 'A4 (210 mm x 297 mm)', value: 'A4' }, { text: 'A5 (148 mm x 210 mm)', value: 'A5' },
+        { text: 'A6 (105 mm x 148 mm)', value: 'A6' }, { text: 'Custom', value: 'Custom' },
+    ];
+    return paperList;
+};
+
+function pageBackgroundChange1(args)
+{
+    if (args.currentValue) {
+        diagram.pageSettings.background = {
+            color: args.currentValue.rgba
+        };
+        diagram.dataBind();
+    }
+};
+ function pageBreaksChange(args)
+ {
+    if (args.event) {
+        diagram.pageSettings.showPageBreaks = args.checked;
+        diagram.dataBind();
+    }
+ }
+
+ function gradientDirections () {
+    var gradientDirections = [
+        { text: 'BottomToTop', value: 'BottomToTop' }, { text: 'TopToBottom', value: 'TopToBottom' },
+        { text: 'RightToLeft', value: 'RightToLeft' }, { text: 'LeftToRight', value: 'LeftToRight' }
+    ];
+    return gradientDirections;
+};
+
+function borderStyles() {
+    var borderStyles = [
+        { text: 'None', value: 'None', className: 'ddl-svg-style ddl_linestyle_none' },
+        { text: '1,2', value: '1,2', className: 'ddl-svg-style ddl_linestyle_one_two' },
+        { text: '3,3', value: '3,3', className: 'ddl-svg-style ddl_linestyle_three_three' },
+        { text: '5,3', value: '5,3', className: 'ddl-svg-style ddl_linestyle_five_three' },
+        { text: '4,4,1', value: '4,4,1', className: 'ddl-svg-style ddl_linestyle_four_four_one' }
+    ];
+    return borderStyles;
+};
+
+ function nodePropertyChange(args)
+ {
+    if (!diagram.preventPropertyChange) {
+        if (diagram) {
+            if (diagram.selectedItems.nodes.length > 0) {
+                var selectedNodes = diagram.selectedItems.nodes;
+                for (var i = 0; i < selectedNodes.length; i++) {
+                    var node = selectedNodes[i];
+                    var propertyName1 = args.propertyName.toString().toLowerCase();
+                    switch (propertyName1) {
+                        case 'offsetx':
+                            node.offsetX = nodeProperties.offsetX.value;
+                            nodeOffsetX.value = nodeProperties.offsetX.value;
+                            break;
+                        case 'offsety':
+                            node.offsetY = nodeProperties.offsetY.value;
+                            break;
+                        case 'width':
+                            node.width = nodeProperties.width.value;
+                            break;
+                        case 'height':
+                            node.height = nodeProperties.height.value;
+                            break;
+                        case 'rotateangle':
+                            node.rotateAngle = nodeProperties.rotateAngle.value;
+                            break;
+                        case 'aspectratio':
+                            node.constraints = node.constraints ^ ej.diagrams.NodeConstraints.AspectRatio;
+                            break;
+                    }
+                    if (!node.children) {
+                        this.applyNodeStyle(propertyName1, node, args.propertyValue);
+                    }
+                    else {
+                        for (var j = 0; j < node.children.length; j++) {
+                            this.applyNodeStyle(propertyName1, diagram.getObject(node.children[j]), args.propertyValue);
+                        }
+                    }
+                }
+                this.isModified = true;
+            }
+            if (diagram.connectors.length > 0) {
+                var selectedNodes = diagram.selectedItems.connectors;
+                for (var i = 0; i < selectedNodes.length; i++) {
+                    switch (args.propertyName.toString().toLowerCase()) {
+                        case 'strokecolor':
+                            connectorProperties.lineColor.value = getColor(nodeProperties.strokeColor.value);
+                            break;
+                        case 'strokewidth':
+                            connectorProperties.lineWidth.value = nodeProperties.strokeWidth.value;
+                            break;
+                        case 'strokestyle':
+                            connectorProperties.lineStyle.value = nodeProperties.strokeStyle.value;
+                            break;
+                        case 'opacity':
+                            connectorProperties.opacity.value = nodeProperties.opacity.value;
+                            break;
+                    }
+                }
+                this.isModified = true;
+            }
+            diagram.dataBind();
+        }
+    }
+};
+
+function connectorPropertyChange(args) {
+    if (!diagram.preventPropertyChange) {
+        if (diagram && diagram.selectedItems.connectors.length > 0) {
+            var selectedNodes = diagram.selectedItems.connectors;
+            for (var i = 0; i < selectedNodes.length; i++) {
+                var connector = selectedNodes[i];
+                switch (args.propertyName.toString().toLowerCase()) {
+                    case 'linecolor':
+                        connector.style.strokeColor = this.getColor(connectorProperties.lineColor.value);
+                        connector.sourceDecorator.style = { fill: connector.style.strokeColor, strokeColor: connector.style.strokeColor };
+                        connector.targetDecorator.style = { fill: connector.style.strokeColor, strokeColor: connector.style.strokeColor };
+                        break;
+                    case 'linewidth':
+                        connector.style.strokeWidth = connectorProperties.lineWidth.value;
+                        if (connector.sourceDecorator.style) {
+                            connector.sourceDecorator.style.strokeWidth = connector.style.strokeWidth;
+                        }
+                        else {
+                            connector.sourceDecorator.style = { strokeWidth: connector.style.strokeWidth };
+                        }
+                        if (connector.targetDecorator.style) {
+                            connector.targetDecorator.style.strokeWidth = connector.style.strokeWidth;
+                        }
+                        else {
+                            connector.targetDecorator.style = { strokeWidth: connector.style.strokeWidth };
+                        }
+                        break;
+                    case 'linestyle':
+                        connector.style.strokeDashArray = connectorProperties.lineStyle.value;
+                        break;
+                    case 'linetype':
+                        connector.type = connectorProperties.lineType.value;
+                        break;
+                    case 'sourcetype':
+                        connector.sourceDecorator.shape = connectorProperties.sourceType.value;
+                        break;
+                    case 'targettype':
+                        connector.targetDecorator.shape = connectorProperties.targetType.value;
+                        break;
+                    case 'sourcesize':
+                        connector.sourceDecorator.width = connector.sourceDecorator.height = connectorProperties.sourceSize.value;
+                        break;
+                    case 'targetsize':
+                        connector.targetDecorator.width = connector.targetDecorator.height = connectorProperties.targetSize.value;
+                        break;
+                    case 'opacity':
+                        connector.style.opacity = connectorProperties.opacity.value / 100;
+                        connector.targetDecorator.style.opacity = connector.style.opacity;
+                        connector.sourceDecorator.style.opacity = connector.style.opacity;
+                        document.getElementById("connectorOpacitySliderText").value = connectorProperties.opacity.value + '%';
+                        break;
+                    case 'linejump':
+                        if (args.propertyValue.checked) {
+                            connector.constraints = connector.constraints | ej.diagrams.ConnectorConstraints.Bridging;
+                        }
+                        else {
+                            connector.constraints = connector.constraints & ~ej.diagrams.ConnectorConstraints.Bridging;
+                        }
+                        break;
+                    case 'linejumpsize':
+                        connector.bridgeSpace = connectorProperties.lineJumpSize.value;
+                        break;
+                }
+            }
+            diagram.dataBind();
+            this.isModified = true;
+        }
+    }
+};
+
+function applyNodeStyle  (propertyName, node, value) {
+    var addInfo = node.addInfo || {};
+    switch (propertyName) {
+        case 'fillcolor':
+            node.style.fill = getColor(value);
+            // nodeFillColor.value = nodeProperties.fillColor;
+            if (value && value.checked) {
+                NodeProperties.prototype.getGradient(node);
+            }
+            break;
+        case 'strokecolor':
+            node.style.strokeColor = getColor(nodeProperties.strokeColor.value);
+            break;
+        case 'strokewidth':
+            node.style.strokeWidth = nodeProperties.strokeWidth.value;
+            break;
+        case 'strokestyle':
+            node.style.strokeDashArray = nodeProperties.strokeStyle.value;
+            break;
+        case 'opacity':
+            node.style.opacity = nodeProperties.opacity.value / 100;
+            document.getElementById("nodeOpacitySliderText").value = nodeProperties.opacity.value + '%';
+            break;
+        case 'gradient':
+            if (value && !value.checked) {
+                node.style.gradient.type = 'None';
+            }
+            else {
+                NodeProperties.prototype.getGradient(node);
+            }
+            break;
+        case 'gradientdirection':
+        case 'gradientcolor':
+            NodeProperties.prototype.getGradient(node);
+            break;
+    }
+};
+function getColor(colorName) {
+    if (window.navigator.msSaveBlob && colorName.length === 9) {
+        return colorName.substring(0, 7);
+    }
+    return colorName;
+};
+var hyperlinkDialog = new ej.popups.Dialog({
+    width: '400px',
+    header: 'Insert Link',
+    target: document.body,
+    isModal:true,
+    animationSettings: { effect: 'None' },
+    showCloseIcon: true,
+    visible: false,
+    buttons: getDialogButtons('hyperlink'),
+    content: '<div id="hyperlinkDialogContent"><div class="row"><div class="row">Enter URL</div><div class="row db-dialog-child-prop-row"><input type="text" id="hyperlink">' +
+    '</div></div><div class="row db-dialog-prop-row"><div class="row">Link Text (Optional)</div><div class="row db-dialog-child-prop-row"><input type="text" id="hyperlinkText"></div></div></div>'
+});
+hyperlinkDialog.appendTo('#hyperlinkDialog');
+
+var fileUploadDialog = new ej.popups.Dialog({
+    width: '500px',
+    height: '485px',
+    header: 'Upload File',
+    target: document.body,
+    isModal: true,
+    animationSettings: { effect: 'None' },
+    buttons: getUploadButtons(),
+    visible: false,
+    showCloseIcon: true,
+    allowDragging: true,
+    content: ' <div id="uploadDialogContent" class="db-upload-content firstPage"> <div id="tooltip"> <div id="uploadInformationDiv" class="row db-dialog-prop-row" style="margin-top: 0px;">' +
+    ' <div class="row"> <div class="row" style="font-size: 12px;font-weight: 500;color: black;"><div class="db-info-text">Choose Format</div>' +
+    ' <div class="db-format-type" style="display: none"> </div> </div><div class="row db-dialog-child-prop-row"><div class="col-xs-3 db-prop-col-style">' +
+    ' <input id="csvFormat" type="radio"></div> <div class="col-xs-3 db-prop-col-style"><input id="xmlFormat" type="radio"></div> <div class="col-xs-3 db-prop-col-style">' +
+    '<input id="jsonFormat" type="radio"> </div> </div> </div> <div class="row db-dialog-prop-row" style="padding: 10px; background-color: #FFF7B5; border: 1px solid #FFF7B5">' +
+    '<div class="db-info-parent" style="width: 10%; background-color:transparent; height: 60px;"></div> <div style="float:left; width: calc(90% - 5px)">' +
+    ' <ul style="padding-left: 25px; margin-bottom: 0px"><li style="margin-bottom: 5px"><span id="descriptionText1" style="color: #515151;font-size: 11px;line-height: 15px;">Makesure that the every column of your table has a header</span>' +
+    '</li><li><span id="descriptionText2" style="color: #515151;font-size: 11px;line-height: 15px;">Each employee should have a reporting person (except for top most employee of the organization) and it should be indicated by any field from your data source.</span></li></ul>' +
+    '</div></div><div class="row db-dialog-prop-row"><button id="btnDownloadFile"></button></div><div class="row"> <div id="dropArea">' +
+    '<span id="dropRegion" class="droparea"> Drop files here or <a href="" id="browseFile"><u>Browse</u></a></span><input type="file" id="defaultfileupload" name="UploadFiles"/>' +
+    '</div></div></div><div id="parentChildRelationDiv" class="row db-dialog-prop-row"> <div class="row db-dialog-child-prop-row" style="margin-top:20px">' +
+    '<div class="row"><div class="db-info-text">Employee Id</div><div class="db-info-style db-employee-id"></div></div><div class="row db-dialog-child-prop-row">' +
+    '<input type="text" id="employeeId"/></div></div><div class="row db-dialog-prop-row"><div class="row"><div class="db-info-text"> Supervisor Id</div>' +
+    ' <div class="db-info-style db-supervisor-id"> </div> </div> <div class="row db-dialog-child-prop-row"><input type="text" id="superVisorId"/></div></div></div>' +
+    '<div id="moreInformationDiv" class="row db-dialog-prop-row"><div id="bindingFields" class="row"><div class="row"><div class="db-info-text">Name</div>' +
+    '<div class="db-info-style db-nameField-id"></div></div><div class="row db-dialog-child-prop-row"><input type="text" id="orgNameField"/></div></div>' +
+    '<div id="bindingFields" class="row db-dialog-prop-row" style="margin-top:20px"><div class="row"><div class="db-info-text">Binding Fields</div><div class="db-info-style db-bindingField-id">' +
+    '</div></div><div class="row db-dialog-child-prop-row"><input type="text" id="orgBindingFields" /></div></div><div id="imageFields" class="row db-dialog-prop-row">' +
+    '<div class="row"><div class="db-info-text">Image Field</div><div class="db-info-style db-imageField-id"></div></div>' +
+    '<div class="row db-dialog-child-prop-row"><input type="text" id="orgImageField"/></div></div> <div id="additionalFields" class="row db-dialog-prop-row">' +
+    '<div class="row"><div class="db-info-text">Additional Fields</div><div class="db-info-style db-additionalField-id"></div></div><div class="row db-dialog-child-prop-row">' +
+    '<input type="text" id="orgAdditionalField"/></div></div></div></div></div>'
+});
+fileUploadDialog.appendTo('#fileUploadDialog');
+
+var exportDialog = new ej.popups.Dialog({
+    width: '400px',
+    header: 'Export Diagram',
+    target: document.body,
+    isModal: true,
+    animationSettings: { effect: 'None' },
+    buttons: getDialogButtons('export'),
+    visible: false,
+    showCloseIcon: true,
+    content: '<div id="exportDialogContent"><div class="row"><div class="row"> File Name </div> <div class="row db-dialog-child-prop-row">' +
+     '<input type="text" id="exportfileName" value = "Untitled Diagram"></div></div>' +
+     '<div class="row db-dialog-prop-row"> <div class="col-xs-6 db-col-left"> <div class="row"> Format </div>' +
+     '<div class="row db-dialog-child-prop-row"> <input type="text" id="exportFormat"/> </div> </div>' +
+     '<div class="col-xs-6 db-col-right"> <div class="row"> Region </div> <div class="row db-dialog-child-prop-row">' +
+     '<input type="text" id="exportRegion"/></div></div></div></div>'
+});
+exportDialog.appendTo('#exportDialog');
+
+var exportFormat = new ej.dropdowns.DropDownList({
+    dataSource: fileFormats(),
+    fields: { text: 'text', value: 'value' },
+    value: exportSettings.format
+});
+exportFormat.appendTo('#exportFormat');
+
+  // dropdown template for exportDialog control
+var exportRegion = new ej.dropdowns.DropDownList({
+    dataSource: diagramRegions(),
+    fields: { text: 'text', value: 'value' },
+    value: exportSettings.region
+});
+exportRegion.appendTo('#exportRegion');
+
+function fileFormats() {
+    var fileFormats = [
+        { text: 'JPG', value: 'JPG' }, { text: 'PNG', value: 'PNG' },
+        { text: 'BMP', value: 'BMP' }, { text: 'SVG', value: 'SVG' }
+    ];
+    return fileFormats;
+};
+function diagramRegions() {
+    var diagramRegions = [
+        { text: 'Content', value: 'Content' }, { text: 'PageSettings', value: 'PageSettings' }
+    ];
+    return diagramRegions;
+};
+function toolbarInsertClick(args) {
+    var commandType = args.item.tooltipText.replace(/[' ']/g, '');
+    if (diagram.selectedItems.nodes.length > 0) {
+        switch (commandType.toLowerCase()) {
+            case 'insertlink':
+                 document.getElementById('hyperlink').value = '';
+                 document.getElementById('hyperlinkText').value = '';
+                if (diagram.selectedItems.nodes[0].annotations.length > 0) {
+                    var annotation = diagram.selectedItems.nodes[0].annotations[0];
+                    if (annotation.hyperlink.link || annotation.content) {
+                        document.getElementById('hyperlink').value = annotation.hyperlink.link;
+                        document.getElementById('hyperlinkText').value = annotation.hyperlink.content || annotation.content;
+                    }
+                }
+                hyperlinkDialog.show();
+                break;
+            case 'insertimage':
+                openUploadBox(false, '.jpg,.png,.bmp');
+                break;
+        }
+    }
+}
+function openUploadBox(isOpen,extensionType)
+{
+    var defaultUpload = document.getElementById('defaultfileupload');
+        defaultUpload = defaultUpload.ej2_instances[0];
+        defaultUpload.clearAll();
+        diagram.orgDataSettings.extensionType = defaultUpload.allowedExtensions = extensionType;
+        defaultUpload.dataBind();
+        diagram.isOpen = isOpen;
+        document.getElementsByClassName('e-file-select-wrap')[0].children[0].click();
+}
+
+function getDialogButtons(dialogType) {
+    var buttons= [];
+    switch (dialogType) {
+        case 'export':
+            buttons.push({
+                click: btnExportClick.bind(this), buttonModel: { content: 'Export', cssClass: 'e-flat e-db-primary', isPrimary: true }
+            });
+            break;
+        case 'print':
+            buttons.push({
+                click: btnPrintClick.bind(this),
+                buttonModel: { content: 'Print', cssClass: 'e-flat e-db-primary', isPrimary: true }
+            });
+            break;
+        case 'hyperlink':
+            buttons.push({
+                click: btnHyperLink.bind(this),
+                buttonModel: { content: 'Apply', cssClass: 'e-flat e-db-primary', isPrimary: true }
+            });
+            break;
+       
+    }
+    buttons.push({
+        click: btnCancelClick.bind(this),
+        buttonModel: { content: 'Cancel', cssClass: 'e-flat', isPrimary: true }
+    });
+    return buttons;
+}
+
+function btnCancelClick(args) {
+    var ss = args.target;
+    var key = ss.offsetParent.id;
+    switch (key) {
+        case 'exportDialog':
+            exportDialog.hide();
+            break;
+        case 'printDialog':
+            printDialog.hide();
+            break;
+        case 'saveDialog':
+            saveDialog.hide();
+            break;
+        case 'customPropertyDialog':
+            this.customPropertyDialog.hide();
+            break;
+        case 'tooltipDialog':
+            tooltipDialog.hide();
+            break;
+        case 'hyperlinkDialog':
+            this.hyperlinkDialog.hide();
+            break;
+        case 'deleteConfirmationDialog':
+            this.deleteConfirmationDialog.hide();
+            break;
+        case 'fileUploadDialog':
+            OrgChartUtilityMethods.uploadDialog.hide();
+            OrgChartUtilityMethods.isUploadSuccess = false;
+            break;
+        case 'moreShapesDialog':
+            moreShapesDialog.hide();
+            break;
+    }
+}
+
+function btnHyperLink() {
+    var node = diagram.selectedItems.nodes[0];
+    if (node.annotations.length > 0) {
+        node.annotations[0].hyperlink.link = document.getElementById('hyperlink').value;
+        node.annotations[0].hyperlink.content = document.getElementById('hyperlinkText').value;
+        applyToolTipforHyperlink(node);
+        diagram.dataBind();
+    } else {
+        var annotation = {
+            hyperlink: {
+                content: document.getElementById('hyperlinkText').value,
+                link: document.getElementById('hyperlink').value
+            }
+        };
+        diagram.addLabels(node, [annotation]);
+        applyToolTipforHyperlink(node);
+        diagram.dataBind();
+    }
+    hyperlinkDialog.hide();
+}
+
+function btnExportClick() {
+    diagram.exportDiagram({
+        fileName: document.getElementById("exportfileName").value,
+        format: exportSettings.format,
+        region: exportSettings.region
+    });
+    exportDialog.hide();
+}
+
+function applyToolTipforHyperlink(node) {
+    node.constraints = ej.diagrams.NodeConstraints.Default & ~ej.diagrams.NodeConstraints.InheritTooltip | ej.diagrams.NodeConstraints.Tooltip;
+    node.tooltip = {
+        content: node.annotations[0].hyperlink.link, relativeMode: 'Object',
+        position: 'TopCenter', showTipPointer: true,
+    };
+}
+
+function getUploadButtons() {
+    var buttons = [];
+    buttons.push({
+        click: btnCancelClick.bind(this),
+        buttonModel: { content: 'Cancel', cssClass: 'e-flat', isPrimary: true }
+    });
+    // buttons.push({
+    //     click: btnUploadNext.bind(this),
+    //     buttonModel: { content: 'Next', cssClass: 'e-flat e-db-primary', isPrimary: true },
+    // });
+    return buttons;
+}

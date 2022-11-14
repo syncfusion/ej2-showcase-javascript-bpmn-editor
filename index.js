@@ -236,7 +236,7 @@ var nodes = [
             type: 'Bpmn', shape: 'Event',
             event: { event: 'Intermediate',trigger:'Message'},
         },
-        annotations:[{content:'Decline Hold',offset:{x:0.5,y:1.4}}]
+        annotations:[{content:'Decline Hold',offset:{x:0.5,y:1.0},verticalAlignment:'Top'}]
     },
     {
         id: 'Task4', width: 120, height: 75, offsetX: 1200, offsetY: 300,
@@ -258,21 +258,21 @@ var nodes = [
             type: 'Bpmn', shape: 'Event',
             event: { event: 'Intermediate',trigger:'Message'},
         },
-        annotations:[{content:'Hold Book',offset:{x:0.5,y:1.4}}]
+        annotations:[{content:'Hold Book',offset:{x:0.5,y:1.0},verticalAlignment:'Top'}]
     },
     {
         id: 'Intermediate3', offsetX:1050, offsetY: 400 , width: 50, height: 50, shape: {
             type: 'Bpmn', shape: 'Event',
             event: { event: 'Intermediate',trigger:'Message'},
         },
-        annotations:[{content:'One Week',offset:{x:0.5,y:1.4}}]
+        annotations:[{content:'One Week',offset:{x:0.5,y:1.0},verticalAlignment:'Top'}]
     },
     {
         id: 'Intermediate4', offsetX:900, offsetY: 60 , width: 50, height: 50, shape: {
             type: 'Bpmn', shape: 'Event',
             event: { event: 'Intermediate',trigger:'Message'},
         },
-        annotations:[{content:'Two Weeks',offset:{x:0.5,y:1.4}}]
+        annotations:[{content:'Two Weeks',offset:{x:0.5,y:1.0},verticalAlignment:'Top'}]
     },
     {
         id: 'Task5', width: 120, height: 75, offsetX: 780, offsetY: 550,
@@ -612,7 +612,7 @@ var contextMenu = {
 var handles = [
     {
         name: 'Clone', pathData: 'M0,2.4879999 L0.986,2.4879999 0.986,9.0139999 6.9950027,9.0139999 6.9950027,10 0.986,10 C0.70400238,10 0.47000122,9.9060001 0.28100207,9.7180004 0.09400177,9.5300007 0,9.2959995 0,9.0139999 z M3.0050011,0 L9.0140038,0 C9.2960014,0 9.5300026,0.093999863 9.7190018,0.28199956 9.906002,0.47000027 10,0.70399952 10,0.986 L10,6.9949989 C10,7.2770004 9.906002,7.5160007 9.7190018,7.7110004 9.5300026,7.9069996 9.2960014,8.0049992 9.0140038,8.0049992 L3.0050011,8.0049992 C2.7070007,8.0049992 2.4650002,7.9069996 2.2770004,7.7110004 2.0890007,7.5160007 1.9950027,7.2770004 1.9950027,6.9949989 L1.9950027,0.986 C1.9950027,0.70399952 2.0890007,0.47000027 2.2770004,0.28199956 2.4650002,0.093999863 2.7070007,0 3.0050011,0 z',tooltip:{content:'Clone'},
-        visible: true, offset: 1, side: 'Bottom', margin: { top: 0, bottom: 0, left: 0, right: 0 }
+        visible: true, offset: 1, side: 'Bottom', margin: { top: 5, bottom: 0, left: 5, right: 5 }
     },
     {
         name: 'Delete', pathData: 'M0.54700077,2.2130003 L7.2129992,2.2130003 7.2129992,8.8800011 C7.2129992,9.1920013 7.1049975,9.4570007 6.8879985,9.6739998 6.6709994,9.8910007 6.406,10 6.0939997,10 L1.6659999,10 C1.3539997,10 1.0890004,9.8910007 0.87200136,9.6739998 0.65500242,9.4570007 0.54700071,9.1920013 0.54700077,8.8800011 z M2.4999992,0 L5.2600006,0 5.8329986,0.54600048 7.7599996,0.54600048 7.7599996,1.6660004 0,1.6660004 0,0.54600048 1.9270014,0.54600048 z',tooltip:{content:'Delete'},
@@ -620,7 +620,7 @@ var handles = [
     },
     {
         name: 'Draw', pathData: 'M3.9730001,0 L8.9730001,5.0000007 3.9730001,10.000001 3.9730001,7.0090005 0,7.0090005 0,2.9910006 3.9730001,2.9910006 z',tooltip:{content:'Draw'},
-        visible: true, offset: 0.5, side: 'Right', margin: { top: 0, bottom: 0, left: 0, right: 0 }
+        visible: true, offset: 0.5, side: 'Right', margin: { top: 0, bottom: 5, left: 5, right: 0 }
     },
 ];
 
@@ -635,29 +635,8 @@ var btnFileMenu = new ej.splitbuttons.DropDownButton({
 });
 btnFileMenu.appendTo('#btnFileMenu');
 
-var btnEditMenu = new ej.splitbuttons.DropDownButton({
-    cssClass: 'db-dropdown-menu',
-    items: getEditMenuItems(),
-    content: 'Edit',
-    select: menuClick,
-   beforeItemRender: beforeItemRender,
-   beforeOpen: arrangeMenuBeforeOpen,
-   beforeClose: arrangeMenuBeforeClose
-});
-btnEditMenu.appendTo('#btnEditMenu');
 
-var btnWindowMenu = new ej.splitbuttons.DropDownButton({
-    cssClass: 'db-dropdown-menu',
-    items: getDesignMenuItems(),
-    content: 'Design',
-    select: menuClick,
-    beforeItemRender: beforeItemRender,
-    beforeOpen: arrangeMenuBeforeOpen,
-    beforeClose: arrangeMenuBeforeClose
-});
-btnWindowMenu.appendTo('#btnDesignMenu');
-
-var btnHelpMenu = new ej.splitbuttons.DropDownButton({
+var btnSelectMenu = new ej.splitbuttons.DropDownButton({
     cssClass: 'db-dropdown-menu',
     items: getSelectMenuItems(),
     content: 'Select',
@@ -666,18 +645,9 @@ var btnHelpMenu = new ej.splitbuttons.DropDownButton({
     beforeOpen: arrangeMenuBeforeOpen,
     beforeClose: arrangeMenuBeforeClose
 });
-btnHelpMenu.appendTo('#btnSelectMenu');
+btnSelectMenu.appendTo('#btnSelectMenu');
 
-var btnArrangeMenu = new ej.splitbuttons.DropDownButton({
-    cssClass: 'db-dropdown-menu',
-    items: getToolsMenuItems(),
-    content: 'Tools',
-    select: menuClick,
-    beforeItemRender: beforeItemRender,
-    beforeOpen: arrangeMenuBeforeOpen,
-    beforeClose: arrangeMenuBeforeClose
-});
-btnArrangeMenu.appendTo('#btnToolsMenu');
+
 
 var btnViewMenu = new ej.splitbuttons.DropDownButton({
     cssClass: 'db-dropdown-menu',
@@ -725,8 +695,13 @@ function getEditMenuItems()
         { text: 'Rotate Counter Clockwise', iconCss: 'em-icons e-copy' },
         { text: 'Delete', iconCss: 'sf-icon-Delete' },
         { separator: true },
-        { text: 'Bring To Front', iconCss: 'sf-icon-BringFront' },
-        { text: 'Send To Back', iconCss: 'sf-icon-Sendback' },
+        {text: 'Order Commands',iconCss:'tb-item-end tb-item-order tb-dropdown-btn-icon',
+            items:[ { text: 'Bring To Front', iconCss: 'sf-icon-BringFront' },
+                    { text: 'Send To Back', iconCss: 'sf-icon-Sendback' },
+                    { text: 'Move Forward', iconCss: 'sf-icon-BringForward' },
+                    { text: 'Send Backward', iconCss: 'sf-icon-SendBackward' },
+                    ]
+        } 
     ]
     return items;
 };
@@ -734,15 +709,16 @@ function getEditMenuItems()
 function getDesignMenuItems()
 {
     var items = [
-        { text: 'Orientation', iconCss: 'em-icons e-cut',
+        { text: 'Orientation',
         items:[
-            { text: 'Landscape', iconCss: 'em-icons e-copy' },
-            { text: 'Portrait', iconCss: 'em-icons e-paste' }
+            { text: 'Landscape', iconCss: 'sf-icon-Selection' },
+            { text: 'Portrait', iconCss: '' }
         ]    
         },
         { text: 'Size', iconCss: 'em-icons e-copy',
-        items:paperList()
+        items:paperList1()
         },
+        {text:'Background'}
     ]
     return items;
 };
@@ -763,8 +739,8 @@ function getToolsMenuItems()
     var items1 = [
         { text: 'Selection Tool',iconCss: 'sf-icon-Selector tb-icons' },
         { text: 'Pan Tool', iconCss: 'sf-icon-Pan tb-icons' },
-        { text: 'Connector Tool' ,iconCss:'sf-icon-ConnectorMode'},
-        { text: 'Connectors',items:[
+        { separator: true },
+        { text: 'Connector Tool',iconCss:'sf-icon-ConnectorMode',items:[
             {text:'Straight',iconCss: 'sf-icon-StraightLine'},
             {text:'Orthogonal',iconCss: 'sf-icon-ConnectorMode'},
             {text:'Bezier',iconCss: 'sf-icon-BeizerLine'},
@@ -784,14 +760,27 @@ function getViewMenuItems()
         { separator: true },
         { text: 'Fit To Width'},
         { text: 'Fit To Page'},
-        { text: 'Reset View'},
     ]
     return items;
 };
 
 function toolsContextMenuOpen (args) {
     if (args.element.classList.contains('e-menu-parent')) {
-        var popup = document.querySelector('#btnArrangeMenu-popup');
+        var popup = document.querySelector('#btnToolsMenu-popup');
+        args.element.style.left = ej.base.formatUnit(parseInt(args.element.style.left, 10) - parseInt(popup.style.left, 10));
+        args.element.style.top = ej.base.formatUnit(parseInt(args.element.style.top, 10) - parseInt(popup.style.top, 10));
+    }
+}
+function designContextMenuOpen (args) {
+    if (args.element.classList.contains('e-menu-parent')) {
+        var popup = document.querySelector('#btnDesignMenu-popup');
+        args.element.style.left = ej.base.formatUnit(parseInt(args.element.style.left, 10) - parseInt(popup.style.left, 10));
+        args.element.style.top = ej.base.formatUnit(parseInt(args.element.style.top, 10) - parseInt(popup.style.top, 10));
+    }
+}
+function editContextMenuOpen (args) {
+    if (args.element.classList.contains('e-menu-parent')) {
+        var popup = document.querySelector('#btnEditMenu-popup');
         args.element.style.left = ej.base.formatUnit(parseInt(args.element.style.left, 10) - parseInt(popup.style.left, 10));
         args.element.style.top = ej.base.formatUnit(parseInt(args.element.style.top, 10) - parseInt(popup.style.top, 10));
     }
@@ -799,40 +788,6 @@ function toolsContextMenuOpen (args) {
 
 function arrangeMenuBeforeOpen(args)
 {
-    //Handling sub menu items
-    // for (var i = 0; i  < args.items.length; i++) {
-    //     if(args.items[i].text === 'Undo' || args.items[i].text === 'Redo')
-    //     {
-    //         if(args.items[i].text === 'Undo' && diagram.historyManager.undoStack.length<1){
-    //             btnEditMenu.enableItems([args.items[i].text], false, false);
-    //         }
-    //         if(args.items[i].text === 'Redo' && diagram.historyManager.redoStack.length<1){
-    //             btnEditMenu.enableItems([args.items[i].text], false, false);
-    //         }
-    //     }
-    //     if(!(diagram.commandHandler.clipboardData.pasteIndex !== undefined
-    //         && diagram.commandHandler.clipboardData.clipObject !==undefined))
-    //         {
-    //             if(pasteItem.indexOf(args.items[i].text)> -1)
-    //             {
-    //                 btnEditMenu.enableItems([args.items[i].text], false, false);
-    //             }
-    //         }
-    //     if(!(diagram.selectedItems.nodes.length>0 || diagram.selectedItems.connectors.length>0)){
-    //         if (disabledItems.indexOf(args.items[i].text) > -1) {
-    //             btnEditMenu.enableItems([args.items[i].text], false, false);
-    //         }
-    //         if(rotateItems.indexOf(args.items[i].text)> -1){
-    //             btnEditMenu.enableItems([args.items[i].text], false, false);
-    //         }
-    // }
-    //     else if(diagram.selectedItems.nodes.length<1 && diagram.selectedItems.connectors.length>0)
-    //     {
-    //         if(rotateItems.indexOf(args.items[i].text)> -1){
-    //             btnEditMenu.enableItems([args.items[i].text], false, false);
-    //         }
-    //     }
-    // }
     for (var i = 0; i < args.element.children.length; i++) {
         args.element.children[i].style.display = 'block';
     }
@@ -920,12 +875,12 @@ function getShortCutKey(menuItem) {
         case 'Ungroup':
             shortCutKey = shortCutKey + '+U';
             break;
-        case 'Send To Back':
-            shortCutKey = shortCutKey + '+Shift+B';
-            break;
-        case 'Bring To Front':
-            shortCutKey = shortCutKey + '+Shift+F';
-            break;
+        // case 'Send To Back':
+        //     shortCutKey = shortCutKey + '+Shift+B';
+        //     break;
+        // case 'Bring To Front':
+        //     shortCutKey = shortCutKey + '+Shift+F';
+        //     break;
         default:
             shortCutKey = '';
             break;
@@ -974,6 +929,14 @@ function enableMenuItems(itemText, diagram) {
         {
             return true;
         }
+        if(itemText === 'Move Forward' && selectedItems.length === 0)
+        {
+            return true;
+        }
+        if(itemText === 'Send Backward' && selectedItems.length === 0)
+        {
+            return true;
+        }
     }
     return false;
 };
@@ -996,6 +959,9 @@ function menumouseover(args) {
             if (button1.element.id === 'btnToolsMenu') {
                 enableToolsMenuItems(diagram);
             }
+            if(button1.element.id === 'btnEditMenu') {
+                enableEditMenuItems(diagram);
+            }
             var buttonElement1 = document.getElementById(this.buttonInstance.element.id);
             buttonElement1.classList.add('e-btn-hover');
         }
@@ -1010,7 +976,7 @@ function menumouseover(args) {
     }
 };
 function enableToolsMenuItems(diagram) {
-    var contextInstance = document.getElementById('ToolsContextMenu');
+    var contextInstance = document.getElementById('toolsContextMenu');
     var contextMenu = contextInstance.ej2_instances[0];
     var selectedItems = diagram.selectedItems.nodes;
     selectedItems = selectedItems.concat(diagram.selectedItems.connectors);
@@ -1023,62 +989,58 @@ function enableToolsMenuItems(diagram) {
                    
 };
 
+function enableEditMenuItems(diagram)
+{
+    var contextInstance = document.getElementById('editContextMenu');
+    var contextMenu = contextInstance.ej2_instances[0];
+    var selectedItems = diagram.selectedItems.nodes;
+    selectedItems = selectedItems.concat(diagram.selectedItems.connectors);
+    for (var i = 0; i < contextMenu.items.length; i++) {
+        contextMenu.enableItems([contextMenu.items[i].text], false);
+    }
+    var objects = diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors);
+        if(objects.length>0)
+        {
+            contextMenu.enableItems(['Cut', 'Copy', 'Delete','Order Commands']);
+        }
+        if(diagram.selectedItems.nodes.length>0)
+        {
+            contextMenu.enableItems(['Rotate Clockwise','Rotate Counter Clockwise']);
+        }
+        if(diagram.historyManager.undoStack.length>0){
+            contextMenu.enableItems(['Undo']);
+        }
+        if(diagram.historyManager.redoStack.length>0){
+            contextMenu.enableItems(['Redo']);
+        }
+        if((diagram.commandHandler.clipboardData.pasteIndex !== undefined
+            && diagram.commandHandler.clipboardData.clipObject !==undefined)){
+                contextMenu.enableItems(['Paste']);
+            }  
+}
+
     var disabledItems = ['Cut','Copy','Send To Back','Bring To Front','Delete'];
     var undoRedoItems = ['Undo','Redo'];
     var rotateItems = ['Rotate Clockwise','Rotate Counter Clockwise'];
     var pasteItem = ['Paste'];
-    
-
-    //Menu initialization
-    // var menuObj = new ej.navigations.Menu({ items: menuItems,height:'10px',
-    // beforeOpen: function (args) {
-    //     //Handling sub menu items
-    //     for (var i = 0; i  < args.items.length; i++) {
-    //         if(args.items[i].text === 'Undo' || args.items[i].text === 'Redo')
-    //         {
-    //             if(args.items[i].text === 'Undo' && diagram.historyManager.undoStack.length<1){
-    //                 menuObj.enableItems([args.items[i].text], false, false);
-    //             }
-    //             if(args.items[i].text === 'Redo' && diagram.historyManager.redoStack.length<1){
-    //                 menuObj.enableItems([args.items[i].text], false, false);
-    //             }
-    //         }
-    //         if(!(diagram.commandHandler.clipboardData.pasteIndex !== undefined
-    //             && diagram.commandHandler.clipboardData.clipObject !==undefined))
-    //             {
-    //                 if(pasteItem.indexOf(args.items[i].text)> -1)
-    //                 {
-    //                     menuObj.enableItems([args.items[i].text], false, false);
-    //                 }
-    //             }
-    //         if(!(diagram.selectedItems.nodes.length>0 || diagram.selectedItems.connectors.length>0)){
-    //             if (disabledItems.indexOf(args.items[i].text) > -1) {
-    //                 menuObj.enableItems([args.items[i].text], false, false);
-    //             }
-    //             if(rotateItems.indexOf(args.items[i].text)> -1){
-    //                 menuObj.enableItems([args.items[i].text], false, false);
-    //             }
-    //     }
-    //         else if(diagram.selectedItems.nodes.length<1 && diagram.selectedItems.connectors.length>0)
-    //         {
-    //             if(rotateItems.indexOf(args.items[i].text)> -1){
-    //                 menuObj.enableItems([args.items[i].text], false, false);
-    //             }
-    //         }
-    //     }
-    // } ,select:menuClick}, '#menu');
-    // menuObj.enableItems(disabledItems, false, false);
 
     //Initialize Toolbar component
     var toolbarObj = new ej.navigations.Toolbar({
         clicked:toolbarClick,
         items: [
-            { prefixIcon: 'e-ddb-icons e-new', tooltipText: 'New Diagram' },
-            { prefixIcon: 'e-icons e-copy', tooltipText: 'Open Diagram', },
-            { prefixIcon: 'sf-icon-Save', tooltipText: 'Save Diagram' },
-            { prefixIcon: 'e-print e-icons', tooltipText: 'Print Diagram'},
-            { type: 'Input', tooltipText: 'Export Diagram',template: '<button id="custombtn" style="width:100%;"></button>'},
-                    { type: 'Separator' },
+                    { prefixIcon: 'e-ddb-icons e-paste', tooltipText: 'New Diagram',cssClass: 'tb-item-start' },
+                    { prefixIcon: 'e-icons e-copy', tooltipText: 'Open Diagram',cssClass: 'tb-item-middle' },
+                    { prefixIcon: 'sf-icon-Save', tooltipText: 'Save Diagram',cssClass: 'tb-item-middle' },
+                    { prefixIcon: 'e-print e-icons', tooltipText: 'Print Diagram',cssClass: 'tb-item-middle'},
+                    { type: 'Input', tooltipText: 'Export Diagram',template: '<button id="custombtn" style="width:100%;"></button>',cssClass: 'tb-item-end tb-dropdown-btn-icon'},
+                                    { type: 'Separator' },
+                    { prefixIcon: 'e-icons e-undo', tooltipText: 'Undo',disabled:true,cssClass: 'tb-item-start'  },
+                    { prefixIcon: 'e-icons e-redo', tooltipText: 'Redo',disabled:true,cssClass: 'tb-item-end'  },
+                                    {type :'Seperator'},
+                    { prefixIcon: 'sf-icon-Cut', tooltipText: 'Cut',click: pasteClick,disabled:true,cssClass: 'tb-item-start'  },
+                    { prefixIcon: 'sf-icon-Copy', tooltipText: 'Copy',click: pasteClick,disabled:true,cssClass: 'tb-item-middle'  },
+                    { prefixIcon: 'e-icons e-paste', tooltipText: 'Paste',disabled:true,cssClass: 'tb-item-end' },
+                                    {type: 'Separator' },
                     {
                         prefixIcon: 'sf-icon-ZoomOut tb-icons', tooltipText: 'Zoom Out(Ctrl + -)', cssClass: 'tb-item-start'
                     },
@@ -1088,48 +1050,25 @@ function enableToolsMenuItems(diagram) {
                     {
                         prefixIcon: 'sf-icon-ZoomIn tb-icons', tooltipText: 'Zoom In(Ctrl + +)', cssClass: 'tb-item-end'
                     },
-                    {
-                        type: 'Separator'
-                    },
+                                    {
+                                        type: 'Separator'
+                                    },
+                    { prefixIcon: 'sf-icon-Pan tb-icons', tooltipText: 'Pan Tool',cssClass: 'tb-item-start'},
+                    { prefixIcon: 'sf-icon-Selector tb-icons', tooltipText: 'Select Tool',cssClass: 'tb-item-middle tb-item-selected'},
+                    { tooltipText: 'Change Connector Type',template: '<button id="conTypeBtn" style="width:100%;"></button>',cssClass: 'tb-item-end'},
+                                    { type: 'Separator' },
                     
-                      {  prefixIcon: 'e-icons e-bold', tooltipText: 'Bold',disabled:true },
-                    
-                       { prefixIcon: 'e-icons e-underline', tooltipText: 'Underline',disabled:true },
-                    
-                      {  prefixIcon: 'e-icons e-italic', tooltipText: 'Italic',disabled:true },
-                       { type: 'Separator' },
-                       { prefixIcon:'e-icons e-font',type: 'Input',tooltipText:'Font Family',template:'<input type="text" id="fontFamilyBtn" style="width:100%;">'},
-                       { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Size',template:' <input type="number" id="fontSizeBtn" min="0" max="50" step="1" value="12">'},
-            
-                        { prefixIcon:'e-icons e-fontSize',type:'Input',tooltipText:'Font Color',template:'<input id="fontcolor" type="color"/>',},
-                       {type:'Separator'},
-                       {
-                        prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true 
-                       },
-                       {
-                        prefixIcon: 'e-icons e-align-center',tooltipText:'Reset'
-                       },
-            { prefixIcon: 'sf-icon-ColorPickers tb-icons',mode:'palette', tooltipText: 'Fill Color',template:'<input id="fillcolor" type="color"/>'},  
-            { prefixIcon: 'e-icons e-undo', tooltipText: 'Undo',disabled:true  },
-            { prefixIcon: 'e-icons e-redo', tooltipText: 'Redo',disabled:true  },
-                    {type: 'Separator' },
-            { prefixIcon: 'sf-icon-Selector tb-icons', tooltipText: 'Select Tool'},
-            { prefixIcon: 'sf-icon-Pan tb-icons', tooltipText: 'Pan Tool',cssClass:'tb-item-start' },
-            { prefixIcon: 'sf-icon-ConnectorMode', tooltipText: 'Connector Tool' },
-                    { type: 'Separator' },
-            { tooltipText: 'Change Connector Type',template: '<button id="conTypeBtn" style="width:100%;"></button>'},
-                    { type: 'Separator' },
-            { prefixIcon: 'sf-icon-Cut', tooltipText: 'Cut',click: pasteClick,disabled:true  },
-            { prefixIcon: 'sf-icon-Copy', tooltipText: 'Copy',click: pasteClick,disabled:true  },
-            { prefixIcon: 'e-icons e-paste', tooltipText: 'Paste',disabled:true },
-            { prefixIcon: 'sf-icon-Delete', tooltipText: 'Delete',disabled:true  },
-                    { type: 'Separator' },
-            { prefixIcon: 'sf-icon-Redo', tooltipText: 'Rotate Clockwise' ,disabled:true },
-            { prefixIcon: 'sf-icon-Undo', tooltipText: 'Rotate Counter-clockwise',disabled:true  },
-                    { type: 'Separator' },
-            { prefixIcon: 'sf-icon-BringFront', tooltipText: 'Bring To Front',disabled:true },
-            { prefixIcon: 'sf-icon-Sendback' , tooltipText: 'Send To Back',disabled:true  },
-                     { type: 'Separator' },
+                    {prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true,cssClass: 'tb-item-start'}, 
+                    { prefixIcon: 'sf-icon-Delete', tooltipText: 'Delete',disabled:true,cssClass: 'tb-item-end'},
+                                    { type: 'Separator' },
+                    { prefixIcon: 'sf-icon-Redo', tooltipText: 'Rotate Clockwise' ,disabled:true,cssClass: 'tb-item-start' },
+                    { prefixIcon: 'sf-icon-Undo', tooltipText: 'Rotate Counter-clockwise',disabled:true,cssClass: 'tb-item-end'  },
+                                    { type: 'Separator' },
+                    { prefixIcon: 'sf-icon-BringFront', tooltipText: 'Bring To Front',disabled:true,cssClass: 'tb-item-start' },
+                    { prefixIcon: 'sf-icon-Sendback' , tooltipText: 'Send To Back',disabled:true,cssClass: 'tb-item-middle'  },
+                    { prefixIcon: 'sf-icon-BringForward', tooltipText: 'Move Forward',disabled:true,cssClass: 'tb-item-middle' },
+                    { prefixIcon: 'sf-icon-SendBackward' , tooltipText: 'Send Backward',disabled:true,cssClass: 'tb-item-end'  },
+                                    { type: 'Separator' },
         
          ],
          width:'100%'
@@ -1156,20 +1095,12 @@ var zoomMenuItems = [
                         { type: 'Verdana', text: 'Verdana' }
                     ];
  btnObj = new ej.splitbuttons.DropDownButton({
-   items: items, iconCss: 'e-ddb-icons e-export', content: 'Export', select: onselectExport,
+   items: items, iconCss: 'sf-icon-Export',  select: onselectExport,
 });
 conTypeBtn = new ej.splitbuttons.DropDownButton({
     items: conTypeItems, iconCss:'sf-icon-ConnectorMode', select: onConnectorSelect
 });
-var fontFamilyBtn = new ej.dropdowns.DropDownList({
-    dataSource: fontType,
-    content:'font',
-    fields: { value: 'type', text: 'text' }, popupWidth: 150,
-    width: '100%', placeholder: 'select a font type',
-    index: 0, change: function () {
-        updateAnnotation('fontfamily', null, fontFamilyBtn);
-    }
-});
+
 
 
 var uploadObj = new ej.inputs.Uploader({
@@ -1182,37 +1113,10 @@ var uploadObj = new ej.inputs.Uploader({
 });
 uploadObj.appendTo('#fileupload');
 
-   //Colorpicker used to apply for Color of the Annotation
-var fontColor = new ej.inputs.ColorPicker({
-    value: '#000',  mode: 'Palette',
-    
-     change: function (arg) {
-        let nodes = diagram.selectedItems.nodes;
-        let connectors = diagram.selectedItems.connectors;
-        if(nodes.length>0){
-        updateFontColor(nodes);
-        }
-        if(connectors.length>0)
-        {
-            updateFontColor(connectors)
-        }
-       
-    }
-});
-fontColor.appendTo('#fontcolor');
-// var defaultObj = new ej.inputs.ColorPicker({}, '#color-picker');
-    
-// var defaultObj = new ej.inputs.ColorPicker({}, '#color-picker');
-
-
-
-// var fillColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
-// fillColorIconBtn.appendTo('#fillColorIconBtn');
 
  toolbarObj.appendTo('#toolbarEditor');
  var btnHideToolbar = new ej.buttons.Button({ iconCss: 'sf-icon-Collapse tb-icons' });
  btnHideToolbar.appendTo('#btnHideToolbar');
- fontFamilyBtn.appendTo('#fontFamilyBtn');
  btnObj.appendTo('#custombtn');
  conTypeBtn.appendTo('#conTypeBtn');
 
@@ -1281,21 +1185,34 @@ fontColor.appendTo('#fontcolor');
             diagram.bringToFront();
             break;
         case 'Landscape':
+            args.item.parentObj.items[1].iconCss = '';
+            args.item.iconCss = 'sf-icon-Selection';
             diagram.pageSettings.orientation = 'Landscape';
+            pagePortrait.checked = false;
+            pageLandscape.checked = true;
             break;
         case 'Portrait':
+            args.item.parentObj.items[0].iconCss = '';
+            args.item.iconCss = 'sf-icon-Selection';
             diagram.pageSettings.orientation = 'Portrait';
+            pagePortrait.checked = true;
+            pageLandscape.checked = false;
             break;
-        case 'Letter':
-        case 'Legal':
-        case 'A0':
-        case 'A1':
-        case 'A2':
-        case 'A3':
-        case 'A4':
-        case 'A5':
-        case 'Tabloid':
+        case 'Letter (8.5 in x 11 in)':
+        case 'Legal (8.5 in x 14 in)':
+        case 'A3 (297 mm x 420 mm)':
+        case 'A4 (210 mm x 297 mm)':
+        case 'A5 (148 mm x 210 mm)':
+        case 'A6 (105 mm x 148 mm)':
+        case 'Tabloid (279 mm x 432 mm)':
             paperListChange(args)
+            pageSettingsList.text = args.item.text;
+            updateSelection(args.item)
+            break;
+        case 'Background':
+            document.getElementById('background').style.display = 'block';
+           var fillElement= document.getElementById('background').parentElement.getElementsByClassName('e-dropdown-btn')[0];
+    fillElement.click();
             break;
         case 'Select All':
             diagram.clearSelection();
@@ -1316,23 +1233,33 @@ fontColor.appendTo('#fontcolor');
             break;
         case 'Selection Tool':
             diagram.tool = ej.diagrams.DiagramTools.Default;
+            removeSelectedToolbarItem();
             break;
         case 'Pan Tool':
+            diagram.clearSelection();
             diagram.tool = ej.diagrams.DiagramTools.ZoomPan;
-            break;
-        case 'Connector Tool':
-            diagram.drawingObject.sourceID = "";
-            diagram.dataBind();
-            diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
+            removeSelectedToolbarItem();
             break;
         case 'Orthogonal':
+            diagram.clearSelection();
+            diagram.drawingObject.sourceID = '';
+            diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
             diagram.drawingObject.type = 'Orthogonal';
+            removeSelectedToolbarItem();
             break;
         case 'Straight':
+            diagram.clearSelection();
+            diagram.drawingObject.sourceID = '';
+            diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
             diagram.drawingObject.type = 'Straight';
+            removeSelectedToolbarItem();
             break;
         case 'Bezier':
+            diagram.clearSelection();
+            diagram.drawingObject.sourceID = '';
+            diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
             diagram.drawingObject.type = 'Bezier';
+            removeSelectedToolbarItem();
             break;
         case 'Show Lines':
             diagram.snapSettings.constraints = diagram.snapSettings.constraints ^ ej.diagrams.SnapConstraints.ShowLines;
@@ -1360,12 +1287,35 @@ fontColor.appendTo('#fontcolor');
         case 'Fit To Page':
             diagram.fitToPage();
             break;
-        case 'Reset View':
-            diagram.reset();
-            break;
-
     }
+    if (option === 'Pan Tool') {
+        if (toolbarObj.items[17].cssClass.indexOf('tb-item-selected') === -1) {
+            toolbarObj.items[17].cssClass += ' tb-item-selected';
+        }
+    }
+   else if (option === 'Selection Tool') {
+        if (toolbarObj.items[18].cssClass.indexOf('tb-item-selected') === -1) {
+            toolbarObj.items[18].cssClass += ' tb-item-selected';
+        }
+    }
+    else if (option ===  'Orthogonal' || option === 'Straight' || option === 'Bezier') {
+        document.getElementById('conTypeBtn').classList.add('tb-item-selected');
+    }
+
     diagram.dataBind();
+ }
+
+ function updateSelection(item)
+ {
+    for(i=0;i<item.parentObj.items.length;i++)
+    {
+        if(item.text === item.parentObj.items[i].text){
+            item.parentObj.items[i].iconCss = 'sf-icon-Selection';
+        }
+        else{
+            item.parentObj.items[i].iconCss = '';
+        }
+    }
  }
 
 
@@ -1389,20 +1339,17 @@ fontColor.appendTo('#fontcolor');
             diagram.zoomTo({ type: 'ZoomOut', zoomFactor: 0.2 });
             zoomCurrentValue.content = diagram.scrollSettings.currentZoom = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
             break;
-        case 'Bold':
-        case 'Underline':
-        case 'Italic':
-            updateAnnotation(args.item.tooltipText);
-            break;
+        // case 'Bold':
+        // case 'Underline':
+        // case 'Italic':
+        //     updateAnnotation(args.item.tooltipText);
+        //     break;
         case 'Lock':
             lockObject();
             break;
-        case 'Reset':
-            diagram.reset();
-            break;
-        case 'Fill Color':
-             showColorPicker('nodeFillColor', 'tb-item-fill')
-            break;
+        // case 'Fill Color':
+        //      showColorPicker('nodeFillColor', 'tb-item-fill')
+        //     break;
         case 'Cut':
             diagram.cut();
             break;
@@ -1422,6 +1369,7 @@ fontColor.appendTo('#fontcolor');
             diagram.tool = ej.diagrams.DiagramTools.ZoomPan;
             break;
         case 'Connector Tool':
+            diagram.clearSelection();
             diagram.drawingObject.sourceID = '';
             diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
             break;
@@ -1437,6 +1385,12 @@ fontColor.appendTo('#fontcolor');
         case 'Send To Back':
             diagram.sendToBack();
             break;
+        case 'Move Forward':
+            diagram.moveForward();
+            break;
+        case 'Send Backward':
+            diagram.sendBackward();
+            break;
         case 'New Diagram':
             diagram.clear();
             break;
@@ -1445,9 +1399,9 @@ fontColor.appendTo('#fontcolor');
             options.mode = 'Data';
             diagram.print(options)
             break;
-        case 'Font Color':
-            showColorPicker('nodeFillColor', 'tb-item-fill')
-            break;
+        // case 'Font Color':
+        //     showColorPicker('nodeFillColor', 'tb-item-fill')
+        //     break;
         case 'Save Diagram':
             download(diagram.saveDiagram());
             break;
@@ -1455,8 +1409,26 @@ fontColor.appendTo('#fontcolor');
             document.getElementsByClassName('e-file-select-wrap')[0].querySelector('button').click();
             break;
     }
+    if (item === 'Select Tool' || item === 'Pan Tool' || item === 'Connector Tool') {
+        if (args.item.cssClass.indexOf('tb-item-selected') === -1) {
+            removeSelectedToolbarItem();
+            args.item.cssClass += ' tb-item-selected';
+        }
+    }
     diagram.dataBind();
  }
+
+ function removeSelectedToolbarItem (args) {
+    // var toolbarEd = selectedItem.utilityMethods.toolbarEditor;
+    for (var i = 0; i < toolbarObj.items.length; i++) {
+        var item = toolbarObj.items[i];
+        if (item.cssClass.indexOf('tb-item-selected') !== -1) {
+            item.cssClass = item.cssClass.replace(' tb-item-selected', '');
+        }
+    }
+    toolbarObj.dataBind();
+    document.getElementById('conTypeBtn').classList.remove('tb-item-selected');
+}
 
  function onUploadSuccess(args) {
     var file1 = args.file;
@@ -1602,54 +1574,54 @@ function lockObject (args) {
  }
  function pasteClick()
  {
-    toolbarObj.items[32].disabled = false;
+    toolbarObj.items[11].disabled = false;
  }
 
  function onClickDisable(args) {
     if(args === false)
     {
+        toolbarObj.items[9].disabled = false;
         toolbarObj.items[10].disabled = false;
-        toolbarObj.items[11].disabled = false;
-        toolbarObj.items[12].disabled = false;
+        toolbarObj.items[21].disabled = false;
         // toolbarObj.items[14].disabled = false;
         // toolbarObj.items[15].disabled = false;
         // toolbarObj.items[16].disabled = false;
-        toolbarObj.items[18].disabled = false;
+        toolbarObj.items[22].disabled = false;
         // toolbarObj.items[20].disabled = false;
+        toolbarObj.items[24].disabled = false;
+        toolbarObj.items[25].disabled = false;
+        toolbarObj.items[27].disabled = false;
+        toolbarObj.items[28].disabled = false;
+        toolbarObj.items[29].disabled = false;
         toolbarObj.items[30].disabled = false;
-        toolbarObj.items[31].disabled = false;
-        toolbarObj.items[33].disabled = false;
-        toolbarObj.items[35].disabled = false;
-        toolbarObj.items[36].disabled = false;
-        toolbarObj.items[38].disabled = false;
-        toolbarObj.items[39].disabled = false;
+        // toolbarObj.items[39].disabled = false;
     }
     else if(args === true ){
         var isTrue;
        
         if(diagram.selectedItems.connectors.length>0){
             isTrue = false;
-            toolbarObj.items[35].disabled = true;
-            toolbarObj.items[36].disabled = true;
+            toolbarObj.items[24].disabled = true;
+            toolbarObj.items[25].disabled = true;
         }
         else{
             isTrue = true;
-            toolbarObj.items[35].disabled = true;
-            toolbarObj.items[36].disabled = true;
+            toolbarObj.items[24].disabled = true;
+            toolbarObj.items[25].disabled = true;
         }
+        toolbarObj.items[9].disabled = isTrue;
         toolbarObj.items[10].disabled = isTrue;
-        toolbarObj.items[11].disabled = isTrue;
-        toolbarObj.items[12].disabled = isTrue;
+        toolbarObj.items[21].disabled = isTrue;
         // toolbarObj.items[14].disabled = isTrue;
         // toolbarObj.items[15].disabled = isTrue;
         // toolbarObj.items[16].disabled = isTrue;
-        toolbarObj.items[18].disabled = isTrue;
+        toolbarObj.items[22].disabled = isTrue;
         // toolbarObj.items[20].disabled = isTrue;
+        toolbarObj.items[27].disabled = isTrue;
+        toolbarObj.items[28].disabled = isTrue;
+        toolbarObj.items[29].disabled = isTrue;
         toolbarObj.items[30].disabled = isTrue;
-        toolbarObj.items[31].disabled = isTrue;
-        toolbarObj.items[33].disabled = isTrue;
-        toolbarObj.items[38].disabled = isTrue;
-        toolbarObj.items[39].disabled = isTrue;
+        // toolbarObj.items[39].disabled = isTrue;
        
         }
   }
@@ -1689,7 +1661,49 @@ var diagram = new ej.diagrams.Diagram({
             segmentWidth: 100,
             thickness: 25,
           },
-    },created:created
+    },created:created,
+    commandManager: {
+        commands: [{
+                name: 'New',
+                canExecute: function () {
+                   return true
+                },
+                execute: function () {
+                    diagram.clear();
+                },
+                gesture: {
+                    key: ej.diagrams.Keys.N,
+                    keyModifiers: ej.diagrams.KeyModifiers.Shift
+                }
+            },
+            {
+                name: 'Save',
+                canExecute: function () {
+                   return true
+                },
+                execute: function () {
+                    download(diagram.saveDiagram());
+                },
+                gesture: {
+                    key: ej.diagrams.Keys.S,
+                    keyModifiers: ej.diagrams.KeyModifiers.Control
+                }
+            },
+            {
+                name: 'Open',
+                canExecute: function () {
+                   return true
+                },
+                execute: function () {
+                    document.getElementsByClassName('e-file-select-wrap')[0].querySelector('button').click();
+                },
+                gesture: {
+                    key: ej.diagrams.Keys.O,
+                    keyModifiers: ej.diagrams.KeyModifiers.Control
+                }
+            },
+        ]
+    }
 });
 
 function download(data) {
@@ -1725,8 +1739,13 @@ function onselectExport(args) {
 }
 
 function onConnectorSelect(args){
+    diagram.clearSelection();
+    diagram.drawingObject.sourceID = '';
     diagram.drawingObject.type = args.item.text;
+    diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
     diagram.dataBind();
+    removeSelectedToolbarItem();
+    document.getElementById('conTypeBtn').classList.add('tb-item-selected');
 }
 
 function getNodeDefaults(obj)
@@ -1764,7 +1783,8 @@ function selectionChange(args)
         document.getElementById('nodePropertyContainer').style.display = 'block';
         if(showTextPanel){
         document.getElementById('textPropertyContainer').style.display = 'block';
-        bindTextProperties(args.newValue[0].annotations[0].style);
+        checkAnnotation(args.newValue)
+        // bindTextProperties(args.newValue[0].annotations[0].style);
         }
 
     }
@@ -1780,7 +1800,8 @@ function selectionChange(args)
             document.getElementById('connectorPropertyContainer').style.display = 'block';
             if(showConTextPanel){
                 document.getElementById('textPropertyContainer').style.display = 'block';
-                bindTextProperties(args.newValue[0].annotations[0].style)
+                checkAnnotation(args.newValue);
+                // bindTextProperties(args.newValue[0].annotations[0].style)
                 }
             bindConnectorProperties(args.newValue[0]);
 
@@ -1794,6 +1815,71 @@ function selectionChange(args)
         }
     }
 }
+
+function checkAnnotation(args)
+{
+    for(i=0;i<args.length;i++)
+    {
+        if(args[i].annotations.length)
+        {
+            for(j=0;j<args[i].annotations.length;j++)
+            {
+                if(args[i].annotations[j].content)
+                {
+                    bindTextProperties(args[i].annotations[j].style);
+                    updateHorVertAlign(args[i].annotations[j].horizontalAlignment, args[i].annotations[j].verticalAlignment);
+                    if (args[i].annotations[j] instanceof ej.diagrams.ShapeAnnotation) {
+                        annotation = args[i].annotations[j];
+                        ddlTextPosition.dataSource = textProperties.getNodeTextPositions();
+                        ddlTextPosition.value = textProperties.textPosition = null;
+                        ddlTextPosition.dataBind();
+                        ddlTextPosition.value = textProperties.textPosition = getPosition(annotation.offset);
+                        ddlTextPosition.dataBind();
+                    }
+                    else if (args[i].annotations[j] instanceof ej.diagrams.PathAnnotation) {
+                        annotation = args[i].annotations[j];
+                        ddlTextPosition.dataSource = textProperties.getConnectorTextPositions();
+                        ddlTextPosition.value = textProperties.textPosition = null;
+                        ddlTextPosition.dataBind();
+                        ddlTextPosition.value = textProperties.textPosition = annotation.alignment;
+                        ddlTextPosition.dataBind();
+                    }
+                    break;
+                }
+            }
+        }
+    }
+};
+
+function getPosition(offset) {
+    if (offset.x === 0 && offset.y === 0) {
+        return 'TopLeft';
+    }
+    else if (offset.x === 0.5 && offset.y === 0) {
+        return 'TopCenter';
+    }
+    else if (offset.x === 1 && offset.y === 0) {
+        return 'TopRight';
+    }
+    else if (offset.x === 0 && offset.y === 0.5) {
+        return 'MiddleLeft';
+    }
+    else if (offset.x === 1 && offset.y === 0.5) {
+        return 'MiddleRight';
+    }
+    else if (offset.x === 0 && offset.y === 1) {
+        return 'BottomLeft';
+    }
+    else if (offset.x === 0.5 && offset.y === 1) {
+        return 'BottomCenter';
+    }
+    else if (offset.x === 1 && offset.y === 1) {
+        return 'BottomRight';
+    }
+    else {
+        return 'Center';
+    }
+};
 
 function positionChange(args)
 {
@@ -1815,6 +1901,13 @@ function sizeChange(args)
 
 function rotateChange(args)
 {
+    if(args.state === 'Start' || args.state === 'Progress')
+    {
+        diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.None};
+    }
+    if(args.state === 'Completed'){
+        diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All|ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles };
+    }
     if(diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors).length===1){
         nodeProperties.rotateAngle.value = args.newValue.rotateAngle;
     }
@@ -1833,6 +1926,32 @@ function bindNodeProperties(node)
    nodeProperties.strokeWidth.value = node.style.strokeWidth;
    nodeProperties.strokeStyle.value = node.style.strokeDashArray ? node.style.strokeDashArray : 'None';
    nodeProperties.opacity.value = node.style.opacity * 100;
+   nodeProperties.aspectRatio.checked = node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? true : false;
+   nodeProperties.gradient.checked = node.style.gradient.type !== 'None' ? true : false;
+    var gradientElement = document.getElementById('gradientStyle');
+        if (nodeProperties.gradient.checked) {
+            gradientElement.className = 'row db-prop-row db-gradient-style-show';
+            nodeProperties.gradientColor.value = node.style.gradient.stops[1].color;
+            var gradient = node.style.gradient;
+            if (gradient.x1) {
+                nodeProperties.gradientDirection.value = 'North';
+            }
+            else if (gradient.x2) {
+                nodeProperties.gradientDirection.value = 'East';
+            }
+            else if (gradient.y1) {
+                nodeProperties.gradientDirection.value = 'West';
+            }
+            else if (gradient.y2) {
+                nodeProperties.gradientDirection.value = 'South';
+            }
+        }
+        else {
+            gradientElement.className = 'row db-prop-row db-gradient-style-hide';
+            nodeProperties.gradientColor.value = '#ffffff';
+            nodeProperties.gradientDirection.value = 'South';
+        }
+        
 }
 
 function bindConnectorProperties(connector)
@@ -1906,8 +2025,8 @@ function checkTextAnnotation()
 
 function historyChange()
 {
-    diagram.historyManager.undoStack.length>0?toolbarObj.items[21].disabled = false:toolbarObj.items[21].disabled = true
-    diagram.historyManager.redoStack.length>0?toolbarObj.items[22].disabled = false:toolbarObj.items[22].disabled = true
+    diagram.historyManager.undoStack.length>0?toolbarObj.items[6].disabled = false:toolbarObj.items[6].disabled = true
+    diagram.historyManager.redoStack.length>0?toolbarObj.items[7].disabled = false:toolbarObj.items[7].disabled = true
 }
 
 function getHexColor(colorStr) {
@@ -1995,7 +2114,7 @@ function paperListChange(args)
 {
     document.getElementById('pageDimension').style.display = 'none';
     document.getElementById('pageOrientation').style.display = '';
-    var value = args.value;
+    var value = args.value || args.item.value;
     var paperSize = getPaperSize(value);
     var pageWidth = paperSize.pageWidth;
     var pageHeight = paperSize.pageHeight;
@@ -2016,14 +2135,30 @@ function paperListChange(args)
         }
         diagram.pageSettings.width = pageWidth;
         diagram.pageSettings.height = pageHeight;
-        diagram.dataBind();
+        
+        
     }
     else{
         document.getElementById('pageOrientation').style.display = 'none';
         document.getElementById('pageDimension').style.display = '';
+        diagram.pageSettings.width = 1460;
+        diagram.pageSettings.height = 600;
     }
+    updatePaperSelection(designContextMenu.items[1],args.value);
+    diagram.dataBind();
 }
 
+function updatePaperSelection(items,value){
+   for(i=0;i<items.items.length;i++)
+   {
+    if(value === items.items[i].value){
+        items.items[i].iconCss = 'sf-icon-Selection';
+    }
+    else{
+        items.items[i].iconCss = '';
+    }
+   }
+}
 
 //Create and add ports for node.
 function getNodePorts(obj) {
@@ -2274,7 +2409,29 @@ function contextMenuOpen(args) {
 
     diagram.appendTo('#diagram');
 
-    var ToolsContextMenu = new ej.navigations.ContextMenu({
+    var editContextMenu = new ej.navigations.ContextMenu({
+        animationSettings: { effect: 'None' },
+        items: getEditMenuItems(),
+        onOpen: editContextMenuOpen,
+        cssClass: "EditMenu",
+        beforeItemRender: beforeItemRender,
+        select: menuClick,
+        beforeClose: arrangeMenuBeforeClose
+    })
+    editContextMenu.appendTo('#editContextMenu');
+
+    var designContextMenu = new ej.navigations.ContextMenu({
+        animationSettings: { effect: 'None' },
+        items: getDesignMenuItems(),
+        onOpen: designContextMenuOpen,
+        cssClass: "DesignMenu",
+        beforeItemRender: beforeItemRender,
+        select: menuClick,
+        beforeClose: arrangeMenuBeforeClose
+    })
+    designContextMenu.appendTo('#designContextMenu');
+
+    var toolsContextMenu = new ej.navigations.ContextMenu({
         animationSettings: { effect: 'None' },
         items: getToolsMenuItems(),
         onOpen: toolsContextMenuOpen,
@@ -2283,7 +2440,40 @@ function contextMenuOpen(args) {
         select: menuClick,
         beforeClose: arrangeMenuBeforeClose
     });
-    ToolsContextMenu.appendTo('#ToolsContextMenu');
+    toolsContextMenu.appendTo('#toolsContextMenu');
+
+    var btnDesignMenu = new ej.splitbuttons.DropDownButton({
+        cssClass: 'db-dropdown-menu',
+        target: '.e-contextmenu-wrapper.designMenu',
+        content: 'Design',
+        select: menuClick,
+        beforeItemRender: beforeItemRender,
+        beforeOpen: arrangeMenuBeforeOpen,
+        beforeClose: arrangeMenuBeforeClose
+    });
+    btnDesignMenu.appendTo('#btnDesignMenu');
+    var btnToolsMenu = new ej.splitbuttons.DropDownButton({
+        cssClass: 'db-dropdown-menu',
+        target: '.e-contextmenu-wrapper.toolsMenu',
+        content: 'Tools',
+        items: getToolsMenuItems(),
+        select: menuClick,
+        beforeItemRender: beforeItemRender,
+        beforeOpen: arrangeMenuBeforeOpen,
+        beforeClose: arrangeMenuBeforeClose
+    });
+    btnToolsMenu.appendTo('#btnToolsMenu');
+
+    var btnEditMenu = new ej.splitbuttons.DropDownButton({
+        cssClass: 'db-dropdown-menu',
+        target: '.e-contextmenu-wrapper.editMenu',
+        content: 'Edit',
+        select: menuClick,
+       beforeItemRender: beforeItemRender,
+       beforeOpen: arrangeMenuBeforeOpen,
+       beforeClose: arrangeMenuBeforeClose
+    });
+    btnEditMenu.appendTo('#btnEditMenu');
 
 function minValue(){
     var size;
@@ -2296,24 +2486,15 @@ function minValue(){
     }
     return size;
 }
-    var  fontSize = new ej.inputs.NumericTextBox({
-        value: minValue(), min: 10,
-        max: 20, width: '100%',
-        format: '##.##',
-        step: 2,
-        change: function (args) { updateAnnotation('fontsize', fontSize); }
-    });
-
-    fontSize.appendTo('#fontSizeBtn');
 
     var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange });
     btnZoomIncrement.appendTo('#btnZoomIncrement');
 
 var palette = new ej.diagrams.SymbolPalette({
-    expandMode: 'Multiple',enableSearch:true, symbolMargin: { left: 15, right: 15, top: 15, bottom: 15 }, symbolHeight: 60, symbolWidth: 60,
+    expandMode: 'Multiple', symbolMargin: { left: 5, right: 10, top: 10, bottom: 10 }, symbolHeight: 60, symbolWidth: 60,
     palettes: [
         { id: 'Bpmn', expanded: true, symbols: bpmnShapes, iconCss: 'shapes', title: 'BPMN Shapes' },
-        { id: 'Connector', expanded: true, symbols: connectorSymbols, iconCss: 'shapes', title: 'Connectors' },
+        { id: 'Connector', expanded: true, symbols: connectorSymbols,  iconCss: 'e-ddb-icons e-connector', title: 'Connectors' },
     ],
     width: '100%', height: '100%',
     getNodeDefaults: function (symbol) {
@@ -2322,28 +2503,6 @@ var palette = new ej.diagrams.SymbolPalette({
 
     
 });
-// document.getElementById('fontcolor').onchange = (args) =>{
-//     let nodes = diagram.selectedItems.nodes;
-//     let connectors = diagram.selectedItems.connectors;
-//     if(nodes.length>0){
-//     updateFontColor(nodes,args);
-//     }
-//     if(connectors.length>0)
-//     {
-//         updateFontColor(connectors,args)
-//     }  
-// }
-// document.getElementById('fillcolor').onchange = (args) =>{
-//     let nodes = diagram.selectedItems.nodes;
-//     let connectors = diagram.selectedItems.connectors;
-//     if(nodes.length>0){
-//         updateFillColor(nodes,args);
-//         }
-//         if(connectors.length>0)
-//         {
-//             updateFillColor(connectors,args)
-//         }  
-// }
 
 palette.appendTo('#symbolpalette');
 
@@ -2388,6 +2547,14 @@ var pageHeight = new ej.inputs.NumericTextBox({
     change: function (args) { pageDimensionChange(args); }
 });
 pageHeight.appendTo('#pageHeight');
+
+var menuPgBackround = new ej.inputs.ColorPicker({
+    mode:'Palette',
+    width:'100%',
+    value:diagram.pageSettings.background.color,
+    change: function (args) { pageBackgroundChange1(args); }
+})
+menuPgBackround.appendTo('#backgroundCp');
 
 var pageBgColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
@@ -2825,7 +2992,7 @@ function hideMenuBar() {
         button1.iconCss = 'sf-icon-Collapse tb-icons';
     }
     hideElements('hide-menubar', diagram);
-    diagram.refresh();
+    // diagram.refresh();
 };
 
 function hideElements(elementType, diagram, diagramType) {
@@ -2870,16 +3037,16 @@ function decoratorList() {
 
 function fontFamilyList()
 {
-    var fontType = [
-        { type: 'Arial', text: 'Arial' },
-        { type: 'Aharoni', text: 'Aharoni' },
-        { type: 'Bell MT', text: 'Bell MT' },
-        { type: 'Fantasy', text: 'Fantasy' },
-        { type: 'Times New Roman', text: 'Times New Roman' },
-        { type: 'Segoe UI', text: 'Segoe UI' },
-        { type: 'Verdana', text: 'Verdana' }
+    var fontFamilyList = [
+        { text: 'Arial', value: 'Arial' },
+        { text: 'Aharoni', value: 'Aharoni' },
+        { text: 'Bell MT', value: 'Bell MT' },
+        { text: 'Fantasy', value: 'Fantasy' },
+        { text: 'Times New Roman', value: 'Times New Roman' },
+        { text: 'Segoe UI', value: 'Segoe UI' },
+        { text: 'Verdana', value: 'Verdana' },
     ];
-    return fontType;
+    return fontFamilyList;
 }
 
 function textPositionDataSource() {
@@ -3085,16 +3252,21 @@ function pageOrientationChange(args)
 {
     if (args.event) {
         var target = args.event.target;
+        var items = designContextMenu.items;
         switch (target.id) {
             case 'pagePortrait':
                 diagram.pageSettings.isPortrait = true;
                 diagram.pageSettings.isLandscape = false;
                 diagram.pageSettings.orientation = 'Portrait';
+                items[0].items[0].iconCss = '';
+                items[0].items[1].iconCss = 'sf-icon-Selection';
                 break;
             case 'pageLandscape':
                 diagram.pageSettings.isPortrait = false;
                 diagram.pageSettings.isLandscape = true;
                 diagram.pageSettings.orientation = 'Landscape';
+                items[0].items[0].iconCss = 'sf-icon-Selection';
+                items[0].items[1].iconCss = '';
                 break;
         }
         diagram.dataBind();
@@ -3144,6 +3316,15 @@ function paperList  () {
     ];
     return paperList;
 };
+function paperList1  () {
+    var paperList1 = [
+        { text: 'Letter (8.5 in x 11 in)', value: 'Letter',iconCss:'sf-icon-Selection' }, { text: 'Legal (8.5 in x 14 in)', value: 'Legal' },
+        { text: 'Tabloid (279 mm x 432 mm)', value: 'Tabloid' }, { text: 'A3 (297 mm x 420 mm)', value: 'A3' },
+        { text: 'A4 (210 mm x 297 mm)', value: 'A4' }, { text: 'A5 (148 mm x 210 mm)', value: 'A5' },
+        { text: 'A6 (105 mm x 148 mm)', value: 'A6' },
+    ];
+    return paperList1;
+};
 
 function pageBackgroundChange1(args)
 {
@@ -3151,6 +3332,7 @@ function pageBackgroundChange1(args)
         diagram.pageSettings.background = {
             color: args.currentValue.rgba
         };
+        document.getElementById('background').style.display = 'none';
         diagram.dataBind();
     }
 };
@@ -3602,4 +3784,29 @@ function getUploadButtons() {
     //     buttonModel: { content: 'Next', cssClass: 'e-flat e-db-primary', isPrimary: true },
     // });
     return buttons;
+}
+
+var splitObj = new ej.layouts.Splitter({
+    height: '500px',
+    paneSettings: [
+        { size: '70%', collapsible: false },
+        { collapsible: true }
+    ],
+    separatorSize: 5,
+    click:clickedSpliter,
+    width: '100%'
+});
+splitObj.appendTo('#splitter');
+// document.getElementById('splitter').onclick = (args) =>{
+// var proPan = document.getElementById('propertyPanel').style.display;
+// if(proPan !== 'none'){
+//     document.getElementById('propertyPanel').style.display = 'none';
+// }
+// else{
+//     document.getElementById('propertyPanel').style.display = 'block';
+// }
+// }
+function clickedSpliter()
+{
+    debugger
 }

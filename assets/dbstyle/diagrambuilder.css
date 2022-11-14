@@ -138,17 +138,17 @@ input, button, select, textarea {
 .sidebar {
     position: absolute;
     bottom: 0;
-    width: 255px;
+    width: 232;
     left: 0px;
     height: calc(100% - 112px);
 }
 
 .main-content {
     margin: 0;
-    left:255px;
+    left:232px;
     height: calc(100% - 112px);
     position:absolute;
-    width:calc(100% - 255px);
+    width:calc(100% - 232px);
 }
 
 .db-palette-parent {
@@ -328,7 +328,7 @@ input, button, select, textarea {
 }
 
 .db-diagram-container {
-    width:calc(100% - 270px);
+    width:calc(100% );
     height: 100%;
     float: left;
 }

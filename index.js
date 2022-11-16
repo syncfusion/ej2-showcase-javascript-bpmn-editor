@@ -1247,6 +1247,7 @@ uploadObj.appendTo('#fileupload');
             diagram.clearSelection();
             diagram.drawingObject.sourceID = '';
             diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
+            diagram.selectedItems.userHandles = [];
             diagram.drawingObject.type = 'Orthogonal';
             removeSelectedToolbarItem();
             break;
@@ -1254,6 +1255,7 @@ uploadObj.appendTo('#fileupload');
             diagram.clearSelection();
             diagram.drawingObject.sourceID = '';
             diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
+            diagram.selectedItems.userHandles = [];
             diagram.drawingObject.type = 'Straight';
             removeSelectedToolbarItem();
             break;
@@ -1261,6 +1263,7 @@ uploadObj.appendTo('#fileupload');
             diagram.clearSelection();
             diagram.drawingObject.sourceID = '';
             diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
+            diagram.selectedItems.userHandles = [];
             diagram.drawingObject.type = 'Bezier';
             removeSelectedToolbarItem();
             break;
@@ -1728,8 +1731,10 @@ function onselectExport(args) {
 function onConnectorSelect(args){
     diagram.clearSelection();
     diagram.drawingObject.sourceID = '';
+    // drawingNode.id = '';
     diagram.drawingObject.type = args.item.text;
     diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
+    diagram.selectedItems.userHandles = [];
     diagram.dataBind();
     removeSelectedToolbarItem();
     document.getElementById('conTypeBtn').classList.add('tb-item-selected');
@@ -2039,9 +2044,11 @@ function UserHandleClick(args)
            break;
         case 'Draw':
             diagram.drawingObject.sourceID = drawingNode.id;
+           // diagram.drawingObject.sourceID = diagram.selectedItems.nodes[diagram.selectedItems.nodes.length-1].id;
             diagram.dataBind();
             break;
     }
+    this.endAction = true;
 }
 
 var PaperSize = (function () {
@@ -2535,17 +2542,12 @@ var pageHeight = new ej.inputs.NumericTextBox({
 });
 pageHeight.appendTo('#pageHeight');
 
-// var menuPgBackround = new ej.inputs.ColorPicker({
-//     mode:'Palette',
-//     width:'100%',
-//     value:diagram.pageSettings.background.color,
-//     change: function (args) { pageBackgroundChange1(args); }
-// })
-// menuPgBackround.appendTo('#backgroundCp');
 
 var pageBgColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
     width: '100%',
+    showButtons:false,
+    // modeSwitcher: true,
     value: diagram.pageSettings.background.color,
     change: function (args) { pageBackgroundChange1(args); }
 });
@@ -2640,6 +2642,8 @@ toolbarNodeInsert.appendTo('#toolbarNodeInsert');
 
 var nodeFillColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
+    showButtons:false,
+    modeSwitcher: true,
     change: function(args) {
         nodePropertyChange({propertyName: 'fillColor', propertyValue: args.currentValue.hex});
     }
@@ -2680,6 +2684,8 @@ nodeProperties.gradientDirection = gradientDirectionDropdown;
 
 var nodeGradientColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
+    showButtons:false,
+    modeSwitcher: true,
     change: function(args) {
         nodeProperties.gradientColor.value = args.currentValue.hex;
         nodePropertyChange({ propertyName: 'gradientColor', propertyValue: args });
@@ -2693,6 +2699,8 @@ gradientColorIconBtn.appendTo('#gradientColorIconBtn');
 
 var nodeStrokeColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
+    showButtons:false,
+    modeSwitcher: true,
     change: function(args) {
         nodeProperties.strokeColor.value = args.currentValue.hex;
         nodePropertyChange({ propertyName: 'strokeColor', propertyValue: args });
@@ -2757,6 +2765,8 @@ connectorProperties.lineType = lineTypeDropdown;
 
 var lineColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
+    showButtons:false,
+    modeSwitcher: true,
     change: function(args) {
         connectorProperties.lineColor.value = args.currentValue.hex;
         connectorPropertyChange({ propertyName: 'lineColor', propertyValue: args });
@@ -2909,6 +2919,8 @@ ddlTextPosition.appendTo('#ddlTextPosition');
 
 var textColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
+    showButtons:false,
+    modeSwitcher: true,
     change: function (args) {
         textProperties.fontColor.value = args.currentValue.hex;
         textPropertyChange({propertyName: 'fontColor', propertyValue: args});

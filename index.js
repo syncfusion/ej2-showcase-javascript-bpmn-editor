@@ -3,6 +3,7 @@ ej.diagrams.SymbolPalette.Inject(ej.diagrams.BpmnDiagrams);
 // Initialize nodes for diagram
 var btnObj;
 var conTypeBtn;
+var drawingNode;
 
 window.onload = function()
 {
@@ -315,46 +316,38 @@ var nodes = [
 //Initialize bpmn shapes for symbol palette
 var bpmnShapes = [
     {
-        id: 'Start', width: 60, height: 60, shape: {
+        id: 'Start Event', width: 60, height: 60, shape: {
             type: 'Bpmn', shape: 'Event',
             event: { event: 'Start' }
         },
     },
     {
-        id:'compensation', width:70,height:70,      shape: {
+        id:'Collapsed Sub-process', width:70,height:70,shape: {
             type: 'Bpmn', shape: 'Activity', activity: {
-                activity: 'Task', task: {
-                    compensation : true
-                }
+                activity: 'SubProcess', subProcess: { collapsed: true, boundary: 'Default' }
             },
         },
     },
     {
-        id:'dataObj', width:70,height:70,shape: {
-            type: 'Bpmn', shape: 'DataObject',
-            dataObject: { collection: true, type: 'Input' }
-        }
-    },
-    {
-        id:'boundaryCall', width:70,height:70,shape: {
+        id:'Expanded Sub-process', width:70,height:70,shape: {
             type: 'Bpmn', shape: 'Activity', activity: {
-                activity: 'SubProcess', subProcess: { collapsed: true, boundary: 'Call' }
+                activity: 'SubProcess', subProcess: { collapsed: false, boundary: 'Default' }
             },
         },
     },
     {
-        id:'dataSource', width:70,height:70, shape: {
+        id:'Data Source', width:70,height:70, shape: {
             type: 'Bpmn', shape: 'DataSource',   
         }
     },
     {
-        id: 'NonInterruptingIntermediate', width: 60, height: 60, shape: {
+        id: 'Intermediate Event', width: 60, height: 60, shape: {
             type: 'Bpmn', shape: 'Event',
-            event: { event: 'NonInterruptingIntermediate' }
+            event: { event: 'Intermediate' }
         },
     },
     {
-        id: 'End', width: 60, height: 60, offsetX: 665, offsetY: 230, shape: {
+        id: 'End Event', width: 60, height: 60, offsetX: 665, offsetY: 230, shape: {
             type: 'Bpmn', shape: 'Event',
             event: { event: 'End' }
         },
@@ -368,34 +361,23 @@ var bpmnShapes = [
         },
     },
     {
-        id: 'Transaction', width: 60, height: 60, offsetX: 300, offsetY: 100,
-        constraints: ej.diagrams.NodeConstraints.Default | ej.diagrams.NodeConstraints.AllowDrop,
-        shape: {
-            type: 'Bpmn', shape: 'Activity',
-            activity: {
-                activity: 'SubProcess', subProcess: {
-                    type: 'Transaction', transaction: {
-                        cancel: { visible: false }, failure: { visible: false }, success: { visible: false }
-                    }
-                }
-            }
-        },
-    }, {
-        id: 'Task_Service', width: 60, height: 60, offsetX: 700, offsetY: 700,
-        shape: {
-            type: 'Bpmn', shape: 'Activity', activity: {
-                activity: 'Task', task: { type: 'Service' }
-            },
-        },
-    },
-    {
         id: 'Gateway', width: 60, height: 60, offsetX: 100, offsetY: 100,
-        shape: { type: 'Bpmn', shape: 'Gateway', gateway: { type: 'Exclusive' } },
+        shape: { type: 'Bpmn', shape: 'Gateway',}
     },
     {
-        id: 'DataObject', width: 60, height: 60, offsetX: 500, offsetY: 100,
+        id: 'Data Object', width: 60, height: 60, offsetX: 500, offsetY: 100,
         shape: { type: 'Bpmn', shape: 'DataObject', dataObject: { collection: false, type: 'None' } },
-    }, {
+    },
+    // {
+    //     id: 'Text Annotation', width: 60, height: 60, offsetX: 500, offsetY: 100,
+    //     shape: { type: 'Bpmn', shape: 'TextAnnotation', },annotations:[{length:100,angle:180,text:'text ann'}]
+    // },
+    {
+        id: 'Message', width: 60,
+        height: 60,shape: { type: 'Bpmn', shape: 'Message',},
+      },
+      
+     {
         id: 'subProcess', width: 520, height: 250, offsetX: 355, offsetY: 230,
         constraints: ej.diagrams.NodeConstraints.Default | ej.diagrams.NodeConstraints.AllowDrop,
         shape: {
@@ -409,7 +391,30 @@ var bpmnShapes = [
                 }
             }
         },
+    },
+    {
+        id:'Association Flow',
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },
+        type: 'Orthogonal',
+        shape: { type: 'Bpmn', flow: 'Association',association: 'BiDirectional'}, 
+    },
+    {
+        id:'Message Flow',
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },type: 'Orthogonal',
+        shape: {
+        type: 'Bpmn',
+        flow: 'Message',
+        message: 'InitiatingMessage'
+            }, 
+    },
+    {
+        id:'Sequence Flow',
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },
+        type: 'Orthogonal',
+        shape: { type: 'Bpmn', flow: 'Sequence',sequence: 'Conditional'
+        }, 
     }
+    
 ];
 
 //Initialize connectors for symbol palette
@@ -612,7 +617,7 @@ var contextMenu = {
 var handles = [
     {
         name: 'Clone', pathData: 'M0,2.4879999 L0.986,2.4879999 0.986,9.0139999 6.9950027,9.0139999 6.9950027,10 0.986,10 C0.70400238,10 0.47000122,9.9060001 0.28100207,9.7180004 0.09400177,9.5300007 0,9.2959995 0,9.0139999 z M3.0050011,0 L9.0140038,0 C9.2960014,0 9.5300026,0.093999863 9.7190018,0.28199956 9.906002,0.47000027 10,0.70399952 10,0.986 L10,6.9949989 C10,7.2770004 9.906002,7.5160007 9.7190018,7.7110004 9.5300026,7.9069996 9.2960014,8.0049992 9.0140038,8.0049992 L3.0050011,8.0049992 C2.7070007,8.0049992 2.4650002,7.9069996 2.2770004,7.7110004 2.0890007,7.5160007 1.9950027,7.2770004 1.9950027,6.9949989 L1.9950027,0.986 C1.9950027,0.70399952 2.0890007,0.47000027 2.2770004,0.28199956 2.4650002,0.093999863 2.7070007,0 3.0050011,0 z',tooltip:{content:'Clone'},
-        visible: true, offset: 1, side: 'Bottom', margin: { top: 5, bottom: 0, left: 5, right: 5 }
+        visible: true, offset: 1, side: 'Bottom', margin: { top: 0, bottom: 0, left: 0, right: 0 }
     },
     {
         name: 'Delete', pathData: 'M0.54700077,2.2130003 L7.2129992,2.2130003 7.2129992,8.8800011 C7.2129992,9.1920013 7.1049975,9.4570007 6.8879985,9.6739998 6.6709994,9.8910007 6.406,10 6.0939997,10 L1.6659999,10 C1.3539997,10 1.0890004,9.8910007 0.87200136,9.6739998 0.65500242,9.4570007 0.54700071,9.1920013 0.54700077,8.8800011 z M2.4999992,0 L5.2600006,0 5.8329986,0.54600048 7.7599996,0.54600048 7.7599996,1.6660004 0,1.6660004 0,0.54600048 1.9270014,0.54600048 z',tooltip:{content:'Delete'},
@@ -620,7 +625,7 @@ var handles = [
     },
     {
         name: 'Draw', pathData: 'M3.9730001,0 L8.9730001,5.0000007 3.9730001,10.000001 3.9730001,7.0090005 0,7.0090005 0,2.9910006 3.9730001,2.9910006 z',tooltip:{content:'Draw'},
-        visible: true, offset: 0.5, side: 'Right', margin: { top: 0, bottom: 5, left: 5, right: 0 }
+        visible: true, offset: 0.5, side: 'Right', margin: { top: 0, bottom: 0, left: 0, right: 0 }
     },
 ];
 
@@ -718,7 +723,6 @@ function getDesignMenuItems()
         { text: 'Size', iconCss: 'em-icons e-copy',
         items:paperList1()
         },
-        {text:'Background'}
     ]
     return items;
 };
@@ -956,9 +960,9 @@ function menumouseover(args) {
         this.buttonInstance = button1;
         if (button1.getPopUpElement().classList.contains('e-popup-close')) {
             button1.toggle();
-            if (button1.element.id === 'btnToolsMenu') {
-                enableToolsMenuItems(diagram);
-            }
+            // if (button1.element.id === 'btnToolsMenu') {
+            //     enableToolsMenuItems(diagram);
+            // }
             if(button1.element.id === 'btnEditMenu') {
                 enableEditMenuItems(diagram);
             }
@@ -975,19 +979,18 @@ function menumouseover(args) {
         }
     }
 };
-function enableToolsMenuItems(diagram) {
-    var contextInstance = document.getElementById('toolsContextMenu');
-    var contextMenu = contextInstance.ej2_instances[0];
-    var selectedItems = diagram.selectedItems.nodes;
-    selectedItems = selectedItems.concat(diagram.selectedItems.connectors);
-    for (var i = 0; i < contextMenu.items.length; i++) {
-        contextMenu.enableItems([contextMenu.items[i].text], false);
-    }
+// function enableToolsMenuItems(diagram) {
+//     var contextInstance = document.getElementById('toolsContextMenu');
+//     var contextMenu = contextInstance.ej2_instances[0];
+//     var selectedItems = diagram.selectedItems.nodes;
+//     selectedItems = selectedItems.concat(diagram.selectedItems.connectors);
+//     for (var i = 0; i < contextMenu.items.length; i++) {
+//         contextMenu.enableItems([contextMenu.items[i].text], false);
+//     }
         
-            contextMenu.enableItems(['Connectors'], true);
-            contextMenu.enableItems(['Selection Tool', 'Pan Tool', 'Connector Tool']);
-                   
-};
+//             // contextMenu.enableItems(['Connectors'], true);
+//             // contextMenu.enableItems(['Selection Tool', 'Pan Tool', 'Connector Tool']);                  
+// };
 
 function enableEditMenuItems(diagram)
 {
@@ -1209,10 +1212,10 @@ uploadObj.appendTo('#fileupload');
             pageSettingsList.text = args.item.text;
             updateSelection(args.item)
             break;
-        case 'Background':
-            document.getElementById('background').style.display = 'block';
-           var fillElement= document.getElementById('background').parentElement.getElementsByClassName('e-dropdown-btn')[0];
-    fillElement.click();
+    //     case 'Background':
+    //         document.getElementById('background').style.display = 'block';
+    //        var fillElement= document.getElementById('background').parentElement.getElementsByClassName('e-dropdown-btn')[0];
+    // fillElement.click();
             break;
         case 'Select All':
             diagram.clearSelection();
@@ -1339,17 +1342,9 @@ uploadObj.appendTo('#fileupload');
             diagram.zoomTo({ type: 'ZoomOut', zoomFactor: 0.2 });
             zoomCurrentValue.content = diagram.scrollSettings.currentZoom = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
             break;
-        // case 'Bold':
-        // case 'Underline':
-        // case 'Italic':
-        //     updateAnnotation(args.item.tooltipText);
-        //     break;
         case 'Lock':
             lockObject();
             break;
-        // case 'Fill Color':
-        //      showColorPicker('nodeFillColor', 'tb-item-fill')
-        //     break;
         case 'Cut':
             diagram.cut();
             break;
@@ -1367,11 +1362,6 @@ uploadObj.appendTo('#fileupload');
             break;
         case 'Pan Tool':
             diagram.tool = ej.diagrams.DiagramTools.ZoomPan;
-            break;
-        case 'Connector Tool':
-            diagram.clearSelection();
-            diagram.drawingObject.sourceID = '';
-            diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
             break;
         case 'Rotate Clockwise':
             diagram.rotate(diagram.selectedItems,90);
@@ -1399,9 +1389,6 @@ uploadObj.appendTo('#fileupload');
             options.mode = 'Data';
             diagram.print(options)
             break;
-        // case 'Font Color':
-        //     showColorPicker('nodeFillColor', 'tb-item-fill')
-        //     break;
         case 'Save Diagram':
             download(diagram.saveDiagram());
             break;
@@ -1770,6 +1757,7 @@ function selectionChange(args)
         var showTextPanel = checkTextAnnotation();
         onClickDisable(false)
         if(diagram.selectedItems.nodes.length>0){
+        drawingNode = diagram.selectedItems.nodes[diagram.selectedItems.nodes.length-1];
         bindNodeProperties(args.newValue[0]);
         }
         document.getElementById('dimen').style.display = 'block';
@@ -2050,7 +2038,7 @@ function UserHandleClick(args)
            diagram.paste(diagram.selectedItems.selectedObjects);
            break;
         case 'Draw':
-            diagram.drawingObject.sourceID = diagram.selectedItems.nodes[diagram.selectedItems.nodes.length-1].id;
+            diagram.drawingObject.sourceID = drawingNode.id;
             diagram.dataBind();
             break;
     }
@@ -2491,10 +2479,9 @@ function minValue(){
     btnZoomIncrement.appendTo('#btnZoomIncrement');
 
 var palette = new ej.diagrams.SymbolPalette({
-    expandMode: 'Multiple', symbolMargin: { left: 5, right: 10, top: 10, bottom: 10 }, symbolHeight: 60, symbolWidth: 60,
+    expandMode: 'Multiple', symbolMargin: { left: 5, right: 15, top: 15, bottom: 10 }, symbolHeight: 60, symbolWidth: 55,
     palettes: [
         { id: 'Bpmn', expanded: true, symbols: bpmnShapes, iconCss: 'shapes', title: 'BPMN Shapes' },
-        { id: 'Connector', expanded: true, symbols: connectorSymbols,  iconCss: 'e-ddb-icons e-connector', title: 'Connectors' },
     ],
     width: '100%', height: '100%',
     getNodeDefaults: function (symbol) {
@@ -2548,13 +2535,13 @@ var pageHeight = new ej.inputs.NumericTextBox({
 });
 pageHeight.appendTo('#pageHeight');
 
-var menuPgBackround = new ej.inputs.ColorPicker({
-    mode:'Palette',
-    width:'100%',
-    value:diagram.pageSettings.background.color,
-    change: function (args) { pageBackgroundChange1(args); }
-})
-menuPgBackround.appendTo('#backgroundCp');
+// var menuPgBackround = new ej.inputs.ColorPicker({
+//     mode:'Palette',
+//     width:'100%',
+//     value:diagram.pageSettings.background.color,
+//     change: function (args) { pageBackgroundChange1(args); }
+// })
+// menuPgBackround.appendTo('#backgroundCp');
 
 var pageBgColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
@@ -3332,7 +3319,7 @@ function pageBackgroundChange1(args)
         diagram.pageSettings.background = {
             color: args.currentValue.rgba
         };
-        document.getElementById('background').style.display = 'none';
+        // document.getElementById('background').style.display = 'none';
         diagram.dataBind();
     }
 };

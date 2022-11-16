@@ -138,17 +138,17 @@ input, button, select, textarea {
 .sidebar {
     position: absolute;
     bottom: 0;
-    width: 232;
+    width: 212;
     left: 0px;
     height: calc(100% - 112px);
 }
 
 .main-content {
     margin: 0;
-    left:232px;
+    left:212px;
     height: calc(100% - 112px);
     position:absolute;
-    width:calc(100% - 232px);
+    width:calc(100% - 212px);
 }
 
 .db-palette-parent {
@@ -314,6 +314,7 @@ input, button, select, textarea {
     height: calc(100% - 64px);
 }
 
+
 .diagrambuilder-container.hide-palette .main-content {
     left: 0px;
     width: 100%;
@@ -342,7 +343,7 @@ input, button, select, textarea {
 }
 
 .db-current-diagram-container {
-    height: calc(100% - 28px);
+    height: calc(100% );
 }
 
 .diagrambuilder-container.hide-pager .db-current-diagram-container {

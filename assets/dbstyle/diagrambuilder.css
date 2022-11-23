@@ -662,6 +662,7 @@ input, button, select, textarea {
 .e-toolbar .e-toolbar-items .e-toolbar-item {
     min-height: 28px;
     margin-top: 0px;
+    /* padding-top: 2px!important; */
 }
 
 .e-toolbar .e-toolbar-items:not(.e-tbar-pos) .e-toolbar-item:first-child {
@@ -1072,7 +1073,7 @@ input[type="color"]::-moz-color-swatch {
     background: #ffffff;
     border: 1px solid #E0E0E0;
     height: 28px;
-    border-radius: 3px;
+    /* border-radius: 3px; */
 }
 
 .db-text-container:hover,
@@ -1091,7 +1092,7 @@ input[type="color"]::-moz-color-swatch {
 
 .db-color-input, .db-text-input {
     float: left;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .db-text {
@@ -1121,6 +1122,7 @@ input[type="color"]::-moz-color-swatch {
     padding: 0px;
     background: transparent;
     box-shadow: 0 0 0 0;
+    padding: 2px 2px 10px;
 }
 
 .db-color-container .e-dropdown-btn {
@@ -1210,12 +1212,12 @@ input[type="color"]::-moz-color-swatch {
 }
 
 .e-numeric.e-input-group .e-input-group-icon {
-    margin: 0px;
+    /* margin: 0px; */
     height: calc(50% - 6px);
-    position: absolute;
+    /* position: absolute; */
     min-height: 12px;
     display: block;
-    padding: 3px 2px 3px 0px;
+    /* padding: 3px 2px 3px 0px; */
 }
 
 .db-text-input .e-numeric.e-input-group .e-input-group-icon {
@@ -2299,6 +2301,7 @@ input.db-layer-edit {
     border:1px solid #f2f2f2;
     background: #f2f2f2;
     text-indent: 3px;
+    padding: 0px;
 }
 
 .e-icons {
@@ -2388,6 +2391,49 @@ input.e-input::selection,
     color: #515151;
     font-size: 12px;
 }
+.e-splitter
+        .e-split-bar.e-split-bar-horizontal
+        .e-navigate-arrow.e-arrow-left,
+      .e-splitter
+        .e-split-bar.e-split-bar-horizontal
+        .e-navigate-arrow.e-arrow-right {
+        background-color: #fff;
+        border-color: #276ef2;
+        border-width: 1px;
+        opacity: 0.9;
+      }
+
+      .e-splitter
+        .e-split-bar.e-split-bar-horizontal
+        .e-navigate-arrow.e-arrow-left::before {
+        background-color: #276ef2;
+        opacity: 1;
+        transform: rotate(40deg);
+      }
+
+      .e-splitter
+        .e-split-bar.e-split-bar-horizontal
+        .e-navigate-arrow.e-arrow-left::after {
+        background-color: #276ef2;
+        opacity: 1;
+        transform: rotate(-40deg);
+      }
+
+      .e-splitter
+        .e-split-bar.e-split-bar-horizontal
+        .e-navigate-arrow.e-arrow-right::before {
+        background-color: #276ef2;
+        opacity: 1;
+        transform: rotate(-40deg);
+      }
+
+      .e-splitter
+        .e-split-bar.e-split-bar-horizontal
+        .e-navigate-arrow.e-arrow-right::after {
+        background-color: #276ef2;
+        opacity: 1;
+        transform: rotate(40deg);
+      }
 /* Not Needed As of Now */
 
 /* #shortCutDialog .e-dlg-header-content + .e-dlg-content {

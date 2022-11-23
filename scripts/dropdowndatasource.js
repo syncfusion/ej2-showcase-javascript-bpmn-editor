@@ -36,7 +36,7 @@ var DropDownDataSources = (function () {
             ]},
             { text: 'Delete', iconCss: 'sf-icon-delete' },
             { separator: true },
-            {text: 'Order Commands',iconCss:'tb-item-end tb-item-order tb-dropdown-btn-icon',
+            {text: 'Order Commands',iconCss:'sf-icon-Order',
                 items:[ { text: 'Bring Forward', iconCss: 'sf-icon-BringForward' },
                         { text: 'Bring To Front', iconCss: 'sf-icon-BringFront' },
                         { text: 'Send Backward', iconCss: 'sf-icon-SendBackward' },
@@ -210,7 +210,7 @@ var DropDownDataSources = (function () {
             { prefixIcon: 'sf-icon-open', tooltipText: 'Open Diagram',cssClass: 'tb-item-middle' },
             { prefixIcon: 'sf-icon-save', tooltipText: 'Save Diagram',cssClass: 'tb-item-middle' },
             { prefixIcon: 'sf-icon-print', tooltipText: 'Print Diagram',cssClass: 'tb-item-middle'},
-            { prefixIcon: 'sf-icon-export',type: 'Input', tooltipText: 'Export Diagram',template: '<button id="custombtn" style="width:100%;"></button>',cssClass: 'tb-item-end tb-dropdown-btn-icon'},
+            { prefixIcon: 'sf-icon-export',tooltipText: 'Export Diagram',cssClass: 'tb-item-end'},
                             { type: 'Separator' },
             { prefixIcon: 'sf-icon-undo', tooltipText: 'Undo',disabled:true,cssClass: 'tb-item-start'  },
             { prefixIcon: 'sf-icon-redo', tooltipText: 'Redo',disabled:true,cssClass: 'tb-item-end'  },
@@ -247,8 +247,8 @@ var DropDownDataSources = (function () {
             { prefixIcon: 'sf-icon-bring-forward', tooltipText: 'Bring Forward',disabled:true,cssClass: 'tb-item-middle' },
             { prefixIcon: 'sf-icon-send-backward' , tooltipText: 'Send Backward',disabled:true,cssClass: 'tb-item-end'  },
                             { type: 'Separator' },
-            { prefixIcon: 'sf-icon-Flip-Horizontal', tooltipText: 'Flip Horizontal',disabled:true,cssClass: 'tb-item-start' },
-            { prefixIcon: 'sf-icon-Flip-Vertical' , tooltipText: 'Flip Vertical',disabled:true,cssClass: 'tb-item-end'  },
+            { prefixIcon: 'sf-icon-rotate', tooltipText: 'Flip Horizontal',disabled:true,cssClass: 'tb-item-start' },
+            { prefixIcon: 'sf-icon-rotate' , tooltipText: 'Flip Vertical',disabled:true,cssClass: 'tb-item-end'  },
 
         ];
         return items;

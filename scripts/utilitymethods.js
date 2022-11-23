@@ -67,6 +67,9 @@ var UtilityMethods = (function () {
             case 'Print Diagram':
                 printDialog.show();
                 break;
+            case 'Export Diagram':
+                exportDialog.show();
+                break;
             case 'Save Diagram':
                 this.download(diagram.saveDiagram());
                 break;
@@ -114,12 +117,6 @@ var UtilityMethods = (function () {
                 break;
             case 'Export':
                 exportDialog.show();
-                break;
-            case 'JPG':
-            case 'PNG':
-            case 'BMP':
-            case 'SVG':
-                this.onselectExport(args);
                 break;
             case 'Open':
                 document.getElementsByClassName('e-file-select-wrap')[0].querySelector('button').click();
@@ -342,11 +339,6 @@ var UtilityMethods = (function () {
             }
         }
     };
-    UtilityMethods.prototype.onselectExport = function(args)
-    {
-        exportFormat.value = args.item.text;
-        exportDialog.show();
-    }
     UtilityMethods.prototype.onConnectorSelect = function(args)
     {
         diagram.clearSelection();
@@ -867,10 +859,10 @@ var UtilityMethods = (function () {
     {
         var expandcollapseicon = document.getElementById('btnHideToolbar');
         var button1 = expandcollapseicon.ej2_instances[0];
-        if (button1.iconCss.indexOf('sf-icon-Collapse tb-icons') > -1) {
-            button1.iconCss = 'sf-icon-DownArrow2 tb-icons';
+        if (button1.iconCss.indexOf('sf-icon-chevron-up') > -1) {
+            button1.iconCss = 'sf-icon-chevron-down';
         } else {
-            button1.iconCss = 'sf-icon-Collapse tb-icons';
+            button1.iconCss = 'sf-icon-chevron-up';
         }
         UtilityMethods.prototype.hideElements('hide-menubar', diagram);
     };

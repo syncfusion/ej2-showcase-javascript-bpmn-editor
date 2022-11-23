@@ -1,6 +1,5 @@
 ej.diagrams.Diagram.Inject(ej.diagrams.BpmnDiagrams, ej.diagrams.UndoRedo, ej.diagrams.DiagramContextMenu);
 ej.diagrams.SymbolPalette.Inject(ej.diagrams.BpmnDiagrams);
-var btnObj;
 var conTypeBtn;
 var drawingNode;
 var diagramEvents = new DiagramClientSideEvents();
@@ -13,8 +12,6 @@ window.onload = function()
     document.getElementById('btnHideToolbar').onclick =  UtilityMethods.prototype.hideMenuBar.bind(this);
     document.onmouseover = menumouseover.bind(this);
     zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
-    // var diagramEvents = new DiagramClientSideEvents();
-
 }
 
 var NodeProperties = (function () {
@@ -1095,10 +1092,6 @@ var zoomMenuItems = [
                         { text: '100%' }, { text: '75%' }, { text: '50%' }, { text: '25%' }, { separator: true },
                         { text: 'Fit To Screen' }
                     ];
- btnObj = new ej.splitbuttons.DropDownButton({
-   items: items, iconCss: 'sf-icon-export',
-    select: function (args) { UtilityMethods.prototype.onselectExport(args)},
-});
 conTypeBtn = new ej.splitbuttons.DropDownButton({
     items: conTypeItems, iconCss:'sf-icon-orthogonal_line',
     select: function (args) {UtilityMethods.prototype.onConnectorSelect(args)}
@@ -1116,9 +1109,8 @@ uploadObj.appendTo('#fileupload');
 
 
  toolbarObj.appendTo('#toolbarEditor');
- var btnHideToolbar = new ej.buttons.Button({ iconCss: 'sf-icon-Collapse tb-icons' });
+ var btnHideToolbar = new ej.buttons.Button({ iconCss: 'sf-icon-chevron-up' });
  btnHideToolbar.appendTo('#btnHideToolbar');
- btnObj.appendTo('#custombtn');
  conTypeBtn.appendTo('#conTypeBtn');
 
 function flipObjects(flipType)
@@ -1518,7 +1510,7 @@ var pageBgColor = new ej.inputs.ColorPicker({
     change: function (args) { UtilityMethods.prototype.pageBackgroundChange1(args); }
 });
 pageBgColor.appendTo('#pageBgColor');
-var pageBgColorPickerBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+var pageBgColorPickerBtn = new ej.buttons.Button({ iconCss: 'sf-icon-fil_colour' });
     pageBgColorPickerBtn.appendTo('#pageBgColorPickerBtn');
 
 var showPageBreaks = new ej.buttons.CheckBox({ label: 'Page Breaks', checked: diagram.pageSettings.showPageBreaks,
@@ -1583,7 +1575,7 @@ showPageBreaks.appendTo('#showPageBreaks');
    aspectRatio.appendTo('#aspectRatio');
    nodeProperties.aspectRatio = aspectRatio;
 
-   var rotateIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-Rotate1 tb-icons' });
+   var rotateIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-rotate' });
    rotateIconBtn.appendTo('#rotateIconBtn');
 
    var nodeRotateAngle = new ej.inputs.NumericTextBox({
@@ -1632,7 +1624,7 @@ var gradient = new ej.buttons.CheckBox({ label: 'Gradient',
     gradient.appendTo('#gradient');
     nodeProperties.gradient = gradient;
 
-var fillColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+var fillColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-fil_colour' });
 fillColorIconBtn.appendTo('#fillColorIconBtn');
 
 var gradientDirectionDropdown = new ej.dropdowns.DropDownList({
@@ -1660,7 +1652,7 @@ var nodeGradientColor = new ej.inputs.ColorPicker({
 nodeGradientColor.appendTo('#nodeGradientColor');
 nodeProperties.gradientColor = nodeGradientColor;
 
-var gradientColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+var gradientColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-fil_colour' });
 gradientColorIconBtn.appendTo('#gradientColorIconBtn');
 
 var nodeStrokeColor = new ej.inputs.ColorPicker({
@@ -1675,7 +1667,7 @@ var nodeStrokeColor = new ej.inputs.ColorPicker({
 nodeStrokeColor.appendTo('#nodeStrokeColor');
 nodeProperties.strokeColor = nodeStrokeColor;
 
-var strokeColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-Pickers tb-icons' });
+var strokeColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-border_colour' });
 strokeColorIconBtn.appendTo('#strokeColorIconBtn');
 
 var nodeBorderStyle = new ej.dropdowns.DropDownList({
@@ -1694,8 +1686,9 @@ nodeBorderStyle.appendTo('#nodeBorderStyle');
 nodeProperties.strokeStyle = nodeBorderStyle;
 
 var nodeStrokeWidth = new ej.inputs.NumericTextBox({
-    min: 0,
-    step: 0.5,
+    min: 1,
+    step: 1,
+    format: 'n0',
     change: function (args) {
        nodeProperties.strokeWidth.value= args.value;
        PropertyChange.prototype.nodePropertyChange({ propertyName: 'strokeWidth', propertyValue: args });
@@ -1741,7 +1734,7 @@ var lineColor = new ej.inputs.ColorPicker({
 lineColor.appendTo('#lineColor');
 connectorProperties.lineColor = lineColor;
 
-var lineColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-Pickers tb-icons' });
+var lineColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-border_colour' });
 lineColorIconBtn.appendTo('#lineColorIconBtn');
 
 var lineStyle = new ej.dropdowns.DropDownList({
@@ -1758,8 +1751,9 @@ lineStyle.appendTo('#lineStyle');
 connectorProperties.lineStyle =  lineStyle;
 
 var lineWidth = new ej.inputs.NumericTextBox({
-    min: 0.5,
-    step: 0.5,
+    min: 1,
+    step: 1,
+    format: 'n0',
     change: function(args) {
         connectorProperties.lineWidth.value = args.value;
         PropertyChange.prototype.connectorPropertyChange({ propertyName: 'lineWidth', propertyValue: args });
@@ -1782,6 +1776,7 @@ connectorProperties.sourceType = sourceType;
 var sourceSize = new ej.inputs.NumericTextBox({
     min: 1,
     step: 1,
+    format: 'n0',
     change: function(args) {
         connectorProperties.sourceSize.value = args.value;
         PropertyChange.prototype.connectorPropertyChange({ propertyName: 'sourceSize', propertyValue: args });
@@ -1804,6 +1799,7 @@ connectorProperties.targetType = targetType;
 var targetSize = new ej.inputs.NumericTextBox({
     min: 1,
     step: 1,
+    format: 'n0',
     change: function(args) {
         connectorProperties.targetSize.value = args.value;
         PropertyChange.prototype.connectorPropertyChange({ propertyName: 'targetSize', propertyValue: args });
@@ -1829,6 +1825,7 @@ var lineJump = new ej.buttons.CheckBox({ label: 'Bridging',
     var lineJumpSize = new ej.inputs.NumericTextBox({
         min: 1,
         step: 1,
+        format: 'n0',
         change: function(args) {
             connectorProperties.lineJumpSize.value = args.value;
             PropertyChange.prototype.connectorPropertyChange({propertyName: 'lineJumpSize', propertyValue: args});
@@ -1866,6 +1863,7 @@ textProperties.fontFamily = fontFamily;
 var fontSizeTextProperties = new ej.inputs.NumericTextBox({
     min: 1,
     step: 1,
+    format: 'n0',
     change: function (args) {
         textProperties.fontSize.value = args.value;
         PropertyChange.prototype.textPropertyChange({propertyName: 'fontSize', propertyValue: args});
@@ -1895,16 +1893,16 @@ var textColor = new ej.inputs.ColorPicker({
 textColor.appendTo('#textColor');
 textProperties.fontColor = textColor;
 
-var fontColorBtn = new ej.buttons.Button({ iconCss: 'sf-icon-ColorPickers tb-icons' });
+var fontColorBtn = new ej.buttons.Button({ iconCss: 'sf-icon-border_colour' });
 fontColorBtn.appendTo('#fontColorBtn');
 
 var toolbarTextStyle = new ej.navigations.Toolbar({
     overflowMode: 'Scrollable',
     clicked: function (args) { toolbarTextStyleChange(args); },
     items: [
-        { prefixIcon: 'sf-icon-Bold tb-icons', tooltipText: 'Bold', cssClass: 'tb-item-start' },
-        { prefixIcon: 'sf-icon-Italic tb-icons', tooltipText: 'Italic', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-Underline tb-icons', tooltipText: 'Underline', cssClass: 'tb-item-end' }
+        { prefixIcon: 'sf-icon-bold ', tooltipText: 'Bold', cssClass: 'tb-item-start' },
+        { prefixIcon: 'sf-icon-text', tooltipText: 'Italic', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-underline', tooltipText: 'Underline', cssClass: 'tb-item-end' }
     ]
 });
 toolbarTextStyle.appendTo('#toolbarTextStyle');
@@ -1913,9 +1911,9 @@ var toolbarTextSubAlignment = new ej.navigations.Toolbar({
     overflowMode: 'Scrollable',
     clicked:  function (args) { toolbarTextSubAlignChange(args); },
     items: [
-        { prefixIcon: 'sf-icon-ParaAlignLeft tb-icons', tooltipText: 'Align Text Left', cssClass: 'tb-item-start' },
-        { prefixIcon: 'sf-icon-ParaAlignCenter tb-icons', tooltipText: 'Align Text Center', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-ParaAlignRight tb-icons', tooltipText: 'Align Text Right', cssClass: 'tb-item-end' }
+        { prefixIcon: 'sf-icon-align_left', tooltipText: 'Align Text Left', cssClass: 'tb-item-start' },
+        { prefixIcon: 'sf-icon-align_center', tooltipText: 'Align Text Center', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-align_right', tooltipText: 'Align Text Right', cssClass: 'tb-item-end' }
     ]
 });
 toolbarTextSubAlignment.appendTo('#toolbarTextSubAlignment');

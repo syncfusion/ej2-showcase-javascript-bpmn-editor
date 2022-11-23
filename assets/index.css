@@ -2211,6 +2211,7 @@
   margin: 0;
   min-width: 24px;
   width: auto;
+  padding-top: 1.5px;
 }
 
 .e-toolbar .e-toolbar-items .e-toolbar-item > * {

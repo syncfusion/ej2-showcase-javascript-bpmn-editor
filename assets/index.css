@@ -2457,7 +2457,7 @@
 }
 
 .e-toolbar .e-toolbar-items .e-toolbar-item.e-overlay {
-  background: #fafafa;
+  background: #e3e3e3;
 }
 
 .e-toolbar .e-toolbar-items .e-toolbar-item.e-overlay .e-tbar-btn-text {
@@ -20681,7 +20681,7 @@ ejs-multiselect {
 .e-btn,
 .e-css.e-btn {
   -webkit-tap-highlight-color: transparent;
-  background-color: #fafafa;
+  /* background-color: #fafafa; */
   border-color: transparent;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   color: rgba(0, 0, 0, 0.87);
@@ -20692,7 +20692,7 @@ ejs-multiselect {
 .e-css.e-btn:hover {
   background-color: rgba(226, 226, 226, 0.9844);
   border-color: transparent;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+ /* box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12); */
   color: rgba(0, 0, 0, 0.87);
 }
 

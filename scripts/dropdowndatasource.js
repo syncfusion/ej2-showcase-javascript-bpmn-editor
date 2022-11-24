@@ -206,50 +206,56 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.toolbarItems = function()
     {
         let items = [
-            { prefixIcon: 'sf-icon-new', tooltipText: 'New Diagram',cssClass: 'tb-item-start' },
-            { prefixIcon: 'sf-icon-open', tooltipText: 'Open Diagram',cssClass: 'tb-item-middle' },
-            { prefixIcon: 'sf-icon-save', tooltipText: 'Save Diagram',cssClass: 'tb-item-middle' },
-            { prefixIcon: 'sf-icon-print', tooltipText: 'Print Diagram',cssClass: 'tb-item-middle'},
-            { prefixIcon: 'sf-icon-export',tooltipText: 'Export Diagram',cssClass: 'tb-item-end'},
+            { prefixIcon: 'sf-icon-undo', tooltipText: 'Undo', },
+            { prefixIcon: 'sf-icon-redo', tooltipText: 'Redo', },
+            { prefixIcon: 'sf-icon-pan', tooltipText: 'Pan Tool',},
+            { prefixIcon: 'sf-icon-pointer', tooltipText: 'Select Tool',},
+            { tooltipText: 'Change Connector Type',template: '<button id="conTypeBtn" style="width:100%;"></button>'},
+            { prefixIcon: 'sf-icon-text', tooltipText: 'Text Tool'},
                             { type: 'Separator' },
-            { prefixIcon: 'sf-icon-undo', tooltipText: 'Undo',disabled:true,cssClass: 'tb-item-start'  },
-            { prefixIcon: 'sf-icon-redo', tooltipText: 'Redo',disabled:true,cssClass: 'tb-item-end'  },
-                            {type :'Seperator'},
-            { prefixIcon: 'sf-icon-cut', tooltipText: 'Cut',click: pasteClick,disabled:true,cssClass: 'tb-item-start'  },
-            { prefixIcon: 'sf-icon-copy', tooltipText: 'Copy',click: pasteClick,disabled:true,cssClass: 'tb-item-middle'  },
-            { prefixIcon: 'sf-icon-paste', tooltipText: 'Paste',disabled:true,cssClass: 'tb-item-end' },
-                            {type: 'Separator' },
+            { prefixIcon: 'sf-icon-group', tooltipText:'Group', template: '<div></div>',disabled:true,},
             {
-                prefixIcon: 'sf-icon-zoom-out', tooltipText: 'Zoom Out(Ctrl + -)', cssClass: 'tb-item-start'
+                prefixIcon: 'sf-icon-align_left', tooltipText: 'Align Left',  template: '<div></div>',disabled:true,
             },
+            {
+                prefixIcon: 'sf-icon-align_center', tooltipText: 'Align Center',  template: '<div></div>',disabled:true,
+            },
+            {
+                prefixIcon: 'sf-icon-align_right', tooltipText: 'Align Right',  template: '<div></div>',disabled:true,
+            },
+            {
+                prefixIcon: 'sf-icon-align_top', tooltipText: 'Align Top', template: '<div></div>',disabled:true,
+            },
+            {
+                prefixIcon: 'sf-icon-align_middle', tooltipText: 'Align Middle', template: '<div></div>',disabled:true,
+            },
+            {
+                prefixIcon: 'sf-icon-align_bottom', tooltipText: 'Align Bottom', template: '<div></div>',disabled:true,
+            },
+            {
+                prefixIcon: 'sf-icon-distribute_horizontal', tooltipText: 'Distribute Objects Vertically', template: '<div></div>',disabled:true,
+            },
+            {
+                prefixIcon: 'sf-icon-distribute_vertical', tooltipText: 'Distribute Objects Horizontally',  template: '<div></div>',disabled:true,
+            },
+                        { type: 'Separator' },
+            { tooltipText: 'OrderCommands',template: '<div><button class="del-lock-hide" id="orderBtn" style="width:100%;"></button></div>',disabled:true,},
+            {prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true,  template: '<div></div>',}, 
+            { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',disabled:true,  template: '<div></div>',},
+            { prefixIcon: 'sf-icon-fil_colour', tooltipText: 'Fill Color',disabled:true,  template: '<div></div>', },
+            { prefixIcon: 'sf-icon-border_colour', tooltipText: 'Font Color',disabled:true,  template: '<div></div>',},
+                            { type: 'Separator' },
+           
+                        {
+                            type: 'Separator'
+                        },
             {
                 cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>'
-            },
-            {
-                prefixIcon: 'sf-icon-zoom-in', tooltipText: 'Zoom In(Ctrl + +)', cssClass: 'tb-item-end'
             },
                             {
                                 type: 'Separator'
                             },
-            { prefixIcon: 'sf-icon-pan', tooltipText: 'Pan Tool',cssClass: 'tb-item-start'},
-            { prefixIcon: 'sf-icon-pointer', tooltipText: 'Select Tool',cssClass: 'tb-item-middle tb-item-selected'},
-            { tooltipText: 'Change Connector Type',template: '<button id="conTypeBtn" style="width:100%;"></button>',cssClass: 'tb-item-end'},
-                            { type: 'Separator' },
-            
-            {prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true,cssClass: 'tb-item-start'}, 
-            { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',disabled:true,cssClass: 'tb-item-end'},
-                            { type: 'Separator' },
-            { prefixIcon: 'sf-icon-rotate', tooltipText: 'Rotate Clockwise' ,disabled:true,cssClass: 'tb-item-start' },
-            { prefixIcon: 'sf-icon-rotate', tooltipText: 'Rotate Counter-clockwise',disabled:true,cssClass: 'tb-item-end'  },
-                            { type: 'Separator' },
-            { prefixIcon: 'sf-icon-bring-to-front', tooltipText: 'Bring To Front',disabled:true,cssClass: 'tb-item-start' },
-            { prefixIcon: 'sf-icon-send-to-back' , tooltipText: 'Send To Back',disabled:true,cssClass: 'tb-item-middle'  },
-            { prefixIcon: 'sf-icon-bring-forward', tooltipText: 'Bring Forward',disabled:true,cssClass: 'tb-item-middle' },
-            { prefixIcon: 'sf-icon-send-backward' , tooltipText: 'Send Backward',disabled:true,cssClass: 'tb-item-end'  },
-                            { type: 'Separator' },
-            { prefixIcon: 'sf-icon-rotate', tooltipText: 'Flip Horizontal',disabled:true,cssClass: 'tb-item-start' },
-            { prefixIcon: 'sf-icon-rotate' , tooltipText: 'Flip Vertical',disabled:true,cssClass: 'tb-item-end'  },
-
+            { prefixIcon: 'sf-icon-chevron-up', tooltipText:'Hide',template: '<button id="btnHideMenubar"></button>'}
         ];
         return items;
     }

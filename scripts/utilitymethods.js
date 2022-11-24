@@ -37,9 +37,19 @@ var UtilityMethods = (function () {
                 diagram.remove();
                 break;
             case 'Select Tool':
+                diagram.clearSelection();
+                // diagram.drawingObject = {};
                 diagram.tool = ej.diagrams.DiagramTools.Default;
                 break;
+            case 'Text Tool':
+                // diagram.clearSelection();
+                diagram.selectedItems.userHandles = [];
+                diagram.drawingObject = { shape: { type: 'Text' }, };
+                diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
+                break;
             case 'Pan Tool':
+                diagram.clearSelection()
+                // diagram.drawingObject = {};
                 diagram.tool = ej.diagrams.DiagramTools.ZoomPan;
                 break;
             case 'Rotate Clockwise':
@@ -288,27 +298,29 @@ var UtilityMethods = (function () {
     {
         if(args === false)
         {
-            toolbarObj.items[9].disabled = false;toolbarObj.items[10].disabled = false;
-            toolbarObj.items[21].disabled = false;toolbarObj.items[22].disabled = false;
-            toolbarObj.items[24].disabled = false;toolbarObj.items[25].disabled = false;
-            toolbarObj.items[27].disabled = false;toolbarObj.items[28].disabled = false;
-            toolbarObj.items[29].disabled = false;toolbarObj.items[30].disabled = false;
-            toolbarObj.items[32].disabled = false;toolbarObj.items[33].disabled = false;
+            toolbarObj.items[16].disabled = false;toolbarObj.items[16].template = '';
+            toolbarObj.items[17].disabled = false;toolbarObj.items[17].template = '';
+            toolbarObj.items[18].disabled = false;toolbarObj.items[18].template = '';
+            toolbarObj.items[19].disabled = false;toolbarObj.items[19].template = '';
+            toolbarObj.items[20].disabled = false;toolbarObj.items[20].template = '';
+            // toolbarObj.items[32].disabled = false;toolbarObj.items[33].template = '';
         }
         else if(args === true ){
             var isTrue;
             if(diagram.selectedItems.connectors.length>0){
                 isTrue = false;
+                isTemp = '';
             }
             else{
                 isTrue = true;
+                isTemp = '<div></div>'
             }
-            toolbarObj.items[9].disabled = isTrue;toolbarObj.items[10].disabled = isTrue;
-            toolbarObj.items[21].disabled = isTrue;toolbarObj.items[22].disabled = isTrue;
-            toolbarObj.items[24].disabled = isTrue;toolbarObj.items[25].disabled = isTrue;
-            toolbarObj.items[27].disabled = isTrue;toolbarObj.items[28].disabled = isTrue;
-            toolbarObj.items[29].disabled = isTrue;toolbarObj.items[30].disabled = isTrue;
-            toolbarObj.items[32].disabled = isTrue;toolbarObj.items[33].disabled = isTrue;
+            toolbarObj.items[16].disabled = isTrue;toolbarObj.items[16].template = isTemp;
+            toolbarObj.items[17].disabled = isTrue;toolbarObj.items[17].template = isTemp;
+            toolbarObj.items[18].disabled = isTrue;toolbarObj.items[18].template = isTemp;
+            toolbarObj.items[19].disabled = isTrue;toolbarObj.items[19].template = isTemp;
+            toolbarObj.items[20].disabled = isTrue;toolbarObj.items[20].template = isTemp;
+            // toolbarObj.items[32].disabled = isTrue;toolbarObj.items[33].template = '';
             }
     };
     UtilityMethods.prototype.download = function(data)
@@ -349,7 +361,11 @@ var UtilityMethods = (function () {
         diagram.dataBind();
         this.removeSelectedToolbarItem();
         document.getElementById('conTypeBtn').classList.add('tb-item-selected');
-    }
+    };
+    UtilityMethods.prototype.onOrderSelect = function(args)
+    {
+
+    };
     UtilityMethods.prototype.removeSelectedToolbarItem = function()
     {
         for (var i = 0; i < toolbarObj.items.length; i++) {
@@ -857,7 +873,7 @@ var UtilityMethods = (function () {
     };
     UtilityMethods.prototype.hideMenuBar = function()
     {
-        var expandcollapseicon = document.getElementById('btnHideToolbar');
+        var expandcollapseicon = document.getElementById('btnHideMenubar');
         var button1 = expandcollapseicon.ej2_instances[0];
         if (button1.iconCss.indexOf('sf-icon-chevron-up') > -1) {
             button1.iconCss = 'sf-icon-chevron-down';

@@ -1,6 +1,7 @@
 ej.diagrams.Diagram.Inject(ej.diagrams.BpmnDiagrams, ej.diagrams.UndoRedo, ej.diagrams.DiagramContextMenu);
 ej.diagrams.SymbolPalette.Inject(ej.diagrams.BpmnDiagrams);
 var conTypeBtn;
+var orderBtn;
 var drawingNode;
 var diagramEvents = new DiagramClientSideEvents();
 var dropDownDataSources = new DropDownDataSources();
@@ -9,7 +10,7 @@ var utilityMethods = new UtilityMethods();
 
 window.onload = function()
 {
-    document.getElementById('btnHideToolbar').onclick =  UtilityMethods.prototype.hideMenuBar.bind(this);
+    document.getElementById('btnHideMenubar').onclick =  UtilityMethods.prototype.hideMenuBar.bind(this);
     document.onmouseover = menumouseover.bind(this);
     zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
 }
@@ -1087,6 +1088,12 @@ function enableEditMenuItems(diagram)
                      {text: 'Orthogonal',iconCss: 'sf-icon-orthogonal_line'},
                      {text: 'Bezier',iconCss: 'sf-icon-bezier'}
                     ];
+var orderItems = [
+    {text:'Bring Forward', iconCss:'sf-icon-bring-forward'},
+    {text:'Bring To Front', iconCss:'sf-icon-bring-to-front'},
+    {text:'Send Backward', iconCss:'sf-icon-send-backward'},
+    {text:'Send To Back', iconCss:'sf-icon-send-to-back'},
+]
 var zoomMenuItems = [
                         { text: '400%' }, { text: '300%' }, { text: '200%' }, { text: '150%' },
                         { text: '100%' }, { text: '75%' }, { text: '50%' }, { text: '25%' }, { separator: true },
@@ -1096,7 +1103,18 @@ conTypeBtn = new ej.splitbuttons.DropDownButton({
     items: conTypeItems, iconCss:'sf-icon-orthogonal_line',
     select: function (args) {UtilityMethods.prototype.onConnectorSelect(args)}
 });
-
+function enable()
+{
+    toolbarObj.items[18].disabled= false;
+    toolbarObj.items[18].template= '';
+    toolbarObj.dataBind();
+}
+function disable()
+{
+    toolbarObj.items[18].disabled= true;
+    toolbarObj.items[18].template= '<div></div>';
+    toolbarObj.dataBind();
+}
 var uploadObj = new ej.inputs.Uploader({
     asyncSettings: {
         saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
@@ -1109,8 +1127,13 @@ uploadObj.appendTo('#fileupload');
 
 
  toolbarObj.appendTo('#toolbarEditor');
- var btnHideToolbar = new ej.buttons.Button({ iconCss: 'sf-icon-chevron-up' });
- btnHideToolbar.appendTo('#btnHideToolbar');
+ var btnHideMenubar = new ej.buttons.Button({ iconCss: 'sf-icon-chevron-up' });
+ btnHideMenubar.appendTo('#btnHideMenubar');
+ orderBtn = new ej.splitbuttons.DropDownButton({
+    items: orderItems, iconCss:'sf-icon-send-backward',
+    select: function (args) {UtilityMethods.prototype.onOrderSelect(args)}
+ });
+ orderBtn.appendTo('#orderBtn');
  conTypeBtn.appendTo('#conTypeBtn');
 
 function flipObjects(flipType)
@@ -1430,6 +1453,8 @@ function minValue(){
     return size;
 }
 
+    var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange });
+    btnZoomIncrement.appendTo('#btnZoomIncrement');
     var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange });
     btnZoomIncrement.appendTo('#btnZoomIncrement');
 
@@ -2086,24 +2111,3 @@ var exportRegion = new ej.dropdowns.DropDownList({
     value: exportSettings.region
 });
 exportRegion.appendTo('#exportRegion');
-
-var splitObj = new ej.layouts.Splitter({
-    height: '500px',
-    paneSettings: [
-        { size: '75%', collapsible: false },
-        { collapsible: true }
-    ],
-    separatorSize: 5,
-    expanded:spliterExpanded,
-    collapsed:splitterColapsed,
-    width: '100%'
-});
-splitObj.appendTo('#splitter');
-function spliterExpanded(args)
-{
-    args.pane[1].style.display = 'none';
-}
-function splitterColapsed(args)
-{
-    args.pane[1].style.display = 'block';
-}

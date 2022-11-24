@@ -3,12 +3,12 @@
  
         <script src="https://cdn.syncfusion.com/ej2/20.3.47/dist/ej2.min.js" type="text/javascript"></script>
         <link href="https://cdn.syncfusion.com/ej2/20.3.47/fluent.css" rel="stylesheet">
-        <link href="https://cdn.syncfusion.com/ej2/ej2-base/styles/material.css" rel="stylesheet">
+        <!-- <link href="https://cdn.syncfusion.com/ej2/ej2-base/styles/material.css" rel="stylesheet">
         <link href="https://cdn.syncfusion.com/ej2/ej2-buttons/styles/fluent.css" rel="stylesheet">
         <link href="https://cdn.syncfusion.com/ej2/ej2-popups/styles/material.css" rel="stylesheet">
         <link href="https://cdn.syncfusion.com/ej2/ej2-splitbuttons/styles/material.css" rel="stylesheet">
         <link href="https://cdn.syncfusion.com/ej2/ej2-diagrams/styles/material.css" rel="stylesheet">
-        <link href="https://cdn.syncfusion.com/ej2/ej2-navigations/styles/fabric.css" rel="stylesheet">
+        <link href="https://cdn.syncfusion.com/ej2/ej2-navigations/styles/fabric.css" rel="stylesheet"> -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
         
         <link href="index.css" rel="stylesheet">
@@ -26,11 +26,11 @@
                 .e-file-select-wrap {
                     display: none;
                 }
-                #conTypeBtn {
+                #conTypeBtn, #orderBtn {
                     width: 45px!important;
                     padding: 0px 0px 0px 0px;
-                    border-top-right-radius: 5px;
-                    border-bottom-right-radius: 5px;
+                    /* border-top-right-radius: 5px;
+                    border-bottom-right-radius: 5px; */
                 }
                 #designContextMenu,#toolsContextMenu{
                     width: 100px;
@@ -77,9 +77,9 @@
             <div class='db-toolbar-container'>
                     <div id="toolbarEditor"></div>
             </div>
-            <div class="db-toolbar-hide-btn">
+            <!-- <div class="db-toolbar-hide-btn">
                     <button id="btnHideToolbar"></button>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class='row content'>
@@ -89,7 +89,6 @@
             </div>
         </div>
         <div class='main-content' role='main'>
-            <div id="splitter" class="splitter-expand">
                 <div class="db-diagram-container">
                     <div id="diagramContainerDiv" class='db-current-diagram-container'>
                         <div id="diagram"></div>
@@ -483,7 +482,7 @@
                         </div>
                     </div>
                 </div>              
-            </div>
+            
         </div>
     </div>
 </div>

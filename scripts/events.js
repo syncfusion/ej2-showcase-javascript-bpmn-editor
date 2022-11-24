@@ -22,6 +22,7 @@ var DiagramClientSideEvents = (function () {
                 if(args.newValue.length>0 && args.newValue[0] instanceof ej.diagrams.Node){
                     diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All|ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles };
                     UtilityMethods.prototype.onClickDisable(false);
+                    // enable();
                     if(diagram.selectedItems.nodes.length>0){
                         drawingNode = diagram.selectedItems.nodes[diagram.selectedItems.nodes.length-1];
                     }
@@ -29,6 +30,7 @@ var DiagramClientSideEvents = (function () {
                 else{
                 diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All&~ej.diagrams.SelectorConstraints.UserHandle };
                 UtilityMethods.prototype.onClickDisable(true);
+                // disable();
                 }
             }
         }

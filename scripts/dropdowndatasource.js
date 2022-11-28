@@ -29,18 +29,18 @@ var DropDownDataSources = (function () {
             { text: 'Paste', iconCss: 'sf-icon-paste' },
             { separator: true },
             { text: 'Rotate',iconCss:'sf-icon-rotate', items:[
-                { text: 'Rotate Right 90', iconCss: 'sf-icon-Redo' },
-                { text: 'Rotate Left 90', iconCss: 'sf-icon-Undo' },
-                { text: 'Flip Vertical', iconCss: 'sf-icon-Undo' },
-                { text: 'Flip Horizontal', iconCss: 'sf-icon-Undo' },
+                { text: 'Rotate Right 90', iconCss: 'sf-icon-rotate-clockwise' },
+                { text: 'Rotate Left 90', iconCss: 'sf-icon-rotate-counter-clockwise' },
+                { text: 'Flip Vertical', iconCss: 'sf-icon-flip-vertical' },
+                { text: 'Flip Horizontal', iconCss: 'sf-icon-flip-horizontal' },
             ]},
             { text: 'Delete', iconCss: 'sf-icon-delete' },
             { separator: true },
             {text: 'Order Commands',iconCss:'sf-icon-Order',
-                items:[ { text: 'Bring Forward', iconCss: 'sf-icon-BringForward' },
-                        { text: 'Bring To Front', iconCss: 'sf-icon-BringFront' },
-                        { text: 'Send Backward', iconCss: 'sf-icon-SendBackward' },
-                        { text: 'Send To Back', iconCss: 'sf-icon-Sendback' },
+                items:[ { text: 'Bring Forward', iconCss: 'sf-icon-bring-forward' },
+                        { text: 'Bring To Front', iconCss: 'sf-icon-bring-to-front' },
+                        { text: 'Send Backward', iconCss: 'sf-icon-send-backward' },
+                        { text: 'Send To Back', iconCss: 'sf-icon-send-to-back' },
                         ]
             } 
         ]
@@ -49,9 +49,9 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.getDesignMenuItems = function()
     {
         var items = [
-            { text: 'Orientation',
+            { text: 'Orientation',iconCss: 'sf-icon-page_orientation',
             items:[
-                { text: 'Landscape', iconCss: 'sf-icon-Selection' },
+                { text: 'Landscape', iconCss: 'sf-icon-check-tick' },
                 { text: 'Portrait', iconCss: '' }
             ]    
             },
@@ -88,11 +88,11 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.getViewMenuItems = function()
     {
         var items = [
-            { text: 'Show Lines',iconCss: 'sf-icon-Selection'},
-            { text: 'Snap To Grid',iconCss : 'sf-icon-Selection'},
-            { text: 'Snap To Object',iconCss : 'sf-icon-Selection'},
-            { text: 'Show Ruler',iconCss: 'sf-icon-Selection'},
-            { text: 'Show Page Breaks',iconCss: 'sf-icon-Selection'},
+            { text: 'Show Lines',iconCss: 'sf-icon-check-tick'},
+            { text: 'Snap To Grid',iconCss : 'sf-icon-check-tick'},
+            { text: 'Snap To Object',iconCss : 'sf-icon-check-tick'},
+            { text: 'Show Ruler',iconCss: 'sf-icon-check-tick'},
+            { text: 'Show Page Breaks',iconCss: 'sf-icon-check-tick'},
             { text: 'Show Multiple page',iconCss: ''},
             { separator: true },
             { text: 'Fit To Width'},
@@ -113,7 +113,7 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.paperList1 = function()
     {
         var paperList1 = [
-            { text: 'Letter (8.5 in x 11 in)', value: 'Letter',iconCss:'sf-icon-Selection' }, { text: 'Legal (8.5 in x 14 in)', value: 'Legal' },
+            { text: 'Letter (8.5 in x 11 in)', value: 'Letter',iconCss:'sf-icon-check-tick' }, { text: 'Legal (8.5 in x 14 in)', value: 'Legal' },
             { text: 'Tabloid (279 mm x 432 mm)', value: 'Tabloid' }, { text: 'A3 (297 mm x 420 mm)', value: 'A3' },
             { text: 'A4 (210 mm x 297 mm)', value: 'A4' }, { text: 'A5 (148 mm x 210 mm)', value: 'A5' },
             { text: 'A6 (105 mm x 148 mm)', value: 'A6' },
@@ -251,7 +251,7 @@ var DropDownDataSources = (function () {
             { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',  template: '<div></div>', cssClass: 'tb-item-end tb-item-lock-category'},
                             { type: 'Separator', visible: false },
             { prefixIcon: 'sf-icon-fil_colour', tooltipText: 'Fill Color',  template: '<div></div>',cssClass: 'tb-item-start tb-item-stroke' },
-            { prefixIcon: 'sf-icon-border_colour', tooltipText: 'Font Color', template: '<div></div>',cssClass: 'tb-item-end tb-item-stroke'},
+            { prefixIcon: 'sf-icon-font-color', tooltipText: 'Font Color', template: '<div></div>',cssClass: 'tb-item-end tb-item-stroke'},
                             { type: 'Separator', visible: false },
                         {
                             type: 'Separator',template:'<div style="margin-left:200px;"></div>'
@@ -262,7 +262,7 @@ var DropDownDataSources = (function () {
                             {
                                 type: 'Separator'
                             },
-            { prefixIcon: 'sf-icon-chevron-up' , tooltipText: 'Hide property'}
+            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide property',template:'<button id="hideProperty"></button>'}
         ];
         return items;
     };

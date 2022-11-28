@@ -2,6 +2,7 @@ ej.diagrams.Diagram.Inject(ej.diagrams.BpmnDiagrams, ej.diagrams.UndoRedo, ej.di
 ej.diagrams.SymbolPalette.Inject(ej.diagrams.BpmnDiagrams);
 var conTypeBtn;
 var orderBtn;
+var hidePropertyBtn;
 var drawingNode;
 var diagramEvents = new DiagramClientSideEvents();
 var dropDownDataSources = new DropDownDataSources();
@@ -1097,7 +1098,7 @@ var orderItems = [
     {text:'Send To Back', iconCss:'sf-icon-send-to-back'},
 ]
 var zoomMenuItems = [
-    // { text: 'Zoom Out' },{ text: 'Zoom In' },
+    { text: 'Zoom Out' },{ text: 'Zoom In' },
      { text: '400%' }, { text: '300%' }, { text: '200%' }, { text: '150%' },
                         { text: '100%' }, { text: '75%' }, { text: '50%' }, { text: '25%' }, { separator: true },
                         { text: 'Fit To Screen' }
@@ -1190,13 +1191,31 @@ uploadObj.appendTo('#fileupload');
 
  toolbarObj.appendTo('#toolbarEditor');
  var btnHideMenubar = new ej.buttons.Button({ iconCss: 'sf-icon-chevron-up' });
- btnHideMenubar.appendTo('#btnHideMenubar');
- orderBtn = new ej.splitbuttons.DropDownButton({
-    items: orderItems, iconCss:'sf-icon-send-backward',
-    select: function (args) {UtilityMethods.prototype.onOrderSelect(args)}
- });
- orderBtn.appendTo('#orderBtn');
  conTypeBtn.appendTo('#conTypeBtn');
+ btnHideMenubar.appendTo('#btnHideMenubar');
+ hidePropertyBtn = new ej.buttons.Button({
+     iconCss:'sf-icon-properties',isPrimary: true 
+ });
+ hidePropertyBtn.appendTo('#hideProperty');
+
+ document.getElementById('hideProperty').onclick= (args)=>{
+    UtilityMethods.prototype.hideElements('hide-properties',diagram);
+ }
+
+ function hidePropertyPanel(args)
+ {
+    var panel =  document.getElementById('propertyPanel');
+    var diagramContent = document.getElementsByClassName('db-diagram-container');
+    if(panel.style.display.toLocaleLowerCase() === 'block' || panel.style.display === ''){
+        panel.style.display = 'none';
+        diagram.updateViewport();
+
+    }
+    else{
+        panel.style.display = 'block';
+        diagramContent.offsetWidth -=260;
+    }
+ }
 
 function flipObjects(flipType)
 {
@@ -1208,6 +1227,7 @@ function flipObjects(flipType)
  diagram.dataBind();
 }
 
+ 
  function onUploadSuccess(args) {
     var file1 = args.file;
     var file = file1.rawFile;
@@ -1558,12 +1578,12 @@ var pageSettingsList = new ej.dropdowns.DropDownList({
 pageSettingsList.appendTo('#pageSettingsList');
 
 var pagePortrait = new ej.buttons.Button({
-    iconCss: 'sf-icon-insert_link', isToggle:true,cssClass: `e-flat`
+    iconCss: 'sf-icon-portrait', isToggle:true,cssClass: `e-flat`
 });
 pagePortrait.appendTo('#pagePortrait');
 
  var pageLandscape = new ej.buttons.Button({
-    iconCss: 'sf-icon-insert_link', isToggle:true,cssClass: `e-flat`
+    iconCss: 'sf-icon-landscape', isToggle:true,cssClass: `e-active`
 });
 pageLandscape.appendTo('#pageLandscape');
 
@@ -1661,7 +1681,7 @@ showPageBreaks.appendTo('#showPageBreaks');
    nodeProperties.height = nodeHeight;
 
 var aspectRatioBtn = new ej.buttons.Button({
-    iconCss: 'sf-icon-insert_link', isToggle:true,cssClass: `e-flat`
+    iconCss: 'sf-icon-unlock', isToggle:true,cssClass: `e-flat`
 });
 aspectRatioBtn.appendTo('#aspectRatioBtn');
 nodeProperties.aspectRatio = aspectRatioBtn;
@@ -2027,9 +2047,9 @@ var toolbarTextSubAlignment = new ej.navigations.Toolbar({
     overflowMode: 'Scrollable',
     clicked:  function (args) { toolbarTextSubAlignChange(args); },
     items: [
-        { prefixIcon: 'sf-icon-align_left', tooltipText: 'Align Text Left', cssClass: 'tb-item-start' },
-        { prefixIcon: 'sf-icon-align_center', tooltipText: 'Align Text Center', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-align_right', tooltipText: 'Align Text Right', cssClass: 'tb-item-end' }
+        { prefixIcon: 'sf-icon-align-left', tooltipText: 'Align Text Left', cssClass: 'tb-item-start' },
+        { prefixIcon: 'sf-icon-align-center', tooltipText: 'Align Text Center', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-align-right', tooltipText: 'Align Text Right', cssClass: 'tb-item-end' }
     ]
 });
 toolbarTextSubAlignment.appendTo('#toolbarTextSubAlignment');

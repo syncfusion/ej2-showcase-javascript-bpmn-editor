@@ -90,10 +90,12 @@ var UtilityMethods = (function () {
              case 'Group':
                 diagram.group();
                 args.item.prefixIcon = 'sf-icon-ungroup';
+                args.item.tooltipText = 'UnGroup';
                 break;
             case 'UnGroup':
                 diagram.unGroup();
                 args.item.prefixIcon = 'sf-icon-group';
+                args.item.tooltipText = 'Group';
                 break;
             case 'Fill Color':
                 var objColor = diagram.selectedItems.nodes[0]? 'nodeFillColor':'lineColor'
@@ -206,14 +208,14 @@ var UtilityMethods = (function () {
                 break;
             case 'Landscape':
                 args.item.parentObj.items[1].iconCss = '';
-                args.item.iconCss = 'sf-icon-Selection';
+                args.item.iconCss = 'sf-icon-check-tick';
                 diagram.pageSettings.orientation = 'Landscape';
                 document.getElementById('pageLandscape').classList.add('e-active');
                 document.getElementById('pagePortrait').classList.remove('e-active');
                 break;
             case 'Portrait':
                 args.item.parentObj.items[0].iconCss = '';
-                args.item.iconCss = 'sf-icon-Selection';
+                args.item.iconCss = 'sf-icon-check-tick';
                 diagram.pageSettings.orientation = 'Portrait';
                 document.getElementById('pagePortrait').classList.add('e-active');
                 document.getElementById('pageLandscape').classList.remove('e-active');
@@ -279,27 +281,27 @@ var UtilityMethods = (function () {
                 break;
             case 'Show Lines':
                 diagram.snapSettings.constraints = diagram.snapSettings.constraints ^ ej.diagrams.SnapConstraints.ShowLines;
-                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-Selection';
+                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-check-tick';
                 break;
             case 'Snap To Grid':
                 diagram.snapSettings.constraints = diagram.snapSettings.constraints ^ ej.diagrams.SnapConstraints.SnapToLines;
-                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-Selection';
+                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-check-tick';
                 break;
             case 'Snap To Object':
                 diagram.snapSettings.constraints = diagram.snapSettings.constraints ^ ej.diagrams.SnapConstraints.SnapToObject;
-                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-Selection';
+                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-check-tick';
                 break;
             case 'Show Ruler':
-                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-Selection';
+                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-check-tick';
                 diagram.rulerSettings.showRulers = !diagram.rulerSettings.showRulers;
                 break;
             case 'Show Page Breaks':
-                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-Selection';
+                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-check-tick';
                 diagram.pageSettings.showPageBreaks = !diagram.pageSettings.showPageBreaks;
                 showPageBreaks.checked = !showPageBreaks.checked;
                 break;
             case 'Show Multiple page':
-                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-Selection';
+                args.item.iconCss = args.item.iconCss ? '' : 'sf-icon-check-tick';
                 diagram.pageSettings.multiplePage = ! diagram.pageSettings.multiplePage;
                 break;
             case 'Fit To Width':
@@ -372,7 +374,7 @@ var UtilityMethods = (function () {
         for(i=0;i<item.parentObj.items.length;i++)
         {
             if(item.text === item.parentObj.items[i].text){
-                item.parentObj.items[i].iconCss = 'sf-icon-Selection';
+                item.parentObj.items[i].iconCss = 'sf-icon-check-tick';
             }
             else{
                 item.parentObj.items[i].iconCss = '';
@@ -513,13 +515,13 @@ var UtilityMethods = (function () {
                     diagram.pageSettings.isLandscape = false;
                     diagram.pageSettings.orientation = 'Portrait';
                     items[0].items[0].iconCss = '';
-                    items[0].items[1].iconCss = 'sf-icon-Selection';
+                    items[0].items[1].iconCss = 'sf-icon-check-tick';
                     break;
                 case 'pageLandscape':
                     diagram.pageSettings.isPortrait = false;
                     diagram.pageSettings.isLandscape = true;
                     diagram.pageSettings.orientation = 'Landscape';
-                    items[0].items[0].iconCss = 'sf-icon-Selection';
+                    items[0].items[0].iconCss = 'sf-icon-check-tick';
                     items[0].items[1].iconCss = '';
                     break;
             }
@@ -576,7 +578,7 @@ var UtilityMethods = (function () {
             diagram.pageSettings.showPageBreaks = args.checked;
             diagram.dataBind();
             var items = btnViewMenu.items;
-            items[4].iconCss = items[4].iconCss ? '' : 'sf-icon-Selection';
+            items[4].iconCss = items[4].iconCss ? '' : 'sf-icon-check-tick';
         }
     };
     UtilityMethods.prototype.updatePaperSelection = function(items,value)
@@ -584,7 +586,7 @@ var UtilityMethods = (function () {
         for(i=0;i<items.items.length;i++)
         {
          if(value === items.items[i].value){
-             items.items[i].iconCss = 'sf-icon-Selection';
+             items.items[i].iconCss = 'sf-icon-check-tick';
          }
          else{
              items.items[i].iconCss = '';
@@ -804,9 +806,11 @@ var UtilityMethods = (function () {
     if(document.getElementById('aspectRatioBtn').classList.contains('e-active'))
     {
         isAspect = true;
+        aspectRatioBtn.iconCss =  'sf-icon-lock'
     }
     else{
         isAspect = false;
+        aspectRatioBtn.iconCss = 'sf-icon-unlock';
     }
         PropertyChange.prototype.nodePropertyChange({propertyName: 'aspectRatio', propertyValue: isAspect}); 
     };

@@ -20806,14 +20806,14 @@ ejs-multiselect {
 
 .e-btn.e-primary,
 .e-css.e-btn.e-primary {
-  background-color: #e3165b;
+  /* background-color: #e3165b; */
   border-color: transparent;
   color: #fff;
 }
 
 .e-btn.e-primary:hover,
 .e-css.e-btn.e-primary:hover {
-  background-color: #e6326f;
+  /* background-color: #e6326f; */
   border-color: transparent;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
   color: #fff;
@@ -20821,7 +20821,7 @@ ejs-multiselect {
 
 .e-btn.e-primary:focus,
 .e-css.e-btn.e-primary:focus {
-  background-color: #ea4e82;
+  /* background-color: #ea4e82; */
   border-color: transparent;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
   color: #fff;

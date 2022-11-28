@@ -206,48 +206,55 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.toolbarItems = function()
     {
         let items = [
-            { prefixIcon: 'sf-icon-undo', tooltipText: 'Undo', },
-            { prefixIcon: 'sf-icon-redo', tooltipText: 'Redo', },
-            { prefixIcon: 'sf-icon-pan', tooltipText: 'Pan Tool',},
-            { prefixIcon: 'sf-icon-pointer', tooltipText: 'Select Tool',},
-            { tooltipText: 'Change Connector Type',template: '<button id="conTypeBtn" style="width:100%;"></button>'},
-            { prefixIcon: 'sf-icon-text', tooltipText: 'Text Tool'},
+            { prefixIcon: 'sf-icon-undo tb-icons', tooltipText: 'Undo',cssClass: 'tb-item-start tb-item-undo' },
+            { prefixIcon: 'sf-icon-redo tb-icons', tooltipText: 'Redo',cssClass: 'tb-item-end tb-item-redo' },
                             { type: 'Separator' },
-            { prefixIcon: 'sf-icon-group', tooltipText:'Group', template: '<div></div>',disabled:true,},
+            { prefixIcon: 'sf-icon-pan', tooltipText: 'Pan Tool',cssClass:'tb-item-start'},
+            { prefixIcon: 'sf-icon-pointer', tooltipText: 'Select Tool',cssClass:'tb-item-middle tb-item-selected'},
+            { tooltipText: 'Change Connector Type',template: '<button id="conTypeBtn" style="width:100%;"></button>',cssClass:'tb-item-middle'},
+            { prefixIcon: 'sf-icon-text', tooltipText: 'Text Tool',cssClass:'tb-item-end' },
+                            { type: 'Separator',template:'<div style="margin-left:70px;"></div>'},
+            { prefixIcon: 'sf-icon-group', tooltipText:'Group', template: '<div></div>', cssClass: 'tb-item-start tb-item-align-category'},
+                            { type: 'Separator', visible: false },
             {
-                prefixIcon: 'sf-icon-align_left', tooltipText: 'Align Left',  template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-align_left', tooltipText: 'Align Left',  template: '<div></div>',cssClass: 'tb-item-middle  tb-item-align-category'
             },
             {
-                prefixIcon: 'sf-icon-align_center', tooltipText: 'Align Center',  template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-align_center', tooltipText: 'Align Center',  template: '<div></div>',cssClass: 'tb-item-middle  tb-item-align-category'
             },
             {
-                prefixIcon: 'sf-icon-align_right', tooltipText: 'Align Right',  template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-align_right', tooltipText: 'Align Right',  template: '<div></div>',cssClass: 'tb-item-middle  tb-item-align-category'
             },
             {
-                prefixIcon: 'sf-icon-align_top', tooltipText: 'Align Top', template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-align_top', tooltipText: 'Align Top', template: '<div></div>',cssClass: 'tb-item-middle  tb-item-align-category'
             },
             {
-                prefixIcon: 'sf-icon-align_middle', tooltipText: 'Align Middle', template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-align_middle', tooltipText: 'Align Middle', template: '<div></div>',cssClass: 'tb-item-middle  tb-item-align-category'
             },
             {
-                prefixIcon: 'sf-icon-align_bottom', tooltipText: 'Align Bottom', template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-align_bottom', tooltipText: 'Align Bottom', template: '<div></div>',cssClass: 'tb-item-middle  tb-item-align-category'
             },
             {
-                prefixIcon: 'sf-icon-distribute_horizontal', tooltipText: 'Distribute Objects Vertically', template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-distribute_horizontal', tooltipText: 'Distribute Objects Vertically', template: '<div></div>', cssClass: 'tb-item-middle tb-item-space-category'
             },
             {
-                prefixIcon: 'sf-icon-distribute_vertical', tooltipText: 'Distribute Objects Horizontally',  template: '<div></div>',disabled:true,
+                prefixIcon: 'sf-icon-distribute_vertical', tooltipText: 'Distribute Objects Horizontally',  template: '<div></div>', cssClass: 'tb-item-middle tb-item-space-category'
             },
-                        { type: 'Separator' },
-            { tooltipText: 'OrderCommands',template: '<div><button class="del-lock-hide" id="orderBtn" style="width:100%;"></button></div>',disabled:true,},
-            {prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',disabled:true,  template: '<div></div>',}, 
-            { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',disabled:true,  template: '<div></div>',},
-            { prefixIcon: 'sf-icon-fil_colour', tooltipText: 'Fill Color',disabled:true,  template: '<div></div>', },
-            { prefixIcon: 'sf-icon-border_colour', tooltipText: 'Font Color',disabled:true,  template: '<div></div>',},
-                            { type: 'Separator' },
-           
+                        { type: 'Separator', visible: false },
+            //{ tooltipText: 'OrderCommands',template: '<button id="orderBtn" style="width:100%;"></button>',cssClass: 'tb-item-end tb-item-order tb-dropdown-btn-icon',visible:false},
+            { prefixIcon: 'sf-icon-bring-forward', tooltipText: 'Bring Forward', template: '<div></div>', cssClass: 'tb-item-start tb-item-lock-category'},
+            { prefixIcon: 'sf-icon-bring-to-front', tooltipText: 'Bring To Front', template: '<div></div>', cssClass: 'tb-item-middle tb-item-lock-category'},
+            { prefixIcon: 'sf-icon-send-backward', tooltipText: 'Send Backward', template: '<div></div>', cssClass: 'tb-item-middle tb-item-lock-category'},
+            { prefixIcon: 'sf-icon-send-to-back', tooltipText: 'Send To Back', template: '<div></div>', cssClass: 'tb-item-end tb-item-lock-category'},
+                            { type: 'Separator', visible: false },
+            {prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock', template: '<div></div>', cssClass: 'tb-item-start tb-item-lock-category'}, 
+            { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',  template: '<div></div>', cssClass: 'tb-item-end tb-item-lock-category'},
+                            { type: 'Separator', visible: false },
+            { prefixIcon: 'sf-icon-fil_colour', tooltipText: 'Fill Color',  template: '<div></div>',cssClass: 'tb-item-start tb-item-stroke' },
+            { prefixIcon: 'sf-icon-border_colour', tooltipText: 'Font Color', template: '<div></div>',cssClass: 'tb-item-end tb-item-stroke'},
+                            { type: 'Separator', visible: false },
                         {
-                            type: 'Separator'
+                            type: 'Separator',template:'<div style="margin-left:200px;"></div>'
                         },
             {
                 cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>'
@@ -255,9 +262,17 @@ var DropDownDataSources = (function () {
                             {
                                 type: 'Separator'
                             },
-            { prefixIcon: 'sf-icon-chevron-up', tooltipText:'Hide',template: '<button id="btnHideMenubar"></button>'}
+            { prefixIcon: 'sf-icon-chevron-up' , tooltipText: 'Hide property'}
         ];
         return items;
-    }
+    };
+    DropDownDataSources.prototype.borderTypeList = function()
+    {
+        let borderTypes = [
+            {text: 'Solid', value:'Solid'},
+            {text:'Gradient',value:'Gradient'}
+        ]
+        return borderTypes;
+    };
     return DropDownDataSources;
 }());

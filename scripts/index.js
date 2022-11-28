@@ -10,8 +10,9 @@ var utilityMethods = new UtilityMethods();
 
 window.onload = function()
 {
-    document.getElementById('btnHideMenubar').onclick =  UtilityMethods.prototype.hideMenuBar.bind(this);
+    // document.getElementById('btnHideMenubar').onclick =  UtilityMethods.prototype.hideMenuBar.bind(this);
     document.onmouseover = menumouseover.bind(this);
+   
     zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
 }
 
@@ -1079,7 +1080,8 @@ function enableEditMenuItems(diagram)
     var toolbarObj = new ej.navigations.Toolbar({
         clicked: function (args) { UtilityMethods.prototype.toolbarClick(args)},
         items: DropDownDataSources.prototype.toolbarItems(),
-        width:'100%'
+        width:'100%',
+        overflowMode: 'Popup'
  });
  //Render initialized Toolbar component
  var items = [{ text: 'JPG' }, { text: 'PNG' }, { text: 'BMP' }, { text: 'SVG' }];
@@ -1095,7 +1097,8 @@ var orderItems = [
     {text:'Send To Back', iconCss:'sf-icon-send-to-back'},
 ]
 var zoomMenuItems = [
-                        { text: '400%' }, { text: '300%' }, { text: '200%' }, { text: '150%' },
+    // { text: 'Zoom Out' },{ text: 'Zoom In' },
+     { text: '400%' }, { text: '300%' }, { text: '200%' }, { text: '150%' },
                         { text: '100%' }, { text: '75%' }, { text: '50%' }, { text: '25%' }, { separator: true },
                         { text: 'Fit To Screen' }
                     ];
@@ -1114,6 +1117,65 @@ function disable()
     toolbarObj.items[18].disabled= true;
     toolbarObj.items[18].template= '<div></div>';
     toolbarObj.dataBind();
+}
+
+function enableToolbarItems(selectedItems) {
+    var toolbarContainer = document.getElementsByClassName('db-toolbar-container')[0];
+    var toolbarClassName = 'db-toolbar-container';
+    if (toolbarContainer.classList.contains('db-undo')) {
+        toolbarClassName += ' db-undo';
+    }
+    if (toolbarContainer.classList.contains('db-redo')) {
+        toolbarClassName += ' db-redo';
+    }
+    toolbarContainer.className = toolbarClassName;
+    if (selectedItems.length === 1) {
+        toolbarContainer.className = toolbarContainer.className + ' db-select';
+        if (selectedItems[0] instanceof ej.diagrams.Node) {
+            if (selectedItems[0].children) {
+                if (selectedItems[0].children.length > 2) {
+                    toolbarContainer.className = toolbarContainer.className + ' db-select db-double db-multiple db-node db-group';
+                }
+                else {
+                    toolbarContainer.className = toolbarContainer.className + ' db-select db-double db-node db-group';
+                }
+            }
+            else {
+                toolbarContainer.className = toolbarContainer.className + ' db-select db-node';
+            }
+        }
+    }
+    else if (selectedItems.length === 2) {
+        toolbarContainer.className = toolbarContainer.className + ' db-select db-double';
+    }
+    else if (selectedItems.length > 2) {
+        toolbarContainer.className = toolbarContainer.className + ' db-select db-double db-multiple';
+    }
+    if (selectedItems.length > 1) {
+        var isNodeExist = false;
+        for (var i = 0; i < selectedItems.length; i++) {
+            if (selectedItems[i] instanceof ej.diagrams.Node) {
+                toolbarContainer.className = toolbarContainer.className + ' db-select db-node';
+                break;
+            }
+        }
+    }
+};
+
+function multipleSelection()
+{
+    for(i=8;i<29;i++)
+    {
+        if(toolbarObj.items[i].type !=='Separator'){
+            if(i !== 27 &&  i !== 28){
+            toolbarObj.items[i].template= '';
+            }
+            if(i == 27 || i == 28)
+            {
+            toolbarObj.items[i].template= '<div></div>';
+            }
+        }
+    }
 }
 var uploadObj = new ej.inputs.Uploader({
     asyncSettings: {
@@ -1189,6 +1251,14 @@ function lockObject (args) {
         var currentZoom = diagram.scrollSettings.currentZoom;
         var zoom = {};
         switch (args.item.text) {
+            case 'Zoom In':
+                diagram.zoomTo({ type: 'ZoomIn', zoomFactor: 0.2 });
+                zoomCurrentValue.content = diagram.scrollSettings.currentZoom = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
+                break;
+            case 'Zoom Out':
+                diagram.zoomTo({ type: 'ZoomOut', zoomFactor: 0.2 });
+                zoomCurrentValue.content = diagram.scrollSettings.currentZoom = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
+                break;
             case '400%':
                 zoom.zoomFactor = (4 / currentZoom) - 1;
                 break;
@@ -1217,11 +1287,7 @@ function lockObject (args) {
         zoomCurrentValue.content = diagram.scrollSettings.currentZoom = args.item.text;
         diagram.zoomTo(zoom);
     }
- }
- function pasteClick()
- {
-    toolbarObj.items[11].disabled = false;
- }
+}
 
 var diagram = new ej.diagrams.Diagram({
     width: '100%', height: '100%',
@@ -1455,14 +1521,12 @@ function minValue(){
 
     var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange });
     btnZoomIncrement.appendTo('#btnZoomIncrement');
-    var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange });
-    btnZoomIncrement.appendTo('#btnZoomIncrement');
 
 var palette = new ej.diagrams.SymbolPalette({
     expandMode: 'Multiple', symbolMargin: { left: 5, right: 15, top: 15, bottom: 10 }, symbolHeight: 60, symbolWidth: 55,
     palettes: [
         { id: 'Bpmn', expanded: true, symbols: bpmnShapes, title: 'BPMN Shapes' },
-    ],
+    ],enableSearch:true,
     width: '100%', height: '100%',
     getNodeDefaults: function (symbol) {
         symbol.style.strokeColor = '#757575';
@@ -1493,21 +1557,24 @@ var pageSettingsList = new ej.dropdowns.DropDownList({
 });
 pageSettingsList.appendTo('#pageSettingsList');
 
-var pagePortrait = new ej.buttons.RadioButton({
-    label: 'Portrait',
-    name: 'pageSettings',
-    checked: false,
-    change: function (args) { UtilityMethods.prototype.pageOrientationChange(args); },
+var pagePortrait = new ej.buttons.Button({
+    iconCss: 'sf-icon-insert_link', isToggle:true,cssClass: `e-flat`
 });
 pagePortrait.appendTo('#pagePortrait');
 
- var pageLandscape = new ej.buttons.RadioButton({
-    label: 'Landscape',
-    name: 'pageSettings',
-    checked: true,
-    change: function (args) { UtilityMethods.prototype.pageOrientationChange(args); },
+ var pageLandscape = new ej.buttons.Button({
+    iconCss: 'sf-icon-insert_link', isToggle:true,cssClass: `e-flat`
 });
 pageLandscape.appendTo('#pageLandscape');
+
+document.getElementById('pagePortrait').onclick = (args)=>{
+    UtilityMethods.prototype.pageOrientationChange(args);
+    document.getElementById('pageLandscape').classList.remove('e-active');
+}
+document.getElementById('pageLandscape').onclick = (args)=>{
+    UtilityMethods.prototype.pageOrientationChange(args);
+    document.getElementById('pagePortrait').classList.remove('e-active');
+}
 
 var pageWidth = new ej.inputs.NumericTextBox({
     min: 100,
@@ -1529,6 +1596,7 @@ pageHeight.appendTo('#pageHeight');
 var pageBgColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
     width: '100%',
+    height:30,
     showButtons:false,
     // modeSwitcher: true,
     value: diagram.pageSettings.background.color,
@@ -1592,13 +1660,16 @@ showPageBreaks.appendTo('#showPageBreaks');
     nodeHeight.appendTo('#nodeHeight');
    nodeProperties.height = nodeHeight;
 
-   var aspectRatio = new ej.buttons.CheckBox({ label: 'Aspect Ratio',
-   change: function(args) {
-    PropertyChange.prototype.nodePropertyChange({propertyName: 'aspectRatio', propertyValue: args.checked});
-      }
-   });
-   aspectRatio.appendTo('#aspectRatio');
-   nodeProperties.aspectRatio = aspectRatio;
+var aspectRatioBtn = new ej.buttons.Button({
+    iconCss: 'sf-icon-insert_link', isToggle:true,cssClass: `e-flat`
+});
+aspectRatioBtn.appendTo('#aspectRatioBtn');
+nodeProperties.aspectRatio = aspectRatioBtn;
+
+document.getElementById('aspectRatioBtn').onclick = (args) =>{
+    UtilityMethods.prototype.aspectRatioClick(args);
+    // document.getElementById('pageDimension').click(); 
+}
 
    var rotateIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-rotate' });
    rotateIconBtn.appendTo('#rotateIconBtn');
@@ -1622,6 +1693,35 @@ showPageBreaks.appendTo('#showPageBreaks');
     ]
 });
 toolbarNodeInsert.appendTo('#toolbarNodeInsert');
+var button = new ej.buttons.Button({
+    cssClass: 'e-outline', isPrimary: true ,
+    onClick: function (args) { UtilityMethods.prototype.toolbarInsertClick(args)},
+});
+button.appendTo('#insertBtn');
+var insertButton = document.getElementById('insertBtn');
+insertButton.onclick = (args) =>{
+    UtilityMethods.prototype.toolbarInsertClick(args)
+}
+
+var backgroundTypeDropdown = new ej.dropdowns.DropDownList({
+    dataSource: DropDownDataSources.prototype.borderTypeList(),
+    fields: { text: 'text', value: 'value' },
+    popupWidth: '200px',
+    index: 0,
+    change: function(args) {
+        var gradientElement = document.getElementById('gradientStyle');
+        if(args.value === 'Gradient')
+        {
+            gradientElement.className  = 'row db-prop-row db-gradient-style-show';
+        }
+        else{
+            gradientElement.className = 'row db-prop-row db-gradient-style-hide';
+        }
+        PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradient', propertyValue: args });
+    }
+});
+backgroundTypeDropdown.appendTo('#backgroundTypeDropdown');
+nodeProperties.gradient = backgroundTypeDropdown; 
 
 var nodeFillColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
@@ -1634,36 +1734,31 @@ var nodeFillColor = new ej.inputs.ColorPicker({
 nodeFillColor.appendTo('#nodeFillColor');
 nodeProperties.fillColor = nodeFillColor;
 
-var gradient = new ej.buttons.CheckBox({ label: 'Gradient',
-    change: function(args) {
-        var gradientElement = document.getElementById('gradientStyle');
-        if (args.checked) {
-            gradientElement.className = 'row db-prop-row db-gradient-style-show';
-        }
-        else {
-            gradientElement.className = 'row db-prop-row db-gradient-style-hide';
-        }
-        PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradient', propertyValue: args });
-      }
-    });
-    gradient.appendTo('#gradient');
-    nodeProperties.gradient = gradient;
-
-var fillColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-fil_colour' });
-fillColorIconBtn.appendTo('#fillColorIconBtn');
-
-var gradientDirectionDropdown = new ej.dropdowns.DropDownList({
-    dataSource: DropDownDataSources.prototype.gradientDirections(),
-    fields: { text: 'text', value: 'value' },
-    popupWidth: '200px',
-    index: 0,
-    change: function(args) {
-        nodeProperties.gradientDirection.value = args.itemData.text;
-        PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradientDirection', propertyValue: args });
-    }
+var gradientDirection =  new ej.splitbuttons.DropDownButton({
+    items: DropDownDataSources.prototype.gradientDirections(),
+    iconCss: 'sf-icon-free_hand',
+    select: function (args) {
+        nodeProperties.gradientDirection.value = args.item.text; 
+        PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradientDirection', propertyValue: args }); 
+    },
 });
-gradientDirectionDropdown.appendTo('#gradientDirectionDropdown');
-nodeProperties.gradientDirection = gradientDirectionDropdown;
+gradientDirection.appendTo('#gradientDirection');
+nodeProperties.gradientDirection = gradientDirection;
+
+// var gradientDirectionDropdown = new ej.dropdowns.DropDownList({
+//     dataSource: DropDownDataSources.prototype.gradientDirections(),
+//     fields: { text: 'text', value: 'value' },
+//     popupWidth: '200px',
+//     index: 0,
+//     change: function(args) {
+//         nodeProperties.gradientDirection.value = args.itemData.text;
+//         PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradientDirection', propertyValue: args });
+//     }
+// });
+
+
+// gradientDirectionDropdown.appendTo('#gradientDirectionDropdown');
+// nodeProperties.gradientDirection = gradientDirectionDropdown;
 
 var nodeGradientColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
@@ -1677,8 +1772,6 @@ var nodeGradientColor = new ej.inputs.ColorPicker({
 nodeGradientColor.appendTo('#nodeGradientColor');
 nodeProperties.gradientColor = nodeGradientColor;
 
-var gradientColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-fil_colour' });
-gradientColorIconBtn.appendTo('#gradientColorIconBtn');
 
 var nodeStrokeColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
@@ -1692,8 +1785,6 @@ var nodeStrokeColor = new ej.inputs.ColorPicker({
 nodeStrokeColor.appendTo('#nodeStrokeColor');
 nodeProperties.strokeColor = nodeStrokeColor;
 
-var strokeColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-border_colour' });
-strokeColorIconBtn.appendTo('#strokeColorIconBtn');
 
 var nodeBorderStyle = new ej.dropdowns.DropDownList({
     dataSource: DropDownDataSources.prototype.borderStyles(),

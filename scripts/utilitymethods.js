@@ -34,7 +34,7 @@ var UtilityMethods = (function () {
                 diagram.paste();
                 break;
             case'Delete':
-                diagram.remove();
+                 diagram.remove();
                 break;
             case 'Select Tool':
                 diagram.clearSelection();
@@ -70,6 +70,38 @@ var UtilityMethods = (function () {
             case 'Send Backward':
                 diagram.sendBackward();
                 break;
+            case 'Align Left':
+            case 'Align Right':
+            case 'Align Top':
+            case 'Align Bottom':
+            case 'Align Middle':
+            case 'Align Center':
+                // selectedItem.isModified = true;
+                var alignType = item.replace('Align', '');
+                var alignType1 = alignType.charAt(0).toUpperCase() + alignType.slice(1);
+                diagram.align(alignType1.trim());
+                break;
+            case 'Distribute Objects Horizontally':
+                diagram.distribute('RightToLeft');
+                break;
+            case 'Distribute Objects Vertically':
+                diagram.distribute('BottomToTop');
+                break;
+             case 'Group':
+                diagram.group();
+                args.item.prefixIcon = 'sf-icon-ungroup';
+                break;
+            case 'UnGroup':
+                diagram.unGroup();
+                args.item.prefixIcon = 'sf-icon-group';
+                break;
+            case 'Fill Color':
+                var objColor = diagram.selectedItems.nodes[0]? 'nodeFillColor':'lineColor'
+                this.showColorPicker(objColor,'tb-item-stroke');
+                break;
+            case 'Font Color':
+                this.showColorPicker('textColor','tb-item-stroke');
+                break;
             case 'New Diagram':
                 diagram.clear();
                 DiagramClientSideEvents.prototype.historyChange();
@@ -93,7 +125,7 @@ var UtilityMethods = (function () {
                 flipObjects(item);
                 break;
         }
-        if (item === 'Select Tool' || item === 'Pan Tool' || item === 'Connector Tool') {
+        if (item === 'Select Tool' || item === 'Pan Tool' || item === 'Text Tool' ) {
             if (args.item.cssClass.indexOf('tb-item-selected') === -1) {
                 this.removeSelectedToolbarItem();
                 args.item.cssClass += ' tb-item-selected';
@@ -139,11 +171,9 @@ var UtilityMethods = (function () {
                 break;
             case 'Cut':
                 diagram.cut();
-                pasteClick();
                 break;
             case 'Copy':
                 diagram.copy();
-                pasteClick();
                 break;
             case 'Paste':
                 diagram.paste();
@@ -178,15 +208,15 @@ var UtilityMethods = (function () {
                 args.item.parentObj.items[1].iconCss = '';
                 args.item.iconCss = 'sf-icon-Selection';
                 diagram.pageSettings.orientation = 'Landscape';
-                pagePortrait.checked = false;
-                pageLandscape.checked = true;
+                document.getElementById('pageLandscape').classList.add('e-active');
+                document.getElementById('pagePortrait').classList.remove('e-active');
                 break;
             case 'Portrait':
                 args.item.parentObj.items[0].iconCss = '';
                 args.item.iconCss = 'sf-icon-Selection';
                 diagram.pageSettings.orientation = 'Portrait';
-                pagePortrait.checked = true;
-                pageLandscape.checked = false;
+                document.getElementById('pagePortrait').classList.add('e-active');
+                document.getElementById('pageLandscape').classList.remove('e-active');
                 break;
             case 'Letter (8.5 in x 11 in)':
             case 'Legal (8.5 in x 14 in)':
@@ -280,13 +310,13 @@ var UtilityMethods = (function () {
                 break;
         }
         if (option === 'Pan Tool') {
-            if (toolbarObj.items[17].cssClass.indexOf('tb-item-selected') === -1) {
-                toolbarObj.items[17].cssClass += ' tb-item-selected';
+            if (toolbarObj.items[3].cssClass.indexOf('tb-item-selected') === -1) {
+                toolbarObj.items[3].cssClass += ' tb-item-selected';
             }
         }
        else if (option === 'Selection Tool') {
-            if (toolbarObj.items[18].cssClass.indexOf('tb-item-selected') === -1) {
-                toolbarObj.items[18].cssClass += ' tb-item-selected';
+            if (toolbarObj.items[4].cssClass.indexOf('tb-item-selected') === -1) {
+                toolbarObj.items[4].cssClass += ' tb-item-selected';
             }
         }
         else if (option ===  'Orthogonal' || option === 'Straight' || option === 'Bezier') {
@@ -298,30 +328,28 @@ var UtilityMethods = (function () {
     {
         if(args === false)
         {
-            toolbarObj.items[16].disabled = false;toolbarObj.items[16].template = '';
-            toolbarObj.items[17].disabled = false;toolbarObj.items[17].template = '';
-            toolbarObj.items[18].disabled = false;toolbarObj.items[18].template = '';
-            toolbarObj.items[19].disabled = false;toolbarObj.items[19].template = '';
-            toolbarObj.items[20].disabled = false;toolbarObj.items[20].template = '';
-            // toolbarObj.items[32].disabled = false;toolbarObj.items[33].template = '';
+            for(i=8;i<29;i++)
+            {
+                if(toolbarObj.items[i].type !=='Separator'){
+                    if(i<=17)
+                    {
+                    toolbarObj.items[i].template = '<div></div>';
+                    }
+                    else if(i>17){
+                    toolbarObj.items[i].template = '';
+                    }
+                }
+            }
         }
-        else if(args === true ){
-            var isTrue;
-            if(diagram.selectedItems.connectors.length>0){
-                isTrue = false;
-                isTemp = '';
+        else{
+            for(i=8;i<29;i++)
+            {
+                if(toolbarObj.items[i].type !=='Separator'){
+                toolbarObj.items[i].template = '<div></div>';
+                }
+               
             }
-            else{
-                isTrue = true;
-                isTemp = '<div></div>'
-            }
-            toolbarObj.items[16].disabled = isTrue;toolbarObj.items[16].template = isTemp;
-            toolbarObj.items[17].disabled = isTrue;toolbarObj.items[17].template = isTemp;
-            toolbarObj.items[18].disabled = isTrue;toolbarObj.items[18].template = isTemp;
-            toolbarObj.items[19].disabled = isTrue;toolbarObj.items[19].template = isTemp;
-            toolbarObj.items[20].disabled = isTrue;toolbarObj.items[20].template = isTemp;
-            // toolbarObj.items[32].disabled = isTrue;toolbarObj.items[33].template = '';
-            }
+        }
     };
     UtilityMethods.prototype.download = function(data)
     {
@@ -364,7 +392,22 @@ var UtilityMethods = (function () {
     };
     UtilityMethods.prototype.onOrderSelect = function(args)
     {
-
+        let text = args.item.text;
+        switch(text)
+        {
+            case'Bring Forward':
+                diagram.moveForward();
+                break;
+            case'Bring To Front':
+                diagram.bringToFront();
+                break;
+            case'Send Backward':
+                diagram.sendBackward();
+                break;
+            case'Send To Back':
+                diagram.sendToBack();
+                break;
+        }
     };
     UtilityMethods.prototype.removeSelectedToolbarItem = function()
     {
@@ -461,8 +504,8 @@ var UtilityMethods = (function () {
     };
     UtilityMethods.prototype.pageOrientationChange = function(args)
     {
-        if (args.event) {
-            var target = args.event.target;
+        if (args.target) {
+            var target = args.target;
             var items = designContextMenu.items;
             switch (target.id) {
                 case 'pagePortrait':
@@ -576,7 +619,7 @@ var UtilityMethods = (function () {
             case 'underline':
                 textProperties.textDecoration = !textProperties.textDecoration;
                 annotation.textDecoration = annotation.textDecoration === 'None' || !annotation.textDecoration ? 'Underline' : 'None';
-                this.updateToolbarState('toolbarTextStyle', textProperties.textDecoration, 2);
+                this.updateToolbarState('toolbarTextStyle',annotation.textDecoration!=='None', 2);
                 break;
             case 'aligntextleft':
             case 'aligntextright':
@@ -727,7 +770,7 @@ var UtilityMethods = (function () {
                 document.getElementById("nodeOpacitySliderText").value = nodeProperties.opacity.value + '%';
                 break;
             case 'gradient':
-                if (value && !value.checked) {
+                if (value && value.value === 'Solid') {
                     node.style.gradient.type = 'None';
                 }
                 else {
@@ -742,10 +785,7 @@ var UtilityMethods = (function () {
     };
     UtilityMethods.prototype.toolbarInsertClick = function(args)
     {
-        var commandType = args.item.tooltipText.replace(/[' ']/g, '');
         if (diagram.selectedItems.nodes.length > 0) {
-            switch (commandType.toLowerCase()) {
-                case 'insertlink':
                     document.getElementById('hyperlink').value = '';
                     document.getElementById('hyperlinkText').value = '';
                     if (diagram.selectedItems.nodes[0].annotations.length > 0) {
@@ -756,9 +796,19 @@ var UtilityMethods = (function () {
                         }
                     }
                     hyperlinkDialog.show();
-                    break;
-            }
         }
+    };
+    UtilityMethods.prototype.aspectRatioClick = function(args)
+    {
+    var isAspect = true;
+    if(document.getElementById('aspectRatioBtn').classList.contains('e-active'))
+    {
+        isAspect = true;
+    }
+    else{
+        isAspect = false;
+    }
+        PropertyChange.prototype.nodePropertyChange({propertyName: 'aspectRatio', propertyValue: isAspect}); 
     };
     UtilityMethods.prototype.getDialogButtons = function(dialogType)
     {
@@ -894,6 +944,16 @@ var UtilityMethods = (function () {
         if (diagram) {
             diagram.updateViewPort();
         }
+    };
+    UtilityMethods.prototype.showColorPicker = function(propertyName, toolbarName)
+    {
+            var fillElement =
+                document.getElementById(propertyName).parentElement.getElementsByClassName('e-dropdown-btn')[0];
+            fillElement.click();
+            var popupElement = document.getElementById(fillElement.id + '-popup');
+            var bounds = document.getElementsByClassName(toolbarName)[0].getBoundingClientRect();
+            popupElement.style.left = bounds.left + 'px';
+            popupElement.style.top = (bounds.top + 40) + 'px';
     };
     return UtilityMethods;
 }());

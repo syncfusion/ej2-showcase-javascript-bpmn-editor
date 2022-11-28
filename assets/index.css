@@ -20830,7 +20830,7 @@ ejs-multiselect {
 
 .e-btn.e-primary:active,
 .e-css.e-btn.e-primary:active {
-  background-color: #ec618f;
+  /* background-color: #ec618f; */
   border-color: transparent;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   color: #fff;
@@ -20839,7 +20839,7 @@ ejs-multiselect {
 
 .e-btn.e-primary.e-active,
 .e-css.e-btn.e-primary.e-active {
-  background-color: #ec618f;
+  /* background-color: #ec618f; */
   border-color: transparent;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
   color: #fff;
@@ -21353,20 +21353,20 @@ ejs-multiselect {
 .e-btn.e-outline.e-primary,
 .e-css.e-btn.e-outline.e-primary {
   background-color: transparent;
-  border-color: #e3165b;
-  color: #e3165b;
+  /* border-color: #e3165b;
+  color: #e3165b; */
 }
 
 .e-btn.e-outline.e-primary:hover,
 .e-css.e-btn.e-outline.e-primary:hover {
-  background-color: #e6326f;
+  /* background-color: #e6326f; */
   border-color: transparent;
   color: #fff;
 }
 
 .e-btn.e-outline.e-primary:focus,
 .e-css.e-btn.e-outline.e-primary:focus {
-  background-color: #ea4e82;
+  /* background-color: #ea4e82; */
   border-color: transparent;
   color: #fff;
 }
@@ -21374,7 +21374,7 @@ ejs-multiselect {
 .e-btn.e-outline.e-primary:active, .e-btn.e-outline.e-primary.e-active,
 .e-css.e-btn.e-outline.e-primary:active,
 .e-css.e-btn.e-outline.e-primary.e-active {
-  background-color: #ec618f;
+  /* background-color: #ec618f; */
   border-color: transparent;
   box-shadow: none;
   color: #fff;
@@ -21382,7 +21382,7 @@ ejs-multiselect {
 
 .e-btn.e-outline.e-primary:disabled,
 .e-css.e-btn.e-outline.e-primary:disabled {
-  background-color: transparent;
+  /* background-color: transparent; */
   border-color: rgba(0, 0, 0, 0.26);
   box-shadow: none;
   color: rgba(0, 0, 0, 0.26);
@@ -21390,9 +21390,9 @@ ejs-multiselect {
 
 .e-btn.e-outline.e-success,
 .e-css.e-btn.e-outline.e-success {
-  background-color: transparent;
+  /* background-color: transparent; */
   border-color: #4d841d;
-  color: #4d841d;
+  /* color: #4d841d; */
 }
 
 .e-btn.e-outline.e-success:hover,

@@ -92,7 +92,7 @@ var DropDownDataSources = (function () {
             { text: 'Snap To Grid',iconCss : 'sf-icon-check-tick'},
             { text: 'Snap To Object',iconCss : 'sf-icon-check-tick'},
             { text: 'Show Ruler',iconCss: 'sf-icon-check-tick'},
-            { text: 'Show Page Breaks',iconCss: 'sf-icon-check-tick'},
+            { text: 'Show Page Breaks',iconCss: ''},
             { text: 'Show Multiple page',iconCss: ''},
             { separator: true },
             { text: 'Fit To Width'},
@@ -149,8 +149,8 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.gradientDirections = function()
     {
         var gradientDirections = [
-            { text: 'BottomToTop', value: 'BottomToTop' }, { text: 'TopToBottom', value: 'TopToBottom' },
-            { text: 'RightToLeft', value: 'RightToLeft' }, { text: 'LeftToRight', value: 'LeftToRight' }
+            { text: 'BottomToTop', value: 'BottomToTop',iconCss: 'sf-icon-bottom-top' }, { text: 'TopToBottom', value: 'TopToBottom',iconCss:'sf-icon-top-bottom' },
+            { text: 'RightToLeft', value: 'RightToLeft',iconCss: 'sf-icon-right-left' }, { text: 'LeftToRight', value: 'LeftToRight',iconCss: 'sf-icon-left-right'}
         ];
         return gradientDirections;
     };
@@ -254,15 +254,12 @@ var DropDownDataSources = (function () {
             { prefixIcon: 'sf-icon-font-color', tooltipText: 'Font Color', template: '<div></div>',cssClass: 'tb-item-end tb-item-stroke'},
                             { type: 'Separator', visible: false },
                         {
-                            type: 'Separator',template:'<div style="margin-left:200px;"></div>'
+                            type: 'Separator',template:'<div style="margin-left:250px;"></div>'
                         },
             {
                 cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>'
             },
-                            {
-                                type: 'Separator'
-                            },
-            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide property',template:'<button id="hideProperty"></button>'}
+            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty"></button>'}
         ];
         return items;
     };

@@ -416,7 +416,7 @@ var nodes = [
         annotations:[{content:'Request Hold'}]
     },
     {
-        id: 'Task8', width: 120, height: 75, offsetX: 1400, offsetY: 200,
+        id: 'Task8', width: 120, height: 75, offsetX: 1390, offsetY: 200,
         shape: {
             type: 'Bpmn', shape: 'Activity', activity: {
                 activity: 'Task',task: {type:'Receive'}
@@ -501,16 +501,16 @@ var bpmnShapes = [
         //sourceDecorator:{shape:'None'},targetDecorator:{shape:'None'},
         shape: { type: 'Bpmn', flow: 'Association',}, 
     },
-    {
-        id:'Message Flow',
-        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },type: 'Straight',
-        sourceDecorator:{shape:'Circle'},targetDecorator:{shape:'Arrow'},
-        // shape: {
-        // type: 'Bpmn',
-        // flow: 'Message',
-        // message: 'InitiatingMessage'
-        //     },
-    },
+    // {
+    //     id:'Message Flow',
+    //     sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },type: 'Straight',
+    //     sourceDecorator:{shape:'Circle'},targetDecorator:{shape:'Arrow'},
+    //     // shape: {
+    //     // type: 'Bpmn',
+    //     // flow: 'Message',
+    //     // message: 'InitiatingMessage'
+    //     //     },
+    // },
     {
         id: 'Message', width: 60,
         height: 60,shape: { type: 'Bpmn', shape: 'Message',},
@@ -657,7 +657,7 @@ var contextMenu = {
             text: 'Delete', id: 'Delete', target: '.e-diagramcontent', iconCss: 'e-menu-icon e-icons e-delete'
         },
         {
-            text: 'Select All', id: 'SelectAll', target: '.e-diagramcontent', iconCss: 'e-menu-icon e-icons e-paste'
+            text: 'Select All', id: 'SelectAll', target: '.e-diagramcontent', iconCss: 'e-menu-icon'
         },
         {
             text: 'Association', id: 'Association' 
@@ -702,7 +702,7 @@ var contextMenu = {
             text: 'Boundry', id: 'Boundry',
             items: [{ text: 'Default', iconCss: 'e-boundry e-bpmn-icons e-Default', id: 'Default' },
             { text: 'Call', iconCss: 'e-boundry e-bpmn-icons e-Call', id: 'BoundryCall' },
-            { text: 'Event', iconCss: 'e-boundry e-bpmn-icons e-Event', id: 'BoundryEvent' }]
+            { text: 'Event', iconCss: 'e-boundry e-bpmn-icons e-Event', id: 'BoundryEvent' },]
         }, {
             text: 'Data Object', id: 'DataObject',
             items: [{ text: 'None', iconCss: 'e-data e-bpmn-icons e-None', id: 'DataObjectNone' },
@@ -760,7 +760,7 @@ var contextMenu = {
         }, {
             text: 'GateWay', id: 'GateWay',
             iconCss: 'e-bpmn-icons e-Gateway', items: [
-                { text: 'None', id: 'GatewayNone', iconCss: 'e-gate e-bpmn-icons e-None' },
+                { text: 'None', id: 'GatewayNone', iconCss: 'e-gate e-bpmn-icons e-None sf-icon-check-tick' },
                 { text: 'Exclusive', iconCss: 'e-gate e-bpmn-icons e-ExclusiveGatewayWithMarker', id: 'Exclusive' },
                 { text: 'Inclusive', iconCss: 'e-gate e-bpmn-icons e-InclusiveGateway', id: 'Inclusive' },
                 { text: 'Parallel', iconCss: 'e-gate e-bpmn-icons e-ParallelGateway', id: 'GatewayParallel' },
@@ -825,6 +825,14 @@ var btnViewMenu = new ej.splitbuttons.DropDownButton({
 });
 btnViewMenu.appendTo('#btnViewMenu');
 
+function viewSelectionChange(args)
+{
+    var items = btnViewMenu.items;
+    items[4].iconCss = diagram.pageSettings.showPageBreaks ? 'sf-icon-check-tick':'';
+    items[5].iconCss = diagram.pageSettings.multiplePage ? 'sf-icon-check-tick':'';
+    showPageBreaks.checked = diagram.pageSettings.showPageBreaks ? true:false;
+
+}
 
 function toolsContextMenuOpen (args) {
     if (args.element.classList.contains('e-menu-parent')) {
@@ -846,6 +854,25 @@ function editContextMenuOpen (args) {
         args.element.style.left = ej.base.formatUnit(parseInt(args.element.style.left, 10) - parseInt(popup.style.left, 10));
         args.element.style.top = ej.base.formatUnit(parseInt(args.element.style.top, 10) - parseInt(popup.style.top, 10));
     }
+}
+
+function updateContextMenuSelection()
+{
+    if(diagram.selectedItems.nodes.length>0)
+    {
+        var bpmnNode = diagram.selectedItems.nodes[0];
+        if(bpmnNode.shape.shape === 'Gateway')
+        {
+            for(i = 0;i<contextMenu.items[21].items.length;i++)
+            {
+                if(bpmnNode.shape.gateway.type === contextMenu.items[21].items[i].text)
+                {
+                    contextMenu.items[21].items[i].iconCss +=' sf-icon-check-tick';
+                }
+            }
+        }
+    }
+    
 }
 
 function arrangeMenuBeforeOpen(args)
@@ -927,6 +954,18 @@ function getShortCutKey(menuItem) {
             break;
         case 'Zoom Out':
             shortCutKey = shortCutKey + '+-';
+            break;
+        case 'Zoom to Fit':
+            shortCutKey = shortCutKey + '+0';
+            break;
+        case 'Zoom to 50%':
+            shortCutKey = shortCutKey + '+1';
+            break;
+        case 'Zoom to 100%':
+            shortCutKey = shortCutKey + '+2';
+            break;
+        case 'Zoom to 200%':
+            shortCutKey = shortCutKey + '+3';
             break;
         // case 'Rotate Right 90':
         //     shortCutKey = shortCutKey + '+R';
@@ -1098,10 +1137,8 @@ var orderItems = [
     {text:'Send To Back', iconCss:'sf-icon-send-to-back'},
 ]
 var zoomMenuItems = [
-    { text: 'Zoom Out' },{ text: 'Zoom In' },
-     { text: '400%' }, { text: '300%' }, { text: '200%' }, { text: '150%' },
-                        { text: '100%' }, { text: '75%' }, { text: '50%' }, { text: '25%' }, { separator: true },
-                        { text: 'Fit To Screen' }
+    { text: 'Zoom In' },{ text: 'Zoom Out' },{ text: 'Zoom to Fit' },{ text: 'Zoom to 50%' },
+    { text: 'Zoom to 100%' },{ text: 'Zoom to 200%' },
                     ];
 conTypeBtn = new ej.splitbuttons.DropDownButton({
     items: conTypeItems, iconCss:'sf-icon-orthogonal_line',
@@ -1262,51 +1299,37 @@ function lockObject (args) {
 
  function zoomChange(args){
     var zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
-    if (args.item.text === 'Custom') {
-        var ss = '';
-    } else if (args.item.text === 'Fit To Screen') {
-        zoomCurrentValue.content = diagram.scrollSettings.currentZoom = 'Fit ...';
-        diagram.fitToPage({ mode: 'Page', region: 'Content', margin: { left: 0, top: 0, right: 0, bottom: 0 } });
-    } else {
         var currentZoom = diagram.scrollSettings.currentZoom;
         var zoom = {};
         switch (args.item.text) {
             case 'Zoom In':
                 diagram.zoomTo({ type: 'ZoomIn', zoomFactor: 0.2 });
-                zoomCurrentValue.content = diagram.scrollSettings.currentZoom = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
+                zoomCurrentValue.content = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
                 break;
             case 'Zoom Out':
                 diagram.zoomTo({ type: 'ZoomOut', zoomFactor: 0.2 });
-                zoomCurrentValue.content = diagram.scrollSettings.currentZoom = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
+                zoomCurrentValue.content = (diagram.scrollSettings.currentZoom * 100).toFixed() + '%';
                 break;
-            case '400%':
-                zoom.zoomFactor = (4 / currentZoom) - 1;
+            case 'Zoom to Fit':
+                diagram.fitToPage({ mode: 'Page', region: 'Content'});
+                zoomCurrentValue.content = diagram.scrollSettings.currentZoom;
                 break;
-            case '300%':
-                zoom.zoomFactor = (3 / currentZoom) - 1;
-                break;
-            case '200%':
-                zoom.zoomFactor = (2 / currentZoom) - 1;
-                break;
-            case '150%':
-                zoom.zoomFactor = (1.5 / currentZoom) - 1;
-                break;
-            case '100%':
-                zoom.zoomFactor = (1 / currentZoom) - 1;
-                break;
-            case '75%':
-                zoom.zoomFactor = (0.75 / currentZoom) - 1;
-                break;
-            case '50%':
+            case 'Zoom to 50%':
                 zoom.zoomFactor = (0.5 / currentZoom) - 1;
+                diagram.zoomTo(zoom);
                 break;
-            case '25%':
-                zoom.zoomFactor = (0.25 / currentZoom) - 1;
+            case 'Zoom to 100%':
+                zoom.zoomFactor = (1 / currentZoom) - 1;
+                diagram.zoomTo(zoom);
+                break;
+            case 'Zoom to 200%':
+                zoom.zoomFactor = (2 / currentZoom) - 1;
+                diagram.zoomTo(zoom);
                 break;
         }
-        zoomCurrentValue.content = diagram.scrollSettings.currentZoom = args.item.text;
-        diagram.zoomTo(zoom);
-    }
+      
+        zoomCurrentValue.content = Math.round(diagram.scrollSettings.currentZoom*100) + ' %';
+        
 }
 
 var diagram = new ej.diagrams.Diagram({
@@ -1317,7 +1340,7 @@ var diagram = new ej.diagrams.Diagram({
     pageSettings:{showPageBreaks:true},
     pageSettings: {
         background: { color: '#FFFFFF' }, width: 600, height: 1460, margin: { left: 5, top: 5 },
-        orientation: 'Landscape',showPageBreaks:true,
+        orientation: 'Landscape',showPageBreaks:false,multiplePage : false
     },
     scrollSettings: { canAutoScroll: true, scrollLimit: 'Infinity', minZoom: 0.25, maxZoom: 30 },
     getNodeDefaults: function (args) { DiagramClientSideEvents.prototype.getNodeDefaults(args); },
@@ -1539,9 +1562,9 @@ function minValue(){
     return size;
 }
 
-    var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange });
+    var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange,
+     });
     btnZoomIncrement.appendTo('#btnZoomIncrement');
-
 var palette = new ej.diagrams.SymbolPalette({
     expandMode: 'Multiple', symbolMargin: { left: 5, right: 15, top: 15, bottom: 10 }, symbolHeight: 60, symbolWidth: 55,
     palettes: [
@@ -1583,7 +1606,7 @@ var pagePortrait = new ej.buttons.Button({
 pagePortrait.appendTo('#pagePortrait');
 
  var pageLandscape = new ej.buttons.Button({
-    iconCss: 'sf-icon-landscape', isToggle:true,cssClass: `e-active`
+    iconCss: 'sf-icon-landscape', isToggle:true,cssClass: `e-flat e-active`
 });
 pageLandscape.appendTo('#pageLandscape');
 
@@ -1681,7 +1704,7 @@ showPageBreaks.appendTo('#showPageBreaks');
    nodeProperties.height = nodeHeight;
 
 var aspectRatioBtn = new ej.buttons.Button({
-    iconCss: 'sf-icon-unlock', isToggle:true,cssClass: `e-flat`
+    iconCss: 'sf-icon-unlock', isToggle:true, cssClass:'e-flat'
 });
 aspectRatioBtn.appendTo('#aspectRatioBtn');
 nodeProperties.aspectRatio = aspectRatioBtn;
@@ -1756,7 +1779,7 @@ nodeProperties.fillColor = nodeFillColor;
 
 var gradientDirection =  new ej.splitbuttons.DropDownButton({
     items: DropDownDataSources.prototype.gradientDirections(),
-    iconCss: 'sf-icon-free_hand',
+    iconCss: 'sf-icon-gradient-alignment',
     select: function (args) {
         nodeProperties.gradientDirection.value = args.item.text; 
         PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradientDirection', propertyValue: args }); 
@@ -2037,7 +2060,7 @@ var toolbarTextStyle = new ej.navigations.Toolbar({
     clicked: function (args) { toolbarTextStyleChange(args); },
     items: [
         { prefixIcon: 'sf-icon-bold ', tooltipText: 'Bold', cssClass: 'tb-item-start' },
-        { prefixIcon: 'sf-icon-text', tooltipText: 'Italic', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-italic', tooltipText: 'Italic', cssClass: 'tb-item-middle' },
         { prefixIcon: 'sf-icon-underline', tooltipText: 'Underline', cssClass: 'tb-item-end' }
     ]
 });
@@ -2054,19 +2077,32 @@ var toolbarTextSubAlignment = new ej.navigations.Toolbar({
 });
 toolbarTextSubAlignment.appendTo('#toolbarTextSubAlignment');
 
-var toolbarTextAlignment = new ej.navigations.Toolbar({
+var toolbarTextAlignmentLeft = new ej.navigations.Toolbar({
     overflowMode: 'Scrollable',
     clicked: function (args) { toolbarTextAlignChange(args); },
     items: [
-        { prefixIcon: 'sf-icon-align_right', tooltipText: 'Align Right', cssClass: 'tb-item-start' },
-        { prefixIcon: 'sf-icon-align_center', tooltipText: 'Align Center', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-align_left', tooltipText: 'Align Left', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-align_bottom', tooltipText: 'Align Bottom', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-align_middle', tooltipText: 'Align Middle', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-align_top', tooltipText: 'Align Top', cssClass: 'tb-item-end' }
+        { prefixIcon: 'sf-icon-align-text-left', tooltipText: 'Align Right', cssClass: 'tb-item-start' },
+        { prefixIcon: 'sf-icon-align-text-horizontal-center', tooltipText: 'Align Center', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-align-text-rignt', tooltipText: 'Align Left', cssClass: 'tb-item-middle' },
+        // { prefixIcon: 'sf-icon-align-text-top', tooltipText: 'Align Bottom', cssClass: 'tb-item-middle' },
+        // { prefixIcon: 'sf-icon-align-text-vertical-center', tooltipText: 'Align Middle', cssClass: 'tb-item-middle' },
+        // { prefixIcon: 'sf-icon-align-text-bottom', tooltipText: 'Align Top', cssClass: 'tb-item-end' }
     ]
 });
-toolbarTextAlignment.appendTo('#toolbarTextAlignment');
+toolbarTextAlignmentLeft.appendTo('#toolbarTextAlignmentLeft');
+var toolbarTextAlignmentTop = new ej.navigations.Toolbar({
+    overflowMode: 'Scrollable',
+    clicked: function (args) { toolbarTextAlignChange(args); },
+    items: [
+        // { prefixIcon: 'sf-icon-align-text-left', tooltipText: 'Align Right', cssClass: 'tb-item-start' },
+        // { prefixIcon: 'sf-icon-align-text-horizontal-center', tooltipText: 'Align Center', cssClass: 'tb-item-middle' },
+        // { prefixIcon: 'sf-icon-align-text-rignt', tooltipText: 'Align Left', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-align-text-top', tooltipText: 'Align Bottom', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-align-text-vertical-center', tooltipText: 'Align Middle', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-align-text-bottom', tooltipText: 'Align Top', cssClass: 'tb-item-end' }
+    ]
+});
+toolbarTextAlignmentTop.appendTo('#toolbarTextAlignmentTop');
 
 var opacityTextSlider = new ej.inputs.Slider({
     min: 0,

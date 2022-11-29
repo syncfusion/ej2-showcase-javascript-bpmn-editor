@@ -3,9 +3,9 @@
  
         <script src="https://cdn.syncfusion.com/ej2/20.3.47/dist/ej2.min.js" type="text/javascript"></script>
         <link href="https://cdn.syncfusion.com/ej2/20.3.47/fluent.css" rel="stylesheet">
-        <!-- <link href="https://cdn.syncfusion.com/ej2/ej2-base/styles/material.css" rel="stylesheet">
+        <!-- <link href="https://cdn.syncfusion.com/ej2/ej2-base/styles/material.css" rel="stylesheet"> -->
         <link href="https://cdn.syncfusion.com/ej2/ej2-buttons/styles/fluent.css" rel="stylesheet">
-        <link href="https://cdn.syncfusion.com/ej2/ej2-popups/styles/material.css" rel="stylesheet">
+        <!-- <link href="https://cdn.syncfusion.com/ej2/ej2-popups/styles/material.css" rel="stylesheet">
         <link href="https://cdn.syncfusion.com/ej2/ej2-splitbuttons/styles/material.css" rel="stylesheet">
         <link href="https://cdn.syncfusion.com/ej2/ej2-diagrams/styles/material.css" rel="stylesheet">
         <link href="https://cdn.syncfusion.com/ej2/ej2-navigations/styles/fabric.css" rel="stylesheet"> -->
@@ -16,7 +16,8 @@
         <!-- <link href="./assets/db-icons1/style.css" rel="stylesheet"> -->
         <!-- <link href="./assets/css/outlook.css" rel="stylesheet"> -->
         <!-- <link href="./assets/styles.css" rel="stylesheet"> -->
-        <link href="./assets/Diagram_Builder_Icon/style.css" rel="stylesheet">
+        <!-- <link href="./assets/Diagram_Builder_Icon/style.css" rel="stylesheet"> -->
+        <link href="./assets/Diagram_Builder_icon_v4/Diagram_Builder_Icon/style.css" rel="stylesheet">
         <link href="./assets/index.css" rel="stylesheet">
         <link href="./assets/dbstyle/diagrambuilder.css" rel="stylesheet"/>
 
@@ -44,6 +45,13 @@
                     height: 28px;
                     margin-left: 20px;
                     margin-bottom: 7px;
+                }
+                .db-toolbar-container{
+                    width: 100%!important;
+                }
+                .close{
+                    float: right;
+                    border-color: #b5b5b5;
                 }       
             </style>
 <ul id = "toolsContextMenu"></ul>
@@ -106,6 +114,9 @@
                         <div id='diagramPropertyContainer' class="db-diagram-prop-container">
                             <div class="row db-prop-header-text">
                                 Page Settings
+                                <button class="close" onclick="UtilityMethods.prototype.hideElements('hide-properties',diagram)"><i style="width: 20px;height: 20px;font-size:20px" class="sf-icon-close"></i></button>
+                            </div>
+                            <div class="db-prop-separator" style="background-color: #b5b5b5;margin-bottom: 15px;">
                             </div>
                             <div class="row db-prop-row">
                                 <div class="col-xs-12 db-col-left">
@@ -170,7 +181,15 @@
                         <div id='nodePropertyContainer' class="db-node-prop-container" style="display:none">
                             <div class="db-node-behaviour-prop" id="dimen">
                                 <div class="row db-prop-header-text">
-                                    Dimensions
+                                    Properties
+                                    <button class="close" onclick="UtilityMethods.prototype.hideElements('hide-properties',diagram)"><i style="width: 20px;height: 20px;font-size:20px" class="sf-icon-close"></i></button>
+                                </div>
+                                <div class="db-prop-separator" style="background-color: #b5b5b5;margin-bottom: 15px;">
+                                </div>
+                                <div class="row db-prop-row">
+                                    <div class="col-xs-6 db-col-right" >
+                                        <span class="db-prop-text-style">Dimensions</span>
+                                    </div>
                                 </div>
                                 <div class="row db-prop-row">
                                     <div class="col-xs-6 db-col-left" style="width: 97px;" >
@@ -216,7 +235,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-2 db-col-left" style="width: 20px;padding-left:7px">
-                                        <button style="height: 26px;" id="aspectRatioBtn"></button>
+                                        <button style="height: 26px; background-color: #ffff;" id="aspectRatioBtn"></button>
                                     </div>
                                 </div>
                                 <div class="row db-prop-row">
@@ -252,7 +271,7 @@
                                         </div>
                                     </div>
                                     <div id='gradientStyle' class="row db-prop-row db-gradient-style-hide">
-                                        <div class="col-xs-6 db-col-left">
+                                        <div class="col-xs-6 db-col-left" style="width: 87px;">
                                             <div class="db-color-container">
                                                 <div class="db-color-input">
                                                     <input id="nodeFillColor" type="color">
@@ -260,9 +279,9 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-2 db-col-center">
-                                            <button style="height: 26px;" id="gradientDirection"></button>
+                                            <button style="height: 26px;width: 48px;" id="gradientDirection"></button>
                                         </div>
-                                        <div class="col-xs-4 db-col-right">
+                                        <div class="col-xs-4 db-col-right" style="margin-left: 20px;">
                                             <div class="db-color-container">
                                                 <div class="db-color-input">
                                                         <input id="nodeGradientColor" type="color">
@@ -274,6 +293,8 @@
                                 <div class="row db-border-style">
                                     <div class="row db-prop-header-text db-border-style-header">
                                         Border/Line Styles
+                                        <button class="close" onclick="UtilityMethods.prototype.hideElements('hide-properties',diagram)"><i style="width: 20px;height: 20px;font-size:20px" class="sf-icon-close"></i></button>
+                                    </div><div class="db-prop-separator" style="background-color: #b5b5b5;margin-bottom: 15px;">
                                     </div>
                                     <div class="row db-prop-row">
                                         <div class="col-xs-6 db-col-right" >
@@ -321,8 +342,9 @@
                         <div id='connectorPropertyContainer' class="db-connector-prop-container" style="display:none">
                             <div class="row db-prop-header-text">
                                 Connector Properties
+                                <button class="close" onclick="UtilityMethods.prototype.hideElements('hide-properties',diagram)"><i style="width: 20px;height: 20px;font-size:20px" class="sf-icon-close"></i></button>
                             </div>
-                            <div class="db-prop-separator" style="margin-top:5px;margin-bottom: 5px;">
+                            <div class="db-prop-separator" style="background-color: #b5b5b5;margin-bottom: 15px;">
                             </div>
                             <div class="row db-prop-row">
                                 <div class="col-xs-6 db-col-left db-prop-text-style">
@@ -450,10 +472,10 @@
                                 </div>
                             </div>
                             <div class="row db-prop-row">
-                                <div class="col-xs-6 db-col-left" id="textPositionDiv">
+                                <div class="col-xs-6 db-col-left" id="textPositionDiv" style="width: 120px;">
                                         <input type="text" id='ddlTextPosition' />
                                 </div>
-                                <div class="col-xs-4 db-col-right" id="textColorDiv" style="width: 95px;margin-left:15px">
+                                <div class="col-xs-4 db-col-right" id="textColorDiv" style="width: 95px;margin-left:4px">
                                     <div class="db-color-container">
                                         <div class="db-color-input">
                                                 <input id="textColor" type="color">
@@ -470,7 +492,12 @@
                                 </div>
                             </div>
                             <div class="row db-prop-row" id='toolbarTextAlignmentDiv'>
-                                    <div id="toolbarTextAlignment"></div>
+                                <div class="col-xs-6 db-col-left">
+                                    <div id="toolbarTextAlignmentLeft"></div>
+                            </div>
+                            <div class="col-xs-6 db-col-right">
+                                    <div id="toolbarTextAlignmentTop"></div>
+                            </div>
                             </div>
                             <div class="row db-prop-row">
                                 <div class="col-xs-2 db-col-right db-prop-text-style" style="margin-right: 3px;padding-top: 6px">

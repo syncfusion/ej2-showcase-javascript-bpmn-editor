@@ -337,8 +337,20 @@ var UtilityMethods = (function () {
                     {
                     toolbarObj.items[i].template = '<div></div>';
                     }
-                    else if(i>17){
+                    else if(i>17 && i !== 28){
                     toolbarObj.items[i].template = '';
+                    }
+                    else if(i === 28) {
+                       var obj =  diagram.selectedItems.nodes.length>0 ?diagram.selectedItems.nodes[0]: diagram.selectedItems.connectors[0];
+                       if(obj.annotations.length && obj.annotations[0].content)
+                       {
+                        toolbarObj.items[i].template = '';
+                        toolbarObj.hideItem(i+1,false);
+                       }
+                       else{
+                         toolbarObj.items[i].template = '<div></div>';
+                         toolbarObj.hideItem(i+1,true);
+                       }
                     }
                 }
             }
@@ -577,8 +589,8 @@ var UtilityMethods = (function () {
         if (args.event) {
             diagram.pageSettings.showPageBreaks = args.checked;
             diagram.dataBind();
-            var items = btnViewMenu.items;
-            items[4].iconCss = items[4].iconCss ? '' : 'sf-icon-check-tick';
+            // var items = btnViewMenu.items;
+            // items[4].iconCss = items[4].iconCss ? '' : 'sf-icon-check-tick';
         }
     };
     UtilityMethods.prototype.updatePaperSelection = function(items,value)
@@ -651,18 +663,46 @@ var UtilityMethods = (function () {
     };
     UtilityMethods.prototype.updateHorVertAlign = function(horizontalAlignment, verticalAlignment)
     {
-        var toolbarHorVerAlignment = document.getElementById('toolbarTextAlignment');
-        if (toolbarHorVerAlignment) {
-            toolbarHorVerAlignment = toolbarHorVerAlignment.ej2_instances[0];
+        // var toolbarHorVerAlignment = document.getElementById('toolbarTextAlignment');
+        // if (toolbarHorVerAlignment) {
+        //     toolbarHorVerAlignment = toolbarHorVerAlignment.ej2_instances[0];
+        // }
+        // if (toolbarHorVerAlignment) {
+        //     for (var i = 0; i < toolbarHorVerAlignment.items.length; i++) {
+        //         toolbarHorVerAlignment.items[i].cssClass = toolbarHorVerAlignment.items[i].cssClass.replace(' tb-item-selected', '');
+        //     }
+        //     var index = horizontalAlignment === 'Right' ? 0 : (horizontalAlignment === 'Center' ? 1 : 2);
+        //     toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
+        //     index = verticalAlignment === 'Bottom' ? 3 : (verticalAlignment === 'Center' ? 4 : 5);
+        //     toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
+        // }
+        this.updateHorAlign(horizontalAlignment);
+        this.updateVerAlign(verticalAlignment);
+    };
+    UtilityMethods.prototype.updateHorAlign = function(horizontalAlignment){
+        var toolbarHorAlignment = document.getElementById('toolbarTextAlignmentLeft');
+        if (toolbarHorAlignment) {
+            toolbarHorAlignment = toolbarHorAlignment.ej2_instances[0];
         }
-        if (toolbarHorVerAlignment) {
-            for (var i = 0; i < toolbarHorVerAlignment.items.length; i++) {
-                toolbarHorVerAlignment.items[i].cssClass = toolbarHorVerAlignment.items[i].cssClass.replace(' tb-item-selected', '');
+        if (toolbarHorAlignment) {
+            for (var i = 0; i < toolbarHorAlignment.items.length; i++) {
+                toolbarHorAlignment.items[i].cssClass = toolbarHorAlignment.items[i].cssClass.replace(' tb-item-selected', '');
             }
             var index = horizontalAlignment === 'Right' ? 0 : (horizontalAlignment === 'Center' ? 1 : 2);
-            toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
-            index = verticalAlignment === 'Bottom' ? 3 : (verticalAlignment === 'Center' ? 4 : 5);
-            toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
+            toolbarHorAlignment.items[index].cssClass = toolbarHorAlignment.items[index].cssClass + ' tb-item-selected';
+        }
+    };
+    UtilityMethods.prototype.updateVerAlign = function(verticalAlignment){
+        var toolbarVerAlignment = document.getElementById('toolbarTextAlignmentTop');
+        if (toolbarVerAlignment) {
+            toolbarVerAlignment = toolbarVerAlignment.ej2_instances[0];
+        }
+        if (toolbarVerAlignment) {
+            for (var i = 0; i < toolbarVerAlignment.items.length; i++) {
+                toolbarVerAlignment.items[i].cssClass = toolbarVerAlignment.items[i].cssClass.replace(' tb-item-selected', '');
+            }
+            var index = verticalAlignment === 'Bottom' ? 0 : (verticalAlignment === 'Center' ? 1 : 2);
+            toolbarVerAlignment.items[index].cssClass = toolbarVerAlignment.items[index].cssClass + ' tb-item-selected';
         }
     };
     UtilityMethods.prototype.getPosition = function(offset)
@@ -807,10 +847,12 @@ var UtilityMethods = (function () {
     {
         isAspect = true;
         aspectRatioBtn.iconCss =  'sf-icon-lock'
+        // document.getElementById('aspectRatioBtn').classList.add('e-flat');
     }
     else{
         isAspect = false;
         aspectRatioBtn.iconCss = 'sf-icon-unlock';
+        // document.getElementById('aspectRatioBtn').classList.add('e-flat');
     }
         PropertyChange.prototype.nodePropertyChange({propertyName: 'aspectRatio', propertyValue: isAspect}); 
     };
@@ -941,9 +983,13 @@ var UtilityMethods = (function () {
         var diagramContainer = document.getElementsByClassName('diagrambuilder-container')[0];
         if (diagramContainer.classList.contains(elementType)) {
                 diagramContainer.classList.remove(elementType);
+                document.getElementById('hideProperty').style.backgroundColor = ''
+                hidePropertyBtn.isPrimary = true;
         }
         else {
             diagramContainer.classList.add(elementType);
+            document.getElementById('hideProperty').style.backgroundColor = '#e3e3e3'
+            hidePropertyBtn.isPrimary = false;
         }
         if (diagram) {
             diagram.updateViewPort();

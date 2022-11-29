@@ -153,6 +153,9 @@ var PropertyChange = (function () {
                                         UtilityMethods.prototype.updateTextFontProperties(propertyName, annotation);
                                     }
                                 }
+                                else if (node.shape && node.shape.type === 'Text') {
+                                    UtilityMethods.prototype.updateTextFontProperties(propertyName, node.style);
+                                }
                             }
                         }
                         diagram.dataBind();

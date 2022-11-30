@@ -342,14 +342,18 @@ var UtilityMethods = (function () {
                     }
                     else if(i === 28) {
                        var obj =  diagram.selectedItems.nodes.length>0 ?diagram.selectedItems.nodes[0]: diagram.selectedItems.connectors[0];
-                       if(obj.annotations.length && obj.annotations[0].content)
+                       if(obj.annotations.length && obj.annotations[0].content || obj.shape.type === 'Text')
                        {
                         toolbarObj.items[i].template = '';
                         toolbarObj.hideItem(i+1,false);
+                        toolbarObj.items[i].disabled = false;
+                        toolbarObj.items[i].visible = true;
                        }
                        else{
                          toolbarObj.items[i].template = '<div></div>';
                          toolbarObj.hideItem(i+1,true);
+                         toolbarObj.items[i].disabled = true;
+                         toolbarObj.items[i].visible = false;
                        }
                     }
                 }
@@ -364,6 +368,7 @@ var UtilityMethods = (function () {
                
             }
         }
+        toolbarObj.dataBind();
     };
     UtilityMethods.prototype.download = function(data)
     {

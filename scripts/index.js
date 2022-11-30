@@ -640,7 +640,7 @@ var connectors = [
         id:'connector18',sourceID:'Task6',targetID:'End1',sourcePortID:'right',targetPortID:'bottom',type:'Orthogonal'
     },
 ]
-
+//...
 //Context menu items
 var contextMenu = {
     show: true, items: [
@@ -670,7 +670,7 @@ var contextMenu = {
         },
         {
             text: 'Condition type', id: 'Condition type', items: [
-                    {text: 'None', id: 'None'}, {text: 'Conditional', id: 'Conditional'},
+                    {text: 'None', id: 'None'}, {text: 'Conditional1', id: 'Conditional1'},
                     {text: 'Normal', id: 'Normal'},
             ]
         },
@@ -682,8 +682,10 @@ var contextMenu = {
         },
         {
             text: 'Ad-Hoc', id: 'Adhoc',
-            items: [{ text: 'None', iconCss: 'e-adhocs e-bpmn-event e-bpmn-icons e-None', id: 'AdhocNone' },
-            { iconCss: 'e-adhocs e-bpmn-icons e-adhoc', text: 'Ad-Hoc', id: 'AdhocAdhoc' }]
+            // items: [{ text: 'None', iconCss: 'e-adhocs e-bpmn-event e-bpmn-icons e-None', id: 'AdhocNone' },
+            // { 
+                iconCss: 'e-adhocs e-bpmn-icons e-adhoc',
+                //  text: 'Ad-Hoc', id: 'AdhocAdhoc' }]
         }, {
             text: 'Loop', id: 'Loop',
             items: [{ text: 'None', iconCss: 'e-loop e-bpmn-icons e-None', id: 'LoopNone' },
@@ -692,12 +694,15 @@ var contextMenu = {
             { text: 'Sequence Multi-Instance', iconCss: 'e-loop e-bpmn-icons e-SequentialMI', id: 'SequenceMultiInstance' }]
         }, {
             text: 'Compensation', id: 'taskCompensation',
-            items: [{ text: 'None', iconCss: 'e-compensation e-bpmn-icons e-None', id: 'CompensationNone' },
-            { iconCss: 'e-compensation e-bpmn-icons e-Compensation', text: 'Compensation', id: 'CompensationCompensation' }]
+            // items: [{ text: 'None', iconCss: 'e-compensation e-bpmn-icons e-None', id: 'CompensationNone' },
+            // { 
+                iconCss: 'e-compensation e-bpmn-icons e-Compensation',
+                //  text: 'Compensation', id: 'CompensationCompensation'}]
         }, {
             text: 'Activity-Type', id: 'Activity-Type',
-            items: [{ text: 'Collapsed sub-process', iconCss: 'e-bpmn-icons e-SubProcess', id: 'CollapsedSubProcess' },
-            { iconCss: 'e-bpmn-icons e-Task', text: 'Expanded sub-process', id: 'ExpandedSubProcess' }]
+            items: [{ iconCss: 'e-bpmn-icons e-Task', text: 'Task', id: 'Task' }
+                ,{ text: 'Collapsed sub-process', iconCss: 'e-bpmn-icons e-SubProcess', id: 'SubProcess' },
+            ]
         }, {
             text: 'Boundry', id: 'Boundry',
             items: [{ text: 'Default', iconCss: 'e-boundry e-bpmn-icons e-Default', id: 'Default' },
@@ -710,12 +715,16 @@ var contextMenu = {
             { text: 'Output', iconCss: 'e-data e-bpmn-icons e-DataOutput', id: 'Output' }]
         }, {
             text: 'Collection', id: 'collection',
-            items: [{ text: 'None', iconCss: 'e-collection e-bpmn-icons e-None', id: 'collectionNone' },
-            { text: 'Collection', iconCss: 'e-collection e-bpmn-icons e-ParallelMI', id: 'Collectioncollection' }]
+            // items: [{ text: 'None', iconCss: 'e-collection e-bpmn-icons e-None', id: 'collectionNone' },
+            // { text: 'Collection', 
+            iconCss: 'e-collection e-bpmn-icons e-ParallelMI',
+            //  id: 'Collectioncollection' }]
         }, {
-            text: 'Call', id: 'DeftCall',
-            items: [{ text: 'None', iconCss: 'e-call e-bpmn-icons e-None', id: 'CallNone' },
-            { text: 'Call', iconCss: 'e-call e-bpmn-icons e-CallActivity', id: 'CallCall' }]
+            text: 'Task Call', id: 'DeftCall',
+            // items: [{ text: 'None', iconCss: 'e-call e-bpmn-icons e-None', id: 'CallNone' },
+            // { text: 'Call', 
+            iconCss: 'e-call e-bpmn-icons e-CallActivity', 
+            // id: 'CallCall' }]
         }, {
             text: 'Trigger Result', id: 'TriggerResult',
             items: [{ text: 'None', id: 'TriggerNone', iconCss: 'e-trigger e-bpmn-icons e-None' },
@@ -856,23 +865,180 @@ function editContextMenuOpen (args) {
     }
 }
 
-function updateContextMenuSelection()
+function updateContextMenuSelection(boolean,args)
 {
     if(diagram.selectedItems.nodes.length>0)
     {
         var bpmnNode = diagram.selectedItems.nodes[0];
+        var checked =boolean;
         if(bpmnNode.shape.shape === 'Gateway')
         {
-            for(i = 0;i<contextMenu.items[21].items.length;i++)
-            {
-                if(bpmnNode.shape.gateway.type === contextMenu.items[21].items[i].text)
+            if(!args.parentItem){
+                for(i = 0;i<args.items[21].items.length;i++)
                 {
-                    contextMenu.items[21].items[i].iconCss +=' sf-icon-check-tick';
+                    if(bpmnNode.shape.gateway.type === args.items[21].items[i].text || !checked)
+                    {
+                        addTick(args,21,checked);
+                    }
+                }
+            }
+        }
+        else if(bpmnNode.shape.shape === 'Activity')
+        {
+            if(!args.parentItem)
+            {
+                if(bpmnNode.shape.activity.activity === 'Task')
+                {
+                    for(i=0;i<args.items[13].items.length;i++)
+                    {
+                        if(bpmnNode.shape.activity.activity === args.items[13].items[i].id || ! checked)
+                        {
+                            addTick(args,13,checked);
+                        }
+                    }
+                    for(i = 0 ;i<args.items[20].items.length;i++){
+                        if(bpmnNode.shape.activity.task.type === args.items[20].items[i].id || !checked )
+                        {
+                            addTick(args,20,checked);
+                        } 
+                    }
+                    if(bpmnNode.shape.activity.task.call)
+                    {
+                        singleItemTick(args,17,true);
+                    }
+                    else{
+                        singleItemTick(args,17,false);
+                    }
+                    for(i=0;i<args.items[11].items.length;i++)
+                    {
+                        if((bpmnNode.shape.activity.task.loop === args.items[11].items[i].text || bpmnNode.shape.activity.task.loop === args.items[11].items[i].id )|| ! checked)
+                        {
+                            addTick(args,11,checked);
+                        }
+                    }
+                    if(bpmnNode.shape.activity.task.compensation)
+                    {
+                        singleItemTick(args,12,true);
+                    }
+                    else{
+                        singleItemTick(args,12,false);
+                    }
+                }
+                else if(bpmnNode.shape.activity.activity === 'SubProcess'){
+                    for(i=0;i<args.items[13].items.length;i++)
+                    {
+                        if(bpmnNode.shape.activity.activity === args.items[13].items[i].id || ! checked)
+                        {
+                            addTick(args,13,checked);
+                        }
+                    }
+                    for(i=0;i<args.items[11].items.length;i++)
+                    {
+                        if((bpmnNode.shape.activity.subProcess.loop === args.items[11].items[i].text || bpmnNode.shape.activity.subProcess.loop === args.items[11].items[i].id )|| ! checked)
+                        {
+                            addTick(args,11,checked);
+                        }
+                    }
+                    for(i=0;i<args.items[14].items.length;i++)
+                    {
+                        if((bpmnNode.shape.activity.subProcess.boundary === args.items[14].items[i].text || bpmnNode.shape.activity.subProcess.boundary === args.items[14].items[i].id )|| ! checked)
+                        {
+                            addTick(args,14,checked);
+                        }
+                    }
+                    if(bpmnNode.shape.activity.subProcess.compensation)
+                    {
+                        singleItemTick(args,12,true);
+                    }
+                    else{
+                        singleItemTick(args,12,false);
+                    }
+                    if(bpmnNode.shape.activity.subProcess.adhoc)
+                    {
+                        singleItemTick(args,10,true);
+                    }
+                    else{
+                        singleItemTick(args,10,false);
+                    }
+                }
+            }
+        }
+        else if(bpmnNode.shape.shape === 'Event')
+        {
+            if(!args.parentItem)
+            {
+                for(i=0;i<args.items[19].items.length;i++){
+                    if(bpmnNode.shape.event.event === args.items[19].items[i].text || !checked)
+                    {
+                        addTick(args,19,checked);
+                    }
+                }
+                for(i=0;i<args.items[18].items.length;i++){
+                    if(bpmnNode.shape.event.trigger === args.items[18].items[i].text || !checked)
+                    {
+                        addTick(args,18,checked);
+                    }
+                }
+            }
+        }
+        else if(bpmnNode.shape.shape === 'DataObject')
+        {
+            if(!args.parentItem)
+            {
+                for(i=0;i<args.items[15].items.length;i++){
+                    if(bpmnNode.shape.dataObject.type === args.items[15].items[i].text || !checked)
+                    {
+                        addTick(args,15,checked);
+                    }
+                }
+                if(bpmnNode.shape.dataObject.collection)
+                {
+                    singleItemTick(args,16,true);
+                }
+                else{
+                    singleItemTick(args,16,false);
                 }
             }
         }
     }
     
+}
+//...
+function singleItemTick(args,index,boolean)
+{
+    if(boolean)
+    {
+        if( args.items[index].iconCss.indexOf('sf-icon-check-tick') === -1){
+            args.items[index].iconCss+=' sf-icon-check-tick';
+        }
+    }
+    else{
+        if( args.items[index].iconCss.indexOf('sf-icon-check-tick') !== -1){
+            args.items[index].iconCss = args.items[index].iconCss.replace(' sf-icon-check-tick','');
+        }
+    }
+}
+
+function addTick(args,index,checked)
+{
+            if(checked){
+                if( args.items[index].items[i].iconCss.indexOf('sf-icon-check-tick') === -1){
+                    args.items[index].items[i].iconCss+=' sf-icon-check-tick';
+                }
+            }
+            else{
+                if( args.items[index].items[i].iconCss.indexOf('sf-icon-check-tick') !== -1){
+                    args.items[index].items[i].iconCss = args.items[index].items[i].iconCss.replace(' sf-icon-check-tick','');
+                }
+            }
+}
+
+function clearTick()
+{
+    if(diagram.selectedItems.nodes.length>0)
+    {
+
+    }
 }
 
 function arrangeMenuBeforeOpen(args)

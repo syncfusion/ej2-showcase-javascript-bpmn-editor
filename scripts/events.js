@@ -172,7 +172,7 @@ var DiagramClientSideEvents = (function () {
         if (diagram.selectedItems.nodes.length > 0 ) {
             var bpmnShape = diagram.selectedItems.nodes[0].shape;
             if (args.item.iconCss.indexOf('e-adhocs') > -1) {
-                bpmnShape.activity.subProcess.adhoc = args.item.id === 'AdhocNone' ? false : true;
+                bpmnShape.activity.subProcess.adhoc = !bpmnShape.activity.subProcess.adhoc;
             }
             if (args.item.iconCss.indexOf("e-event") > -1) {
                 bpmnShape.event.event = args.item.id;
@@ -190,23 +190,23 @@ var DiagramClientSideEvents = (function () {
                 }
             }
             if (args.item.iconCss.indexOf("e-compensation") > -1) {
-                var compensation = (args.item.id === 'CompensationNone') ? false : true;
+                // var compensation = (args.item.id === 'taskCompensation') ? true : false;
                 if (bpmnShape.activity.activity === 'Task') {
-                    bpmnShape.activity.task.compensation = compensation;
+                    bpmnShape.activity.task.compensation = !bpmnShape.activity.task.compensation ;
                 }
                 if (bpmnShape.activity.activity === 'SubProcess') {
-                    bpmnShape.activity.subProcess.compensation = compensation;
+                    bpmnShape.activity.subProcess.compensation = ! bpmnShape.activity.subProcess.compensation;
                 }
             }
             if (args.item.iconCss.indexOf('e-call') > -1) {
-                var compensations = (args.item.id === 'CallNone') ? false : true;
+                // var compensations = (args.item.id === 'CallNone') ? false : true;
                 if (bpmnShape.activity.activity === 'Task') {
-                    bpmnShape.activity.task.call = compensations;
+                    bpmnShape.activity.task.call = !bpmnShape.activity.task.call;
                 }
             }
-            if (args.item.id === 'CollapsedSubProcess' || args.item.id === 'ExpandedSubProcess') {
-                if (args.item.id === 'ExpandedSubProcess') {
-                    bpmnShape.activity.activity = 'SubProcess';
+            if (args.item.id === 'SubProcess' || args.item.id === 'Task') {
+                if (args.item.id === 'Task') {
+                    bpmnShape.activity.activity = 'Task';
                     bpmnShape.activity.subProcess.collapsed = false;
                 }
                 else {
@@ -226,8 +226,8 @@ var DiagramClientSideEvents = (function () {
                 bpmnShape.dataObject.type = data;
             }
             if (args.item.iconCss.indexOf('e-collection') > -1) {
-                var collection = (args.item.id === 'Collectioncollection') ? true : false;
-                bpmnShape.dataObject.collection = collection;
+                // var collection = (args.item.id === 'Collectioncollection') ? true : false;
+                bpmnShape.dataObject.collection =!bpmnShape.dataObject.collection;
             }
             if (args.item.iconCss.indexOf("e-task") > -1) {
                 var task = task === 'TaskNone' ? 'None' : args.item.id;
@@ -279,9 +279,9 @@ var DiagramClientSideEvents = (function () {
                 diagram.selectedItems.connectors[0].shape.association = 'Directional':
                 diagram.selectedItems.connectors[0].shape.association = 'BiDirectional';
             }
-            if(args.item.id === 'Conditional' || args.item.id === 'Normal')
+            if(args.item.id === 'Conditional1' || args.item.id === 'Normal')
             {
-                args.item.id === 'Conditional' ? 
+                args.item.id === 'Conditional1' ? 
                 diagram.selectedItems.connectors[0].shape.sequence = 'Conditional':
                 diagram.selectedItems.connectors[0].shape.sequence = 'Normal';
             }
@@ -302,6 +302,7 @@ var DiagramClientSideEvents = (function () {
     };
     DiagramClientSideEvents.prototype.contextMenuOpen = function(args)
     {
+        updateContextMenuSelection(false,args)
         var hiddenId = [];
         if (args.element.className !== 'e-menu-parent e-ul ') {
             hiddenId = ['Adhoc', 'Loop', 'taskCompensation', 'Activity-Type', 'Boundry', 'DataObject',
@@ -385,7 +386,7 @@ var DiagramClientSideEvents = (function () {
                             hiddenId.splice(hiddenId.indexOf(item.id), 1);
                         }
                     }
-                    if (item.text === 'Call') {
+                    if (item.text === 'Task Call') {
                         if ((bpmnShape.shape === 'Activity') &&
                             (bpmnShape.activity.activity === 'Task')) {
                             hiddenId.splice(hiddenId.indexOf(item.id), 1);
@@ -412,58 +413,59 @@ var DiagramClientSideEvents = (function () {
                             hiddenId.splice(hiddenId.indexOf(item.id), 1);
                         }
                     }
-                    if (diagram.selectedItems.nodes.length > 0 && args.parentItem && args.parentItem.id === 'TriggerResult' &&
-                        bpmnShape.shape === 'Event') {
-                        var shape = bpmnShape;
-                        if (item.text !== 'None' && (item.text === shape.event.event ||
-                            item.text === shape.event.trigger)) {
-                            hiddenId.push(item.id);
-                        }
-                        if (shape.event.event === 'Start') {
-                            if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Link') {
-                                hiddenId.push(item.id);
-                            }
-                        }
-                        if (shape.event.event === 'NonInterruptingStart' || item.text === 'Link') {
-                            if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Compensation' ||
-                                item.text === 'Error' || item.text === 'None') {
-                                hiddenId.push(item.id);
-                            }
-                        }
-                        if (shape.event.event === 'Intermediate') {
-                            if (item.text === 'Terminate') {
-                                hiddenId.push(item.id);
-                            }
-                        }
-                        if (shape.event.event === 'NonInterruptingIntermediate') {
-                            if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Compensation' ||
-                                item.text === 'Error' || item.text === 'None' || item.text === 'Link') {
-                                hiddenId.push(item.id);
-                            }
-                        }
-                        if (shape.event.event === 'ThrowingIntermediate') {
-                            if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Timer' || item.text === 'Error' ||
-                                item.text === 'None' || item.text === 'Pareller' || item.text === 'Conditional') {
-                                hiddenId.push(item.id);
-                            }
-                        }
-                        if (shape.event.event === 'End') {
-                            if (item.text === 'Parallel' || item.text === 'Timer' || item.text === 'Conditional' || item.text === 'Link') {
-                                hiddenId.push(item.id);
-                            }
-                        }
-                    }
-                    if (diagram.selectedItems.nodes.length > 0 && args.parentItem && args.parentItem.id === 'EventType' &&
-                        bpmnShape.shape === 'Event') {
-                        if ((item.text === bpmnShape.event.event)) {
-                            hiddenId.push(item.id);
-                        }
-                    }
+                    // if (diagram.selectedItems.nodes.length > 0 && args.parentItem && args.parentItem.id === 'TriggerResult' &&
+                    //     bpmnShape.shape === 'Event') {
+                    //     var shape = bpmnShape;
+                    //     if (item.text !== 'None' && (item.text === shape.event.event ||
+                    //         item.text === shape.event.trigger)) {
+                    //         hiddenId.push(item.id);
+                    //     }
+                    //     if (shape.event.event === 'Start') {
+                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Link') {
+                    //             hiddenId.push(item.id);
+                    //         }
+                    //     }
+                    //     if (shape.event.event === 'NonInterruptingStart' || item.text === 'Link') {
+                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Compensation' ||
+                    //             item.text === 'Error' || item.text === 'None') {
+                    //             hiddenId.push(item.id);
+                    //         }
+                    //     }
+                    //     if (shape.event.event === 'Intermediate') {
+                    //         if (item.text === 'Terminate') {
+                    //             hiddenId.push(item.id);
+                    //         }
+                    //     }
+                    //     if (shape.event.event === 'NonInterruptingIntermediate') {
+                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Compensation' ||
+                    //             item.text === 'Error' || item.text === 'None' || item.text === 'Link') {
+                    //             hiddenId.push(item.id);
+                    //         }
+                    //     }
+                    //     if (shape.event.event === 'ThrowingIntermediate') {
+                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Timer' || item.text === 'Error' ||
+                    //             item.text === 'None' || item.text === 'Pareller' || item.text === 'Conditional') {
+                    //             hiddenId.push(item.id);
+                    //         }
+                    //     }
+                    //     if (shape.event.event === 'End') {
+                    //         if (item.text === 'Parallel' || item.text === 'Timer' || item.text === 'Conditional' || item.text === 'Link') {
+                    //             hiddenId.push(item.id);
+                    //         }
+                    //     }
+                    // }
+                    // if (diagram.selectedItems.nodes.length > 0 && args.parentItem && args.parentItem.id === 'EventType' &&
+                    //     bpmnShape.shape === 'Event') {
+                    //     if ((item.text === bpmnShape.event.event)) {
+                    //         hiddenId.push(item.id);
+                    //     }
+                    // }
                 }
             }
         }
-        updateContextMenuSelection();
+        updateContextMenuSelection(true,args);
         args.hiddenItems = hiddenId;
+        diagram.dataBind();
     };
     DiagramClientSideEvents.prototype.multipleSelectionSettings = function(selectedItems) 
     {

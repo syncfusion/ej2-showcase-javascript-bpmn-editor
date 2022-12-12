@@ -1,6 +1,7 @@
 var UtilityMethods = (function () {
     function UtilityMethods() {
     };
+    // To execute toolbar click operation
     UtilityMethods.prototype.toolbarClick = function(args)
     {
         let item = args.item.tooltipText;
@@ -97,13 +98,6 @@ var UtilityMethods = (function () {
                 args.item.prefixIcon = 'sf-icon-group';
                 args.item.tooltipText = 'Group';
                 break;
-            case 'Fill Color':
-                var objColor = diagram.selectedItems.nodes[0]? 'nodeFillColor':'lineColor'
-                this.showColorPicker(objColor,'tb-item-stroke');
-                break;
-            case 'Font Color':
-                this.showColorPicker('textColor','tb-item-stroke');
-                break;
             case 'New Diagram':
                 diagram.clear();
                 DiagramClientSideEvents.prototype.historyChange();
@@ -135,6 +129,7 @@ var UtilityMethods = (function () {
         }
         diagram.dataBind();
      };
+     // To execute menubar click operation
     UtilityMethods.prototype.menuClick = function(args)
     {
         var buttonElement = document.getElementsByClassName('e-btn-hover')[0];
@@ -326,41 +321,26 @@ var UtilityMethods = (function () {
         }
         diagram.dataBind();
     };
+    // To hide and show toolbar items on single selection
     UtilityMethods.prototype.onClickDisable = function(args)
     {
         if(args === false)
         {
-            for(i=8;i<29;i++)
+            for(i=8;i<26;i++)
             {
                 if(toolbarObj.items[i].type !=='Separator'){
                     if(i<=17)
                     {
                     toolbarObj.items[i].template = '<div></div>';
                     }
-                    else if(i>17 && i !== 28){
+                    else if(i>17){
                     toolbarObj.items[i].template = '';
-                    }
-                    else if(i === 28) {
-                       var obj =  diagram.selectedItems.nodes.length>0 ?diagram.selectedItems.nodes[0]: diagram.selectedItems.connectors[0];
-                       if(obj.annotations.length && obj.annotations[0].content || obj.shape.type === 'Text')
-                       {
-                        toolbarObj.items[i].template = '';
-                        toolbarObj.hideItem(i+1,false);
-                        toolbarObj.items[i].disabled = false;
-                        toolbarObj.items[i].visible = true;
-                       }
-                       else{
-                         toolbarObj.items[i].template = '<div></div>';
-                         toolbarObj.hideItem(i+1,true);
-                         toolbarObj.items[i].disabled = true;
-                         toolbarObj.items[i].visible = false;
-                       }
                     }
                 }
             }
         }
         else{
-            for(i=8;i<29;i++)
+            for(i=8;i<26;i++)
             {
                 if(toolbarObj.items[i].type !=='Separator'){
                 toolbarObj.items[i].template = '<div></div>';
@@ -370,6 +350,7 @@ var UtilityMethods = (function () {
         }
         toolbarObj.dataBind();
     };
+    // To download diagram json.
     UtilityMethods.prototype.download = function(data)
     {
         if (window.navigator.msSaveBlob) {
@@ -386,6 +367,7 @@ var UtilityMethods = (function () {
             a.remove();
         }
     };
+    // To update paper selection in menubar
     UtilityMethods.prototype.updateSelection = function(item)
     {
         for(i=0;i<item.parentObj.items.length;i++)
@@ -398,6 +380,7 @@ var UtilityMethods = (function () {
             }
         }
     };
+    // To activate connector drawing tool
     UtilityMethods.prototype.onConnectorSelect = function(args)
     {
         diagram.clearSelection();
@@ -409,25 +392,7 @@ var UtilityMethods = (function () {
         this.removeSelectedToolbarItem();
         document.getElementById('conTypeBtn').classList.add('tb-item-selected');
     };
-    UtilityMethods.prototype.onOrderSelect = function(args)
-    {
-        let text = args.item.text;
-        switch(text)
-        {
-            case'Bring Forward':
-                diagram.moveForward();
-                break;
-            case'Bring To Front':
-                diagram.bringToFront();
-                break;
-            case'Send Backward':
-                diagram.sendBackward();
-                break;
-            case'Send To Back':
-                diagram.sendToBack();
-                break;
-        }
-    };
+    // To remove toolbar selected item
     UtilityMethods.prototype.removeSelectedToolbarItem = function()
     {
         for (var i = 0; i < toolbarObj.items.length; i++) {
@@ -439,6 +404,7 @@ var UtilityMethods = (function () {
         toolbarObj.dataBind();
         document.getElementById('conTypeBtn').classList.remove('tb-item-selected');
     };
+    // To get paper size
     UtilityMethods.prototype.getPaperSize = function(args)
     {
         var paperSize = new PaperSize();
@@ -486,6 +452,7 @@ var UtilityMethods = (function () {
         }
         return paperSize
     };
+    // To update page paper size
     UtilityMethods.prototype.paperListChange = function(args)
     {
         document.getElementById('pageDimension').style.display = 'none';
@@ -521,18 +488,21 @@ var UtilityMethods = (function () {
         this.updatePaperSelection(designContextMenu.items[1],args.value);
         diagram.dataBind();
     };
+    // To change the page orientation 
     UtilityMethods.prototype.pageOrientationChange = function(args)
     {
         if (args.target) {
             var target = args.target;
             var items = designContextMenu.items;
-            switch (target.id) {
+            var option = target.id ? target.id : (args.currentTarget.ej2_instances[0].iconCss === 'sf-icon-portrait'? 'pagePortrait':'pageLandscape');  
+            switch (option) {
                 case 'pagePortrait':
                     diagram.pageSettings.isPortrait = true;
                     diagram.pageSettings.isLandscape = false;
                     diagram.pageSettings.orientation = 'Portrait';
                     items[0].items[0].iconCss = '';
                     items[0].items[1].iconCss = 'sf-icon-check-tick';
+                    document.getElementById('pageLandscape').classList.remove('e-active');
                     break;
                 case 'pageLandscape':
                     diagram.pageSettings.isPortrait = false;
@@ -540,13 +510,13 @@ var UtilityMethods = (function () {
                     diagram.pageSettings.orientation = 'Landscape';
                     items[0].items[0].iconCss = 'sf-icon-check-tick';
                     items[0].items[1].iconCss = '';
+                    document.getElementById('pagePortrait').classList.remove('e-active');
                     break;
             }
             diagram.dataBind();
-            // selectedItem.pageSettings.pageWidth = diagram.pageSettings.width;
-            // selectedItem.pageSettings.pageHeight = diagram.pageSettings.height;
         }
     };
+    // To change page width and height
     UtilityMethods.prototype.pageDimensionChange = function(args)
     {
         if (args.event) {
@@ -579,6 +549,7 @@ var UtilityMethods = (function () {
             }
         }
     };
+    // To change page background color
     UtilityMethods.prototype.pageBackgroundChange1= function(args)
     {
         if (args.currentValue) {
@@ -589,15 +560,15 @@ var UtilityMethods = (function () {
             diagram.dataBind();
         }
     };
+    //To enable or disable page breaks
     UtilityMethods.prototype.pageBreaksChange = function(args)
     {
         if (args.event) {
             diagram.pageSettings.showPageBreaks = args.checked;
             diagram.dataBind();
-            // var items = btnViewMenu.items;
-            // items[4].iconCss = items[4].iconCss ? '' : 'sf-icon-check-tick';
         }
     };
+    // To update the selected papersize in menubar.
     UtilityMethods.prototype.updatePaperSelection = function(items,value)
     {
         for(i=0;i<items.items.length;i++)
@@ -610,6 +581,7 @@ var UtilityMethods = (function () {
          }
         }
     };
+    // To align text 
     UtilityMethods.prototype.updateTextAlign= function(textAlign)
     {
         var toolbarTextSubAlignment = document.getElementById('toolbarTextSubAlignment');
@@ -624,6 +596,7 @@ var UtilityMethods = (function () {
             toolbarTextSubAlignment.items[index].cssClass = toolbarTextSubAlignment.items[index].cssClass + ' tb-item-selected';
         }
     };
+    // To update font appearence
     UtilityMethods.prototype.updateTextProperties = function(propertyName, propertyValue, annotation)
     {
         switch (propertyName) {
@@ -648,6 +621,7 @@ var UtilityMethods = (function () {
                 break;
         }
     };
+    // To update font styles 
     UtilityMethods.prototype.updateTextFontProperties = function(propertyName, annotation)
     {
         switch (propertyName) {
@@ -666,24 +640,13 @@ var UtilityMethods = (function () {
                 break;
         }
     };
+    // To update horizontal and vertical alignment of text
     UtilityMethods.prototype.updateHorVertAlign = function(horizontalAlignment, verticalAlignment)
     {
-        // var toolbarHorVerAlignment = document.getElementById('toolbarTextAlignment');
-        // if (toolbarHorVerAlignment) {
-        //     toolbarHorVerAlignment = toolbarHorVerAlignment.ej2_instances[0];
-        // }
-        // if (toolbarHorVerAlignment) {
-        //     for (var i = 0; i < toolbarHorVerAlignment.items.length; i++) {
-        //         toolbarHorVerAlignment.items[i].cssClass = toolbarHorVerAlignment.items[i].cssClass.replace(' tb-item-selected', '');
-        //     }
-        //     var index = horizontalAlignment === 'Right' ? 0 : (horizontalAlignment === 'Center' ? 1 : 2);
-        //     toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
-        //     index = verticalAlignment === 'Bottom' ? 3 : (verticalAlignment === 'Center' ? 4 : 5);
-        //     toolbarHorVerAlignment.items[index].cssClass = toolbarHorVerAlignment.items[index].cssClass + ' tb-item-selected';
-        // }
         this.updateHorAlign(horizontalAlignment);
         this.updateVerAlign(verticalAlignment);
     };
+    // To update horizontal alignment of text
     UtilityMethods.prototype.updateHorAlign = function(horizontalAlignment){
         var toolbarHorAlignment = document.getElementById('toolbarTextAlignmentLeft');
         if (toolbarHorAlignment) {
@@ -697,6 +660,7 @@ var UtilityMethods = (function () {
             toolbarHorAlignment.items[index].cssClass = toolbarHorAlignment.items[index].cssClass + ' tb-item-selected';
         }
     };
+    // To update vertical alignment of text
     UtilityMethods.prototype.updateVerAlign = function(verticalAlignment){
         var toolbarVerAlignment = document.getElementById('toolbarTextAlignmentTop');
         if (toolbarVerAlignment) {
@@ -710,6 +674,7 @@ var UtilityMethods = (function () {
             toolbarVerAlignment.items[index].cssClass = toolbarVerAlignment.items[index].cssClass + ' tb-item-selected';
         }
     };
+    // To get the postion text annotation
     UtilityMethods.prototype.getPosition = function(offset)
     {
         if (offset.x === 0 && offset.y === 0) {
@@ -740,6 +705,7 @@ var UtilityMethods = (function () {
             return 'Center';
         }
     };
+    // To get the gexcolor of color string
     UtilityMethods.prototype.getHexColor = function(colorStr)
     {
         var a = document.createElement('div');
@@ -757,6 +723,7 @@ var UtilityMethods = (function () {
         }
         return colorName;
     };
+    // To get text offset
     UtilityMethods.prototype.getOffset = function(position)
     {
         switch (position.toLowerCase()) {
@@ -780,6 +747,7 @@ var UtilityMethods = (function () {
                 return { x: 1, y: 1 };
         }
     }
+    //To update bold italic and underline style selection
     UtilityMethods.prototype.updateToolbarState = function(toolbarName, isSelected, index)
     {
         var toolbarTextStyle = document.getElementById(toolbarName);
@@ -792,6 +760,7 @@ var UtilityMethods = (function () {
             toolbarTextStyle.dataBind();
         }
     };
+    // To apply node styles
     UtilityMethods.prototype.applyNodeStyle = function(propertyName, node, value)
     {
         var addInfo = node.addInfo || {};
@@ -830,6 +799,7 @@ var UtilityMethods = (function () {
                 break;
         }
     };
+    // To insert hyperlink
     UtilityMethods.prototype.toolbarInsertClick = function(args)
     {
         if (diagram.selectedItems.nodes.length > 0) {
@@ -845,6 +815,7 @@ var UtilityMethods = (function () {
                     hyperlinkDialog.show();
         }
     };
+    // To update aspect ratio
     UtilityMethods.prototype.aspectRatioClick = function(args)
     {
     var isAspect = true;
@@ -852,15 +823,14 @@ var UtilityMethods = (function () {
     {
         isAspect = true;
         aspectRatioBtn.iconCss =  'sf-icon-lock'
-        // document.getElementById('aspectRatioBtn').classList.add('e-flat');
     }
     else{
         isAspect = false;
         aspectRatioBtn.iconCss = 'sf-icon-unlock';
-        // document.getElementById('aspectRatioBtn').classList.add('e-flat');
     }
         PropertyChange.prototype.nodePropertyChange({propertyName: 'aspectRatio', propertyValue: isAspect}); 
     };
+    // To get the buutons for the dialog.
     UtilityMethods.prototype.getDialogButtons = function(dialogType)
     {
         var buttons= [];
@@ -885,10 +855,11 @@ var UtilityMethods = (function () {
         }
         buttons.push({
             click: this.btnCancelClick.bind(this),
-            buttonModel: { content: 'Cancel', cssClass: 'e-flat', isPrimary: true }
+            buttonModel: { content: 'Cancel', cssClass: 'e-flat',isPrimary:true }
         });
         return buttons;
     };
+    // To add hyperlink
     UtilityMethods.prototype.btnHyperLink = function()
     {
         var node = diagram.selectedItems.nodes[0];
@@ -918,6 +889,7 @@ var UtilityMethods = (function () {
             position: 'TopCenter', showTipPointer: true,
         };
     };
+    // To print the diagram
     UtilityMethods.prototype.btnPrintClick = function()
     {
         var pageWidth = printSettings.pageWidth;
@@ -947,6 +919,7 @@ var UtilityMethods = (function () {
         });
         printDialog.hide();
     };
+    // To export diagram
     UtilityMethods.prototype.btnExportClick = function()
     {
         diagram.exportDiagram({
@@ -956,6 +929,7 @@ var UtilityMethods = (function () {
         });
         exportDialog.hide();
     };
+    // To get cancel button for dialog
     UtilityMethods.prototype.btnCancelClick = function(args)
     {
         var ss = args.target;
@@ -972,17 +946,7 @@ var UtilityMethods = (function () {
                 break;
         }
     };
-    UtilityMethods.prototype.hideMenuBar = function()
-    {
-        var expandcollapseicon = document.getElementById('btnHideMenubar');
-        var button1 = expandcollapseicon.ej2_instances[0];
-        if (button1.iconCss.indexOf('sf-icon-chevron-up') > -1) {
-            button1.iconCss = 'sf-icon-chevron-down';
-        } else {
-            button1.iconCss = 'sf-icon-chevron-up';
-        }
-        UtilityMethods.prototype.hideElements('hide-menubar', diagram);
-    };
+    // To hide property panel
     UtilityMethods.prototype.hideElements = function(elementType, diagram)
     {
         var diagramContainer = document.getElementsByClassName('diagrambuilder-container')[0];
@@ -999,16 +963,6 @@ var UtilityMethods = (function () {
         if (diagram) {
             diagram.updateViewPort();
         }
-    };
-    UtilityMethods.prototype.showColorPicker = function(propertyName, toolbarName)
-    {
-            var fillElement =
-                document.getElementById(propertyName).parentElement.getElementsByClassName('e-dropdown-btn')[0];
-            fillElement.click();
-            var popupElement = document.getElementById(fillElement.id + '-popup');
-            var bounds = document.getElementsByClassName(toolbarName)[0].getBoundingClientRect();
-            popupElement.style.left = bounds.left + 'px';
-            popupElement.style.top = (bounds.top + 40) + 'px';
     };
     return UtilityMethods;
 }());

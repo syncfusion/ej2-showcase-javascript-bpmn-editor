@@ -11,7 +11,6 @@ var utilityMethods = new UtilityMethods();
 
 window.onload = function()
 {
-    // document.getElementById('btnHideMenubar').onclick =  UtilityMethods.prototype.hideMenuBar.bind(this);
     document.onmouseover = menumouseover.bind(this);
    
     zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
@@ -55,13 +54,13 @@ var NodeProperties = (function () {
     NodeProperties.prototype.getGradientDirectionValue = function (direction) {
         var gradientValue = {};
         var x1 = 0, x2 = 0, y1 = 0, y2 = 0;
-        if (direction === 'LeftToRight') {
+        if (direction === 'Left To Right' || direction === 'North') {
             x1 = 100;
         }
-        else if (direction === 'BottomToTop') {
+        else if (direction === 'Bottom To Top' || direction === 'South') {
             y2 = 100;
         }
-        else if (direction === 'RightToLeft') {
+        else if (direction === 'Right To Left' || direction === 'East') {
             x2 = 100;
         }
         else {
@@ -105,11 +104,11 @@ var TextProperties = (function () {
     }
     TextProperties.prototype.getNodeTextPositions = function () {
         return [
-            { text: 'TopLeft', value: 'TopLeft' }, { text: 'TopCenter', value: 'TopCenter' },
-            { text: 'TopRight', value: 'TopRight' }, { text: 'MiddleLeft', value: 'MiddleLeft' },
-            { text: 'Center', value: 'Center' }, { text: 'MiddleRight', value: 'MiddleRight' },
-            { text: 'BottomLeft', value: 'BottomLeft' }, { text: 'BottomCenter', value: 'BottomCenter' },
-            { text: 'BottomRight', value: 'BottomRight' },
+            { text: 'Top Left', value: 'TopLeft' }, { text: 'Top Center', value: 'TopCenter' },
+            { text: 'Top Right', value: 'TopRight' }, { text: 'Middle Left', value: 'MiddleLeft' },
+            { text: 'Center', value: 'Center' }, { text: 'Middle Right', value: 'MiddleRight' },
+            { text: 'Bottom Left', value: 'BottomLeft' }, { text: 'Bottom Center', value: 'BottomCenter' },
+            { text: 'Bottom Right', value: 'BottomRight' },
         ];
     };
     TextProperties.prototype.getConnectorTextPositions = function () {
@@ -326,7 +325,7 @@ var nodes = [
                 activity: 'Task',task: {type:'Service'}
             },
         },
-        annotations:[{content:'Get the Book Status',offset:{x:0.5,y:0.5}}]
+        annotations:[{content:'Get the Book Status',offset:{x:0.5,y:0.5},verticalAlignment:'Top'}]
     },
     {
         id: 'Gateway1', width: 70, height: 60, offsetX: 570, offsetY: 300,
@@ -429,7 +428,7 @@ var nodes = [
 //Initialize bpmn shapes for symbol palette
 var bpmnShapes = [
     {
-        id: 'Task', width: 96, height: 72, offsetX: 700, offsetY: 700,
+        id: 'Task', width: 35, height: 30, 
         shape: {
             type: 'Bpmn', shape: 'Activity', activity: {
                 activity: 'Task',
@@ -437,36 +436,36 @@ var bpmnShapes = [
         },
     },
     {
-        id: 'Gateway', width: 60, height: 60, offsetX: 100, offsetY: 100,
+        id: 'Gateway', width: 30, height: 30, 
         shape: { type: 'Bpmn', shape: 'Gateway',}
     },
     {
-        id: 'Intermediate Event', width: 30, height: 30, shape: {
+        id: 'Intermediate_Event', width: 30, height: 30, shape: {
             type: 'Bpmn', shape: 'Event',
             event: { event: 'Intermediate' }
         },
     },
     {
-        id: 'End Event', width: 30, height: 30, offsetX: 665, offsetY: 230, shape: {
+        id: 'End_Event', width: 30, height: 30,  shape: {
             type: 'Bpmn', shape: 'Event',
             event: { event: 'End' }
         },
     },
     {
-        id: 'Start Event', width: 30, height: 30, shape: {
+        id: 'Start_Event', width: 30, height: 30, shape: {
             type: 'Bpmn', shape: 'Event',
             event: { event: 'Start' }
         },
     },
     {
-        id:'Collapsed Sub-process', width:96,height:72,shape: {
+        id:'Collapsed_Sub-process', width:35,height:30,shape: {
             type: 'Bpmn', shape: 'Activity', activity: {
                 activity: 'SubProcess', subProcess: { collapsed: true, boundary: 'Default' }
             },
         },
     },
      {
-        id: 'Expanded Sub-Process', width: 576, height: 384, offsetX: 355, offsetY: 230,
+        id: 'Expanded_Sub-Process', width: 35, height: 30, 
         constraints: ej.diagrams.NodeConstraints.Default | ej.diagrams.NodeConstraints.AllowDrop,
         shape: {
             shape: 'Activity', type: 'Bpmn',
@@ -480,80 +479,40 @@ var bpmnShapes = [
             }
         },
     },
-    // {
-    //     id:'Expanded Sub-process', width:70,height:70,shape: {
-    //         type: 'Bpmn', shape: 'Activity', activity: {
-    //             activity: 'SubProcess', subProcess: { collapsed: false, boundary: 'Default' }
-    //         },
-    //     },
-    // },
     {
-        id:'Sequence Flow',
-        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },
+        id:'Sequence_Flow',
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 30 },
         type: 'Straight',
-        shape: { type: 'Bpmn', flow: 'Sequence',sequence: 'None'
+        shape: { type: 'Bpmn', flow: 'Sequence',sequence: 'Normal'
         },
     },
     {
-        id:'Association Flow',
-        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },
-        type: 'Straight',style:{strokeDashArray:"3"},
-        //sourceDecorator:{shape:'None'},targetDecorator:{shape:'None'},
+        id:'Association_Flow',
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 30 },
+        type: 'Straight',style:{strokeDashArray:"2 2"},
+        targetDecorator:{shape:'None'},
         shape: { type: 'Bpmn', flow: 'Association',}, 
     },
-    // {
-    //     id:'Message Flow',
-    //     sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },type: 'Straight',
-    //     sourceDecorator:{shape:'Circle'},targetDecorator:{shape:'Arrow'},
-    //     // shape: {
-    //     // type: 'Bpmn',
-    //     // flow: 'Message',
-    //     // message: 'InitiatingMessage'
-    //     //     },
-    // },
     {
-        id: 'Message', width: 60,
-        height: 60,shape: { type: 'Bpmn', shape: 'Message',},
+        id:'Message Flow',
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 25 },type: 'Straight',
+        sourceDecorator:{shape:'None',style:{fill:'white'}},targetDecorator:{shape:'Arrow'},
+        style:{strokeDashArray:'4 4'}
+    },
+    {
+        id: 'Message', width: 35,
+        height: 25,shape: { type: 'Bpmn', shape: 'Message',},
       },
     {
-        id: 'Data Object', width: 48, height: 63, offsetX: 500, offsetY: 100,
+        id: 'Data_Object', width: 30, height: 35, 
         shape: { type: 'Bpmn', shape: 'DataObject', dataObject: { collection: false, type: 'None' } },
     },
     {
-        id:'Data Source', width:96,height:72, shape: {
-            type: 'Bpmn', shape: 'DataSource',   
+        id:'Data_Source', width:30,height:28, shape: {
+            type: 'Bpmn', shape: 'DataSource',  
         }
     },
-    // {
-    //     id:'Group', width:60,height:60, shape: {
-    //         type: 'Bpmn', shape: 'Group', 
-    //     },
-    // },
-    // {
-    //     id: 'Text Annotation', width: 60, height: 60, offsetX: 500, offsetY: 100,
-    //     shape: { type: 'Bpmn', shape: 'TextAnnotation', },annotations:[{length:100,angle:180,text:'text ann'}]
-    // },
-    
-      
-    //  {
-    //     id: 'subProcess', width: 520, height: 250, offsetX: 355, offsetY: 230,
-    //     constraints: ej.diagrams.NodeConstraints.Default | ej.diagrams.NodeConstraints.AllowDrop,
-    //     shape: {
-    //         shape: 'Activity', type: 'Bpmn',
-    //         activity: {
-    //             activity: 'SubProcess', subProcess: {
-    //                 type: 'Transaction', collapsed: false,
-    //                 processes: [], transaction: {
-    //                     cancel: { visible: false }, failure: { visible: false }, success: { visible: false }
-    //                 }
-    //             }
-    //         }
-    //     },
-    // },
    
-    
-   
-    
 ];
 
 //Initialize connectors for symbol palette
@@ -645,16 +604,16 @@ var connectors = [
 var contextMenu = {
     show: true, items: [
         {
-            text: 'Copy', id: 'Copy', target: '.e-diagramcontent', iconCss: 'e-menu-icon e-icons e-copy'
+            text: 'Copy', id: 'Copy', target: '.e-diagramcontent', iconCss: 'sf-icon-copy'
         },
         {
-            text: 'Cut', id: 'Cut', target: '.e-diagramcontent', iconCss: 'e-menu-icon e-icons e-cut'
+            text: 'Cut', id: 'Cut', target: '.e-diagramcontent', iconCss: 'sf-icon-cut'
         },
         {
-            text: 'Paste', id: 'Paste', target: '.e-diagramcontent', iconCss: 'e-menu-icon e-icons e-paste'
+            text: 'Paste', id: 'Paste', target: '.e-diagramcontent', iconCss: 'sf-icon-paste'
         },
         {
-            text: 'Delete', id: 'Delete', target: '.e-diagramcontent', iconCss: 'e-menu-icon e-icons e-delete'
+            text: 'Delete', id: 'Delete', target: '.e-diagramcontent', iconCss: 'sf-icon-delete'
         },
         {
             text: 'Select All', id: 'SelectAll', target: '.e-diagramcontent', iconCss: 'e-menu-icon'
@@ -670,8 +629,8 @@ var contextMenu = {
         },
         {
             text: 'Condition type', id: 'Condition type', items: [
-                    {text: 'None', id: 'None'}, {text: 'Conditional1', id: 'Conditional1'},
-                    {text: 'Normal', id: 'Normal'},
+                    {text: 'None', id: 'None'}, {text: 'Conditional Flow', id: 'Conditional Flow'},
+                    {text: 'Normal', id: 'Normal Flow'},
             ]
         },
         {
@@ -682,10 +641,7 @@ var contextMenu = {
         },
         {
             text: 'Ad-Hoc', id: 'Adhoc',
-            // items: [{ text: 'None', iconCss: 'e-adhocs e-bpmn-event e-bpmn-icons e-None', id: 'AdhocNone' },
-            // { 
-                iconCss: 'e-adhocs e-bpmn-icons e-adhoc',
-                //  text: 'Ad-Hoc', id: 'AdhocAdhoc' }]
+            iconCss: 'e-adhocs e-bpmn-icons e-adhoc',
         }, {
             text: 'Loop', id: 'Loop',
             items: [{ text: 'None', iconCss: 'e-loop e-bpmn-icons e-None', id: 'LoopNone' },
@@ -694,17 +650,14 @@ var contextMenu = {
             { text: 'Sequence Multi-Instance', iconCss: 'e-loop e-bpmn-icons e-SequentialMI', id: 'SequenceMultiInstance' }]
         }, {
             text: 'Compensation', id: 'taskCompensation',
-            // items: [{ text: 'None', iconCss: 'e-compensation e-bpmn-icons e-None', id: 'CompensationNone' },
-            // { 
-                iconCss: 'e-compensation e-bpmn-icons e-Compensation',
-                //  text: 'Compensation', id: 'CompensationCompensation'}]
+            iconCss: 'e-compensation e-bpmn-icons e-Compensation',
         }, {
             text: 'Activity-Type', id: 'Activity-Type',
             items: [{ iconCss: 'e-bpmn-icons e-Task', text: 'Task', id: 'Task' }
                 ,{ text: 'Collapsed sub-process', iconCss: 'e-bpmn-icons e-SubProcess', id: 'SubProcess' },
             ]
         }, {
-            text: 'Boundry', id: 'Boundry',
+            text: 'Boundary', id: 'Boundary',
             items: [{ text: 'Default', iconCss: 'e-boundry e-bpmn-icons e-Default', id: 'Default' },
             { text: 'Call', iconCss: 'e-boundry e-bpmn-icons e-Call', id: 'BoundryCall' },
             { text: 'Event', iconCss: 'e-boundry e-bpmn-icons e-Event', id: 'BoundryEvent' },]
@@ -715,16 +668,10 @@ var contextMenu = {
             { text: 'Output', iconCss: 'e-data e-bpmn-icons e-DataOutput', id: 'Output' }]
         }, {
             text: 'Collection', id: 'collection',
-            // items: [{ text: 'None', iconCss: 'e-collection e-bpmn-icons e-None', id: 'collectionNone' },
-            // { text: 'Collection', 
             iconCss: 'e-collection e-bpmn-icons e-ParallelMI',
-            //  id: 'Collectioncollection' }]
         }, {
-            text: 'Task Call', id: 'DeftCall',
-            // items: [{ text: 'None', iconCss: 'e-call e-bpmn-icons e-None', id: 'CallNone' },
-            // { text: 'Call', 
+            text: 'Task Call', id: 'DeftCall', 
             iconCss: 'e-call e-bpmn-icons e-CallActivity', 
-            // id: 'CallCall' }]
         }, {
             text: 'Trigger Result', id: 'TriggerResult',
             items: [{ text: 'None', id: 'TriggerNone', iconCss: 'e-trigger e-bpmn-icons e-None' },
@@ -777,6 +724,12 @@ var contextMenu = {
                 { text: 'EventBased', iconCss: 'e-gate e-bpmn-icons e-EventBasedGateway', id: 'EventBased' },
                 { text: 'ExclusiveEventBased', iconCss: 'e-gate e-bpmn-icons e-ExclusiveEventBased', id: 'ExclusiveEventBased' },
                 { text: 'ParallelEventBased', iconCss: 'e-gate e-bpmn-icons e-ParallelEventBasedGatewaytostart', id: 'ParallelEventBased' }
+            ]
+        },
+        {
+            text: 'Message Type', id: 'MessageType', items: [
+                    {text: 'None', id: 'None'}, {text: 'InitiatingMessage', id: 'InitiatingMessage'},
+                    {text: 'NonInitiatingMessage', id: 'NonInitiatingMessage'},
             ]
         },
     ],
@@ -1133,17 +1086,6 @@ function getShortCutKey(menuItem) {
         case 'Zoom to 200%':
             shortCutKey = shortCutKey + '+3';
             break;
-        // case 'Rotate Right 90':
-        //     shortCutKey = shortCutKey + '+R';
-        //     break;
-        // case 'Rotate Left 90':
-        //     shortCutKey = shortCutKey + '+L';
-        //     break;
-        // case 'Flip Horizontal':
-        //     shortCutKey = shortCutKey + '+H';
-        //     break;
-        // case 'Flip Vertical':
-        //     shortCutKey = shortCutKey + '+J';
         default:
             shortCutKey = '';
             break;
@@ -1219,9 +1161,6 @@ function menumouseover(args) {
         this.buttonInstance = button1;
         if (button1.getPopUpElement().classList.contains('e-popup-close')) {
             button1.toggle();
-            // if (button1.element.id === 'btnToolsMenu') {
-            //     enableToolsMenuItems(diagram);
-            // }
             if(button1.element.id === 'btnEditMenu') {
                 enableEditMenuItems(diagram);
             }
@@ -1238,19 +1177,6 @@ function menumouseover(args) {
         }
     }
 };
-// function enableToolsMenuItems(diagram) {
-//     var contextInstance = document.getElementById('toolsContextMenu');
-//     var contextMenu = contextInstance.ej2_instances[0];
-//     var selectedItems = diagram.selectedItems.nodes;
-//     selectedItems = selectedItems.concat(diagram.selectedItems.connectors);
-//     for (var i = 0; i < contextMenu.items.length; i++) {
-//         contextMenu.enableItems([contextMenu.items[i].text], false);
-//     }
-        
-//             // contextMenu.enableItems(['Connectors'], true);
-//             // contextMenu.enableItems(['Selection Tool', 'Pan Tool', 'Connector Tool']);                  
-// };
-
 function enableEditMenuItems(diagram)
 {
     var contextInstance = document.getElementById('editContextMenu');
@@ -1310,19 +1236,7 @@ conTypeBtn = new ej.splitbuttons.DropDownButton({
     items: conTypeItems, iconCss:'sf-icon-orthogonal_line',
     select: function (args) {UtilityMethods.prototype.onConnectorSelect(args)}
 });
-function enable()
-{
-    toolbarObj.items[18].disabled= false;
-    toolbarObj.items[18].template= '';
-    toolbarObj.dataBind();
-}
-function disable()
-{
-    toolbarObj.items[18].disabled= true;
-    toolbarObj.items[18].template= '<div></div>';
-    toolbarObj.dataBind();
-}
-
+// To enable toolbar items
 function enableToolbarItems(selectedItems) {
     var toolbarContainer = document.getElementsByClassName('db-toolbar-container')[0];
     var toolbarClassName = 'db-toolbar-container';
@@ -1365,19 +1279,13 @@ function enableToolbarItems(selectedItems) {
         }
     }
 };
-
+// To hide and show tool bar items on multiple selection
 function multipleSelection()
 {
-    for(i=8;i<29;i++)
+    for(i=8;i<26;i++)
     {
         if(toolbarObj.items[i].type !=='Separator'){
-            if(i !== 27 &&  i !== 28){
             toolbarObj.items[i].template= '';
-            }
-            if(i == 27 || i == 28)
-            {
-            toolbarObj.items[i].template= '<div></div>';
-            }
         }
     }
 }
@@ -1393,9 +1301,7 @@ uploadObj.appendTo('#fileupload');
 
 
  toolbarObj.appendTo('#toolbarEditor');
- var btnHideMenubar = new ej.buttons.Button({ iconCss: 'sf-icon-chevron-up' });
  conTypeBtn.appendTo('#conTypeBtn');
- btnHideMenubar.appendTo('#btnHideMenubar');
  hidePropertyBtn = new ej.buttons.Button({
      iconCss:'sf-icon-properties',isPrimary: true 
  });
@@ -1404,22 +1310,7 @@ uploadObj.appendTo('#fileupload');
  document.getElementById('hideProperty').onclick= (args)=>{
     UtilityMethods.prototype.hideElements('hide-properties',diagram);
  }
-
- function hidePropertyPanel(args)
- {
-    var panel =  document.getElementById('propertyPanel');
-    var diagramContent = document.getElementsByClassName('db-diagram-container');
-    if(panel.style.display.toLocaleLowerCase() === 'block' || panel.style.display === ''){
-        panel.style.display = 'none';
-        diagram.updateViewport();
-
-    }
-    else{
-        panel.style.display = 'block';
-        diagramContent.offsetWidth -=260;
-    }
- }
-
+// To flip diagram objects
 function flipObjects(flipType)
 {
     var selectedObjects = diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors);
@@ -1429,8 +1320,6 @@ function flipObjects(flipType)
  }
  diagram.dataBind();
 }
-
- 
  function onUploadSuccess(args) {
     var file1 = args.file;
     var file = file1.rawFile;
@@ -1442,7 +1331,7 @@ function flipObjects(flipType)
 function loadDiagram(event) {
     diagram.loadDiagram(event.target.result);
 }
-
+// To lock diagram object
 function lockObject (args) {
     for (var i = 0; i < diagram.selectedItems.nodes.length; i++) {
         var node = diagram.selectedItems.nodes[i];
@@ -1462,7 +1351,7 @@ function lockObject (args) {
     }
     diagram.dataBind();
 }
-
+// To perform zoom operation
  function zoomChange(args){
     var zoomCurrentValue = document.getElementById("btnZoomIncrement").ej2_instances[0];
         var currentZoom = diagram.scrollSettings.currentZoom;
@@ -1505,7 +1394,7 @@ var diagram = new ej.diagrams.Diagram({
     drawingObject:{type:'Orthogonal'},
     pageSettings:{showPageBreaks:true},
     pageSettings: {
-        background: { color: '#FFFFFF' }, width: 600, height: 1460, margin: { left: 5, top: 5 },
+        background: { color: '#FFFFFF' }, width: 600, height: 1500, margin: { left: 5, top: 5 },
         orientation: 'Landscape',showPageBreaks:false,multiplePage : false
     },
     scrollSettings: { canAutoScroll: true, scrollLimit: 'Infinity', minZoom: 0.25, maxZoom: 30 },
@@ -1524,8 +1413,8 @@ var diagram = new ej.diagrams.Diagram({
     dragEnter:function (args) { DiagramClientSideEvents.prototype.dragEnter(args); },
     created: function (args) { DiagramClientSideEvents.prototype.created(args);},
     rulerSettings: {
-        showRulers: true, dynamicGrid: true, horizontalRuler: { interval: 10,segmentWidth: 100,thickness: 25,},
-        verticalRuler: { interval: 10,segmentWidth: 100,thickness: 25,},
+        showRulers: true, dynamicGrid: true, horizontalRuler: { interval: 10,segmentWidth: 100,thickness: 25,markerColor:'#0078d4'},
+        verticalRuler: { interval: 10,segmentWidth: 100,thickness: 25,markerColor:'#0078d4'},
     },
     commandManager: {  commands : [{
         name: 'New',
@@ -1732,26 +1621,16 @@ function minValue(){
      });
     btnZoomIncrement.appendTo('#btnZoomIncrement');
 var palette = new ej.diagrams.SymbolPalette({
-    expandMode: 'Multiple', symbolMargin: { left: 5, right: 15, top: 15, bottom: 10 }, symbolHeight: 60, symbolWidth: 55,
+    expandMode: 'Multiple', 
+    symbolMargin: { left: 5, right: 15, top: 15, bottom: 10 }, 
+    // symbolHeight: 60, symbolWidth: 55,
+    getSymbolInfo: function (symbol) {
+        return {  tooltip: symbol.id.replace('_',' ')};
+    },
     palettes: [
         { id: 'Bpmn', expanded: true, symbols: bpmnShapes, title: 'BPMN Shapes' },
     ],enableSearch:true,
     width: '100%', height: '100%',
-    getNodeDefaults: function (symbol) {
-        symbol.style.strokeColor = '#757575';
-        if(symbol.id === 'Message')
-        {
-            symbol.width = 72,symbol.height =48
-        }
-        else if(symbol.id === 'Message Flow')
-        {
-            symbol.shape =  {
-                type: 'Bpmn',
-                flow: 'Message',
-                message: 'InitiatingMessage'
-                    }
-        }
-    },
 });
 
 palette.appendTo('#symbolpalette');
@@ -1778,11 +1657,9 @@ pageLandscape.appendTo('#pageLandscape');
 
 document.getElementById('pagePortrait').onclick = (args)=>{
     UtilityMethods.prototype.pageOrientationChange(args);
-    document.getElementById('pageLandscape').classList.remove('e-active');
 }
 document.getElementById('pageLandscape').onclick = (args)=>{
     UtilityMethods.prototype.pageOrientationChange(args);
-    document.getElementById('pagePortrait').classList.remove('e-active');
 }
 
 var pageWidth = new ej.inputs.NumericTextBox({
@@ -1807,7 +1684,6 @@ var pageBgColor = new ej.inputs.ColorPicker({
     width: '100%',
     height:30,
     showButtons:false,
-    // modeSwitcher: true,
     value: diagram.pageSettings.background.color,
     change: function (args) { UtilityMethods.prototype.pageBackgroundChange1(args); }
 });
@@ -1877,7 +1753,6 @@ nodeProperties.aspectRatio = aspectRatioBtn;
 
 document.getElementById('aspectRatioBtn').onclick = (args) =>{
     UtilityMethods.prototype.aspectRatioClick(args);
-    // document.getElementById('pageDimension').click(); 
 }
 
    var rotateIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-rotate' });
@@ -1898,7 +1773,6 @@ document.getElementById('aspectRatioBtn').onclick = (args) =>{
     clicked: function (args) { UtilityMethods.prototype.toolbarInsertClick(args)},
     items: [
         { prefixIcon: 'sf-icon-insert_link', tooltipText: 'Insert Link', cssClass: 'tb-item-start' },
-        // { prefixIcon: 'sf-icon-InsertImage tb-icons', tooltipText: 'Insert Image', cssClass: 'tb-item-end' }
     ]
 });
 toolbarNodeInsert.appendTo('#toolbarNodeInsert');
@@ -1925,6 +1799,7 @@ var backgroundTypeDropdown = new ej.dropdowns.DropDownList({
         }
         else{
             gradientElement.className = 'row db-prop-row db-gradient-style-hide';
+
         }
         PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradient', propertyValue: args });
     }
@@ -1953,21 +1828,6 @@ var gradientDirection =  new ej.splitbuttons.DropDownButton({
 });
 gradientDirection.appendTo('#gradientDirection');
 nodeProperties.gradientDirection = gradientDirection;
-
-// var gradientDirectionDropdown = new ej.dropdowns.DropDownList({
-//     dataSource: DropDownDataSources.prototype.gradientDirections(),
-//     fields: { text: 'text', value: 'value' },
-//     popupWidth: '200px',
-//     index: 0,
-//     change: function(args) {
-//         nodeProperties.gradientDirection.value = args.itemData.text;
-//         PropertyChange.prototype.nodePropertyChange({ propertyName: 'gradientDirection', propertyValue: args });
-//     }
-// });
-
-
-// gradientDirectionDropdown.appendTo('#gradientDirectionDropdown');
-// nodeProperties.gradientDirection = gradientDirectionDropdown;
 
 var nodeGradientColor = new ej.inputs.ColorPicker({
     mode: 'Palette',
@@ -2065,6 +1925,7 @@ lineColorIconBtn.appendTo('#lineColorIconBtn');
 var lineStyle = new ej.dropdowns.DropDownList({
     dataSource:DropDownDataSources.prototype.borderStyles(),
     fields: { text: 'text', value: 'value' },
+    popupWidth: '160px',
     itemTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',
     valueTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',
     change: function(args) {

@@ -149,8 +149,8 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.gradientDirections = function()
     {
         var gradientDirections = [
-            { text: 'BottomToTop', value: 'BottomToTop',iconCss: 'sf-icon-bottom-top' }, { text: 'TopToBottom', value: 'TopToBottom',iconCss:'sf-icon-top-bottom' },
-            { text: 'RightToLeft', value: 'RightToLeft',iconCss: 'sf-icon-right-left' }, { text: 'LeftToRight', value: 'LeftToRight',iconCss: 'sf-icon-left-right'}
+            { text: 'Bottom To Top', value: 'BottomToTop',iconCss: 'sf-icon-bottom-top' }, { text: 'Top To Bottom', value: 'TopToBottom',iconCss:'sf-icon-top-bottom' },
+            { text: 'Right To Left', value: 'RightToLeft',iconCss: 'sf-icon-right-left' }, { text: 'Left To Right', value: 'LeftToRight',iconCss: 'sf-icon-left-right'}
         ];
         return gradientDirections;
     };
@@ -195,11 +195,11 @@ var DropDownDataSources = (function () {
     DropDownDataSources.prototype.textPositionDataSource = function()
     {
         var textPosition = [
-            { text: 'TopLeft', value: 'TopLeft' }, { text: 'TopCenter', value: 'TopCenter' },
-            { text: 'TopRight', value: 'TopRight' }, { text: 'MiddleLeft', value: 'MiddleLeft' },
-            { text: 'Center', value: 'Center' }, { text: 'MiddleRight', value: 'MiddleRight' },
-            { text: 'BottomLeft', value: 'BottomLeft' }, { text: 'BottomCenter', value: 'BottomCenter' },
-            { text: 'BottomRight', value: 'BottomRight' },
+            { text: 'Top Left', value: 'TopLeft' }, { text: 'Top Center', value: 'TopCenter' },
+            { text: 'Top Right', value: 'TopRight' }, { text: 'Middle Left', value: 'MiddleLeft' },
+            { text: 'Center', value: 'Center' }, { text: 'Middle Right', value: 'MiddleRight' },
+            { text: 'Bottom Left', value: 'BottomLeft' }, { text: 'Bottom Center', value: 'BottomCenter' },
+            { text: 'Bottom Right', value: 'BottomRight' },
         ];
         return textPosition;
     };
@@ -241,7 +241,6 @@ var DropDownDataSources = (function () {
                 prefixIcon: 'sf-icon-distribute_vertical', tooltipText: 'Distribute Objects Horizontally',  template: '<div></div>', cssClass: 'tb-item-middle tb-item-space-category'
             },
                         { type: 'Separator', visible: false },
-            //{ tooltipText: 'OrderCommands',template: '<button id="orderBtn" style="width:100%;"></button>',cssClass: 'tb-item-end tb-item-order tb-dropdown-btn-icon',visible:false},
             { prefixIcon: 'sf-icon-bring-forward', tooltipText: 'Bring Forward', template: '<div></div>', cssClass: 'tb-item-start tb-item-lock-category'},
             { prefixIcon: 'sf-icon-bring-to-front', tooltipText: 'Bring To Front', template: '<div></div>', cssClass: 'tb-item-middle tb-item-lock-category'},
             { prefixIcon: 'sf-icon-send-backward', tooltipText: 'Send Backward', template: '<div></div>', cssClass: 'tb-item-middle tb-item-lock-category'},
@@ -250,16 +249,13 @@ var DropDownDataSources = (function () {
             {prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock', template: '<div></div>', cssClass: 'tb-item-start tb-item-lock-category'}, 
             { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',  template: '<div></div>', cssClass: 'tb-item-end tb-item-lock-category'},
                             { type: 'Separator', visible: false },
-            { prefixIcon: 'sf-icon-fil_colour', tooltipText: 'Fill Color',  template: '<div></div>',cssClass: 'tb-item-start tb-item-stroke' },
-            { prefixIcon: 'sf-icon-font-color', tooltipText: 'Font Color', template: '<div></div>',cssClass: 'tb-item-end tb-item-stroke'},
-                            { type: 'Separator', visible: false },
                         {
-                            type: 'Separator',template:'<div style="margin-left:250px;"></div>'
+                            type: 'Separator',template:'<div style="margin-left:320px;"></div>'
                         },
             {
-                cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>'
+                cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>',
             },
-            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty"></button>'}
+            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty"></button>',}
         ];
         return items;
     };

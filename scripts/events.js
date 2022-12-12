@@ -12,11 +12,6 @@ var DiagramClientSideEvents = (function () {
                 var nodeContainer = document.getElementById('nodePropertyContainer');
                 nodeContainer.classList.remove('multiple');
                 nodeContainer.classList.remove('connector');
-                if(selectedItems.length>0)
-                {
-                    // toolbarObj.hideItem(18,false);
-                    
-                }
                 if (selectedItems.length > 1) {
                     multiSelect = true;
                     this.multipleSelectionSettings(selectedItems);
@@ -27,8 +22,7 @@ var DiagramClientSideEvents = (function () {
                     toolbarObj.hideItem(9,false);
                     toolbarObj.hideItem(18,false);
                     toolbarObj.hideItem(23,false);
-                    toolbarObj.hideItem(26,true);
-                    toolbarObj.hideItem(29,true);
+                    toolbarObj.hideItem(26,false);
                 }
                 else if (selectedItems.length === 1) {
                     multiSelect = false;
@@ -38,7 +32,6 @@ var DiagramClientSideEvents = (function () {
                     toolbarObj.hideItem(18,false);
                     toolbarObj.hideItem(23,false);
                     toolbarObj.hideItem(26,false);
-                    // toolbarObj.hideItem(29,false);
                     if(selectedItems[0].children && selectedItems[0].children.length>0)
                     {
                         toolbarObj.items[8].tooltipText = 'UnGroup';
@@ -54,23 +47,15 @@ var DiagramClientSideEvents = (function () {
                     toolbarObj.hideItem(18,true);
                     toolbarObj.hideItem(23,true);
                     toolbarObj.hideItem(26,true);
-                    toolbarObj.hideItem(29,true);
-                    // toolbarObj.hideItem(18,true);
-                    //toolbarObj.hideItem(17,true);
-                    // toolbarObj.items[23].template = '<div style="margin-left:345px;"></div>';
                 }
                 if(args.newValue.length>0 && args.newValue[0] instanceof ej.diagrams.Node){
                     diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All|ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles };
-                    // UtilityMethods.prototype.onClickDisable(false);
-                    // enable();
                     if(diagram.selectedItems.nodes.length>0){
                         drawingNode = diagram.selectedItems.nodes[diagram.selectedItems.nodes.length-1];
                     }
                 }
                 else{
                 diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All&~ej.diagrams.SelectorConstraints.UserHandle };
-                // UtilityMethods.prototype.onClickDisable(true);
-                // disable();
                 }
             }
         }
@@ -154,17 +139,54 @@ var DiagramClientSideEvents = (function () {
                 break;
         }
     }
-    DiagramClientSideEvents.prototype.dragEnter = function(obj)
+    DiagramClientSideEvents.prototype.dragEnter = function(args)
     {
-        if(obj.dragItem.type === 'Straight')
+        if(args.element.type === 'Straight')
         {
-            if(obj.dragItem.sourceDecorator && obj.dragItem.sourceDecorator.shape === 'Circle'){
-                obj.dragItem.shape = {
+            if(args.element.sourceDecorator && args.element.style.strokeDashArray === '4 4'){
+                args.element.shape = {
                     type: 'Bpmn',
                     flow: 'Message',
-                    message: 'InitiatingMessage'
+                    message: 'Default'
                         }
             }  
+        }
+        else if(args.element.shape.shape === 'Activity')
+        {
+            if(args.element.shape.activity.activity === 'Task')
+            {
+                args.element.width = 96; args.element.height = 72;
+            }
+            else if(args.element.shape.activity.activity === 'SubProcess')
+            {
+                if(args.element.shape.activity.subProcess.collapsed)
+                {
+                args.element.width = 96; args.element.height = 72;
+                }
+                else{
+                args.element.width = 576; args.element.height = 384;
+                }
+            }
+        }
+        else if(args.element.shape.shape === 'Event')
+        {
+            args.element.width = 50; args.element.height = 50;
+        }
+        else if(args.element.shape.shape === 'Gateway')
+        {
+            args.element.width = 60; args.element.height = 60;
+        }
+        else if(args.element.shape.shape === 'Message')
+        {
+            args.element.width = 72; args.element.height = 48;
+        }
+        else if(args.element.shape.shape === 'DataObject')
+        {
+            args.element.width = 48; args.element.height = 63;
+        }
+        else if(args.element.shape.shape === 'DataSource')
+        {
+            args.element.width = 96; args.element.height = 72;
         }
     };
     DiagramClientSideEvents.prototype.contextMenuClick = function(args)
@@ -248,30 +270,23 @@ var DiagramClientSideEvents = (function () {
             if(args.item.id === 'Association')
             {
                 diagram.selectedItems.connectors[0].shape.flow = 'Association';
-                // diagram.selectedItems.connectors[0].shape.sequence = 'Normal';
-                // diagram.selectedItems.connectors[0].shape.message = 'Default';
-                diagram.selectedItems.connectors[0].shape.association = 'Directional';
             }
             if(args.item.id === 'Sequence')
             {
                 diagram.selectedItems.connectors[0].shape.flow = 'Sequence';
-                // diagram.selectedItems.connectors[0].shape.association = 'Default';
-                // diagram.selectedItems.connectors[0].shape.message = 'Default';
-                diagram.selectedItems.connectors[0].shape.sequence = 'Conditional';
-                // diagram.selectedItems.connectors[0].style.strokeDashArray = '';
             }
             if(args.item.id === 'MessageFlow')
             {
                 diagram.selectedItems.connectors[0].shape.flow = 'Message';
-                diagram.selectedItems.connectors[0].shape.message = 'InitiatingMessage';
-                // diagram.selectedItems.connectors[0].shape.association = 'Default';
-                // diagram.selectedItems.connectors[0].shape.sequence = 'Normal';
             }
             if(args.item.id === 'None')
             {
                 diagram.selectedItems.connectors[0].shape.flow === 'Sequence' ? 
                 diagram.selectedItems.connectors[0].shape.sequence = 'Default':
-                diagram.selectedItems.connectors[0].shape.association = 'Default';
+                diagram.selectedItems.connectors[0].shape.flow === 'Association'?
+                diagram.selectedItems.connectors[0].shape.association = 'Default':
+                diagram.selectedItems.connectors[0].shape.message = 'Default'
+                ;
             }
             if(args.item.id === 'Directional' || args.item.id === 'BiDirectional')
             {
@@ -279,11 +294,17 @@ var DiagramClientSideEvents = (function () {
                 diagram.selectedItems.connectors[0].shape.association = 'Directional':
                 diagram.selectedItems.connectors[0].shape.association = 'BiDirectional';
             }
-            if(args.item.id === 'Conditional1' || args.item.id === 'Normal')
+            if(args.item.id === 'Conditional Flow' || args.item.id === 'Normal')
             {
-                args.item.id === 'Conditional1' ? 
+                args.item.id === 'Conditional Flow' ? 
                 diagram.selectedItems.connectors[0].shape.sequence = 'Conditional':
                 diagram.selectedItems.connectors[0].shape.sequence = 'Normal';
+            }
+            if(args.item.id === 'InitiatingMessage' || args.item.id === 'NonInitiatingMessage')
+            {
+                args.item.id === 'InitiatingMessage' ? 
+                diagram.selectedItems.connectors[0].shape.message = 'InitiatingMessage':
+                diagram.selectedItems.connectors[0].shape.message = 'NonInitiatingMessage';
             }
         diagram.dataBind();
         }
@@ -305,9 +326,9 @@ var DiagramClientSideEvents = (function () {
         updateContextMenuSelection(false,args)
         var hiddenId = [];
         if (args.element.className !== 'e-menu-parent e-ul ') {
-            hiddenId = ['Adhoc', 'Loop', 'taskCompensation', 'Activity-Type', 'Boundry', 'DataObject',
+            hiddenId = ['Adhoc', 'Loop', 'taskCompensation', 'Activity-Type', 'Boundary', 'DataObject',
                 'collection', 'DeftCall', 'TriggerResult', 'EventType', 'TaskType', 'GateWay','Copy','Paste','Cut','SelectAll','Delete',
-            'Association','Sequence','MessageFlow','Condition type','Direction'];
+            'Association','Sequence','MessageFlow','Condition type','Direction','MessageType'];
         }
         for (var i = 0; i < args.items.length; i++) {
             if(args.items[i].text === 'Paste')
@@ -348,6 +369,7 @@ var DiagramClientSideEvents = (function () {
                             {
                                 hiddenId.splice(hiddenId.indexOf('Association'), 1);
                                 hiddenId.splice(hiddenId.indexOf('Sequence'), 1);
+                                hiddenId.splice(hiddenId.indexOf('MessageType'), 1);
                             }
                         }
                     }
@@ -359,18 +381,24 @@ var DiagramClientSideEvents = (function () {
     
                     if(diagram.selectedItems.nodes.length){
                     var bpmnShape = diagram.selectedItems.nodes[0].shape;
+                    if(bpmnShape.type !== 'Text'){
                     if (bpmnShape.shape !== 'DataObject' && bpmnShape.shape !== 'Gateway') {
                         if (item.text === 'Ad-Hoc') {
                             if (bpmnShape.activity.activity === 'SubProcess') {
                                 hiddenId.splice(hiddenId.indexOf(item.id), 1);
                             }
                         }
-                        if (item.text === 'Loop' || item.text === 'Compensation' || item.text === 'Activity-Type') {
+                        if (item.text === 'Loop' || item.text === 'Compensation') {
                             if (bpmnShape.shape === 'Activity') {
                                 hiddenId.splice(hiddenId.indexOf(item.id), 1);
                             }
                         }
-                        if (item.text === 'Boundry') {
+                        if (item.text === 'Activity-Type') {
+                            if (bpmnShape.shape === 'Activity' && (bpmnShape.activity.activity === 'Task' || (bpmnShape.activity.activity === 'SubProcess' && bpmnShape.activity.subProcess.collapsed))) {
+                                hiddenId.splice(hiddenId.indexOf(item.id), 1);
+                            }
+                        }
+                        if (item.text === 'Boundary') {
                             if ((bpmnShape.activity.activity === 'SubProcess')) {
                                 hiddenId.splice(hiddenId.indexOf(item.id), 1);
                             }
@@ -413,54 +441,8 @@ var DiagramClientSideEvents = (function () {
                             hiddenId.splice(hiddenId.indexOf(item.id), 1);
                         }
                     }
-                    // if (diagram.selectedItems.nodes.length > 0 && args.parentItem && args.parentItem.id === 'TriggerResult' &&
-                    //     bpmnShape.shape === 'Event') {
-                    //     var shape = bpmnShape;
-                    //     if (item.text !== 'None' && (item.text === shape.event.event ||
-                    //         item.text === shape.event.trigger)) {
-                    //         hiddenId.push(item.id);
-                    //     }
-                    //     if (shape.event.event === 'Start') {
-                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Link') {
-                    //             hiddenId.push(item.id);
-                    //         }
-                    //     }
-                    //     if (shape.event.event === 'NonInterruptingStart' || item.text === 'Link') {
-                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Compensation' ||
-                    //             item.text === 'Error' || item.text === 'None') {
-                    //             hiddenId.push(item.id);
-                    //         }
-                    //     }
-                    //     if (shape.event.event === 'Intermediate') {
-                    //         if (item.text === 'Terminate') {
-                    //             hiddenId.push(item.id);
-                    //         }
-                    //     }
-                    //     if (shape.event.event === 'NonInterruptingIntermediate') {
-                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Compensation' ||
-                    //             item.text === 'Error' || item.text === 'None' || item.text === 'Link') {
-                    //             hiddenId.push(item.id);
-                    //         }
-                    //     }
-                    //     if (shape.event.event === 'ThrowingIntermediate') {
-                    //         if (item.text === 'Cancel' || item.text === 'Terminate' || item.text === 'Timer' || item.text === 'Error' ||
-                    //             item.text === 'None' || item.text === 'Pareller' || item.text === 'Conditional') {
-                    //             hiddenId.push(item.id);
-                    //         }
-                    //     }
-                    //     if (shape.event.event === 'End') {
-                    //         if (item.text === 'Parallel' || item.text === 'Timer' || item.text === 'Conditional' || item.text === 'Link') {
-                    //             hiddenId.push(item.id);
-                    //         }
-                    //     }
-                    // }
-                    // if (diagram.selectedItems.nodes.length > 0 && args.parentItem && args.parentItem.id === 'EventType' &&
-                    //     bpmnShape.shape === 'Event') {
-                    //     if ((item.text === bpmnShape.event.event)) {
-                    //         hiddenId.push(item.id);
-                    //     }
-                    // }
                 }
+            }
             }
         }
         updateContextMenuSelection(true,args);
@@ -595,8 +577,7 @@ var DiagramClientSideEvents = (function () {
         nodeProperties.strokeWidth.value = node.style.strokeWidth;
         nodeProperties.strokeStyle.value = node.style.strokeDashArray ? node.style.strokeDashArray : 'None';
         nodeProperties.opacity.value = node.style.opacity * 100;
-        // nodeProperties.aspectRatio.cssClass =
-         node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? document.getElementById('aspectRatioBtn').classList.add('e-active') : document.getElementById('aspectRatioBtn').classList.remove('e-active');
+        node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? document.getElementById('aspectRatioBtn').classList.add('e-active') : document.getElementById('aspectRatioBtn').classList.remove('e-active');
         node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? aspectRatioBtn.iconCss = 'sf-icon-lock': aspectRatioBtn.iconCss = 'sf-icon-unlock';
         nodeProperties.gradient.value = node.style.gradient.type !== 'None' ? 'Gradient' : 'Solid';
          var gradientElement = document.getElementById('gradientStyle');

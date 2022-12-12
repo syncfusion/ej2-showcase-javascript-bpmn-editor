@@ -172,52 +172,6 @@ input, button, select, textarea {
     position: absolute;
 }
 
-.db-palette-more-shapes-text {
-    color: #000000;
-    font-size: 12px;
-    line-height: 28px;
-    font-weight: normal;
-    float: right;
-    width: calc(100% - 20px);
-    cursor: pointer;
-}
-
-.db-overview-parent {
-    bottom: 28px;
-    position: absolute;
-    width: 255px;
-    height: 200px;
-    background-color:white;
-    box-shadow: -3px 0px 15px rgba(0, 0, 0, 0.25);
-    display: none;
-}
-
-.sidebar.show-overview .db-overview-parent {
-    display: block;
-}
-
-.db-overview {
-    float: left;
-    height: 100%;
-    cursor: pointer;
-}
-
-.db-overview span {
-    font-size: 18px;
-    text-align: center;
-    background-image: url('./common_images/Overview - Normal.svg');
-    background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
-    margin: 6px 0px;
-    display: block;
-    pointer-events: none;
-}
-
-.db-overview.active span {
-    background-image: url('./common_images/Overview.svg');
-}
-
 #symbolpalette_search {
     background-color: white;
     border-color: #CBCBCB;
@@ -258,11 +212,6 @@ input, button, select, textarea {
     border-bottom: 1px solid #CBCBCB;
 }
 
-.e-accordion .e-acrdn-item.e-selected.e-select {
-    border-top: none;
-    /* border-bottom: none; */
-}
-
 .e-accordion .e-acrdn-item.e-select.e-expand-state {
     border-bottom: 1px solid #CBCBCB;
 }
@@ -295,7 +244,7 @@ input, button, select, textarea {
 
 /* Window Show/Hide Customization - start */
 
-.diagrambuilder-container.hide-menubar .db-header-container {
+/* .diagrambuilder-container.hide-menubar .db-header-container {
     display: none;
 }
 
@@ -312,17 +261,17 @@ input, button, select, textarea {
 .diagrambuilder-container.hide-toolbar .sidebar, 
 .diagrambuilder-container.hide-toolbar .main-content {
     height: calc(100% - 64px);
-}
+} */
 
 
-.diagrambuilder-container.hide-palette .main-content {
+/* .diagrambuilder-container.hide-palette .main-content {
     left: 0px;
     width: 100%;
 }
 
 .diagrambuilder-container.hide-palette .sidebar {
     display: none;
-}
+} */
 
 .diagrambuilder-container.hide-properties .main-content {
     width: 100%;
@@ -354,7 +303,7 @@ input, button, select, textarea {
     display: none;
 }
 
-.diagrambuilder-container.custom-diagram .sidebar {
+/* .diagrambuilder-container.custom-diagram .sidebar {
     z-index: 100000000;
     width: 30px;
     display: block;
@@ -378,16 +327,16 @@ input, button, select, textarea {
     width: calc(100% - 298px);
     position: absolute;
     left: 28px;
-}
+} */
 
 /* Window Show/Hide Customization - end */
 
 /* Show/Hide Diagram's Ruler/Grid Customization - Start */
 
-.db-current-diagram-container {
+/* .db-current-diagram-container {
     border-top: 1px solid #CBCBCB;
     border-left: 1px solid #CBCBCB;
-}
+} */
 
 .db-current-diagram-container.db-show-ruler {
     border-width: 0px;
@@ -398,7 +347,7 @@ input, button, select, textarea {
 
 /* Page Options Customizaion - Start */
 
-.db-more-diagram-options-container {
+/* .db-more-diagram-options-container {
     height: 28px;
     background-color:#F1F1F1; 
     border-top: 1px solid #CBCBCB;
@@ -425,7 +374,7 @@ input, button, select, textarea {
 
 .db-more-diagram-options-container .e-btn.db-active-page {
     background-color: #ffffff;
-}
+} */
 
 /* Page Options Customizaion - End */
 
@@ -484,13 +433,6 @@ input, button, select, textarea {
 
 .e-diagram .e-diagram-text-edit {
     border-color: #000000;
-}
-
-.db-current-diagram-container.mindmap-diagram .e-diagram-border,
-.db-current-diagram-container.orgchart-diagram .e-diagram-border {
-    stroke: #7d7d7d;
-    stroke-width: 1px;
-    stroke-dasharray: 6,3;
 }
 
 .e-diagram-border.e-disabled {
@@ -916,7 +858,7 @@ input, button, select, textarea {
 
 .e-toolbar .e-toolbar-items .e-toolbar-item.tb-item-selected .e-tbar-btn.e-btn,
 .e-toolbar .e-toolbar-items .e-toolbar-item .e-dropdown-btn.tb-item-selected {
-    background: #7d7d7d;
+    background: #0078d4;
 }
 
 .e-toolbar .e-toolbar-items .e-toolbar-item.tb-item-selected .e-tbar-btn .e-icons.e-btn-icon,
@@ -984,7 +926,7 @@ input, button, select, textarea {
 .db-toolbar-container #toolbarEditor .e-toolbar-items .e-toolbar-item.tb-item-selected .e-tbar-btn.e-btn:hover,
 .db-toolbar-container #toolbarEditor .e-toolbar-items .e-toolbar-item .e-dropdown-btn.tb-item-selected:hover,
 .db-property-editor-container .e-toolbar .e-toolbar-items .e-toolbar-item.tb-item-selected .e-tbar-btn.e-btn:hover {
-    background: #7d7d7d;
+    background: #0078d4;
 }
 
 .db-toolbar-container #toolbarEditor .e-toolbar-items .e-toolbar-item.tb-item-selected .e-tbar-btn.e-btn:hover span,
@@ -1156,7 +1098,7 @@ input[type="color"]::-moz-color-swatch {
 }
 
 .db-prop-text-style {
-    font-size: 10px;
+    font-size: 13px;
     color: #333;
     font-weight: normal;
 }
@@ -2135,73 +2077,6 @@ input.db-layer-edit {
 
 /* MindMap and OrgChart Property Panel Customization Start */
 
-.org-pattern-style {
-    width: 100%;
-    height: 77px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.mindmap-pattern-style {
-    width: 100%;
-    height: 50px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-}
-
-.org-pattern-parent {
-    border: 1px solid #D5D5D5;
-    background-color: #ffffff;
-    padding: 5px;
-    width: calc(50% - 5px);
-    margin-right: 5px;
-    cursor: pointer;
-}
-
-.org-pattern-parent:hover {
-    border: 1px solid #b2b2b2;
-}
-
-.mindmap-pattern1 {
-    background-image: url('./mindmap_images/Mind_Map0.svg');
-}
-
-.mindmap-pattern2 {
-    background-image: url('./mindmap_images/Mind_Map1.svg');
-}
-
-.mindmap-pattern3 {
-    background-image: url('./mindmap_images/Mind_Map2.svg');
-}
-
-.mindmap-pattern4 {
-    background-image: url('./mindmap_images/Mind_Map3.svg');
-}
-
-#orgPattern1 {
-    background-image: url('./orgchart_images/OrgTemplate1.svg');
-}
-
-#orgPattern2 {
-    background-image: url('./orgchart_images/OrgTemplate2.svg');
-}
-
-#orgPattern3 {
-    background-image: url('./orgchart_images/OrgTemplate3.svg');
-}
-
-#orgPattern4 {
-    background-image: url('./orgchart_images/OrgTemplate4.svg');
-}
-
-.db-org-description {
-    font-size: 12px;
-    color: black;
-}
-
 #btnImportData {
     width:100%;
     height:28px;
@@ -2395,49 +2270,6 @@ input.e-input::selection,
     color: #515151;
     font-size: 12px;
 }
-.e-splitter
-        .e-split-bar.e-split-bar-horizontal
-        .e-navigate-arrow.e-arrow-left,
-      .e-splitter
-        .e-split-bar.e-split-bar-horizontal
-        .e-navigate-arrow.e-arrow-right {
-        background-color: #fff;
-        border-color: #276ef2;
-        border-width: 1px;
-        opacity: 0.9;
-      }
-
-      .e-splitter
-        .e-split-bar.e-split-bar-horizontal
-        .e-navigate-arrow.e-arrow-left::before {
-        background-color: #276ef2;
-        opacity: 1;
-        transform: rotate(40deg);
-      }
-
-      .e-splitter
-        .e-split-bar.e-split-bar-horizontal
-        .e-navigate-arrow.e-arrow-left::after {
-        background-color: #276ef2;
-        opacity: 1;
-        transform: rotate(-40deg);
-      }
-
-      .e-splitter
-        .e-split-bar.e-split-bar-horizontal
-        .e-navigate-arrow.e-arrow-right::before {
-        background-color: #276ef2;
-        opacity: 1;
-        transform: rotate(-40deg);
-      }
-
-      .e-splitter
-        .e-split-bar.e-split-bar-horizontal
-        .e-navigate-arrow.e-arrow-right::after {
-        background-color: #276ef2;
-        opacity: 1;
-        transform: rotate(40deg);
-      }
 /* Not Needed As of Now */
 
 /* #shortCutDialog .e-dlg-header-content + .e-dlg-content {

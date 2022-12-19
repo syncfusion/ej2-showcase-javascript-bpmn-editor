@@ -482,21 +482,21 @@ var bpmnShapes = [
     {
         id:'Sequence_Flow',
         sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 30 },
-        type: 'Straight',
+        type: 'Straight',targetDecorator:{shape:'Arrow',style:{fill:'black'}},
         shape: { type: 'Bpmn', flow: 'Sequence',sequence: 'Normal'
         },
     },
     {
         id:'Association_Flow',
-        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 30 },
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 35 },
         type: 'Straight',style:{strokeDashArray:"2 2"},
-        targetDecorator:{shape:'None'},
-        shape: { type: 'Bpmn', flow: 'Association',}, 
+        targetDecorator:{shape:'None'},sourceDecorator:{shape:'None'},
+        shape: { type: 'Bpmn', flow: 'Association',association:'Default'}, 
     },
     {
         id:'Message Flow',
         sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 25 },type: 'Straight',
-        sourceDecorator:{shape:'None',style:{fill:'white'}},targetDecorator:{shape:'Arrow'},
+        sourceDecorator:{shape:'None'},targetDecorator:{shape:'Arrow',style:{fill:'white'}},
         style:{strokeDashArray:'4 4'}
     },
     {
@@ -619,24 +619,24 @@ var contextMenu = {
             text: 'Select All', id: 'SelectAll', target: '.e-diagramcontent', iconCss: 'e-menu-icon'
         },
         {
-            text: 'Association', id: 'Association' 
+            text: 'Association', id: 'Association',iconCss:'e-bpmn-icons' 
         },
         {
-            text: 'Sequence', id: 'Sequence'
+            text: 'Sequence', id: 'Sequence',iconCss:'e-bpmn-icons' 
         },
         {
-            text: 'MessageFlow', id: 'MessageFlow'
+            text: 'Message Flow', id: 'MessageFlow',iconCss:'e-bpmn-icons' 
         },
         {
             text: 'Condition type', id: 'Condition type', items: [
-                    {text: 'None', id: 'None'}, {text: 'Conditional Flow', id: 'Conditional Flow'},
-                    {text: 'Normal', id: 'Normal Flow'},
+                    {text: 'Default', id: 'None',iconCss:'e-bpmn-icons'}, {text: 'Conditional', id: 'Conditional Flow',iconCss:'e-bpmn-icons'},
+                    {text: 'Normal', id: 'Normal Flow',iconCss:'e-bpmn-icons'},
             ]
         },
         {
             text: 'Direction', id: 'Direction', items: [
-                    {text: 'None', id: 'None'}, {text: 'Directional', id: 'Directional'},
-                    {text: 'BiDirectional', id: 'BiDirectional'},
+                    {text: 'Default', id: 'None',iconCss:'e-bpmn-icons'}, {text: 'Directional', id: 'Directional',iconCss:'e-bpmn-icons'},
+                    {text: 'Bi-Directional', id: 'BiDirectional',iconCss:'e-bpmn-icons'},
             ]
         },
         {
@@ -693,10 +693,10 @@ var contextMenu = {
             text: 'Event Type', id: 'EventType',
             items: [{ text: 'Start', id: 'Start', iconCss: 'e-event e-bpmn-icons e-NoneStart', },
             { text: 'Intermediate', id: 'Intermediate', iconCss: 'e-event e-bpmn-icons e-InterruptingNone' },
-            { text: 'NonInterruptingStart', id: 'NonInterruptingStart', iconCss: 'e-event e-bpmn-icons e-Noninterruptingstart' },
-            { text: 'ThrowingIntermediate', id: 'ThrowingIntermediate', iconCss: 'e-event e-bpmn-icons e-InterruptingNone' },
+            { text: 'Non-Interrupting Start', id: 'NonInterruptingStart', iconCss: 'e-event e-bpmn-icons e-Noninterruptingstart' },
+            { text: 'Throwing Intermediate', id: 'ThrowingIntermediate', iconCss: 'e-event e-bpmn-icons e-InterruptingNone' },
             {
-                text: 'NonInterruptingIntermediate', id: 'NonInterruptingIntermediate',
+                text: 'Non-Interrupting Intermediate', id: 'NonInterruptingIntermediate',
                 iconCss: 'e-event e-bpmn-icons e-NoninterruptingIntermediate'
             },
             { text: 'End', id: 'End', iconCss: 'e-event e-bpmn-icons e-NoneEnd' }]
@@ -705,8 +705,8 @@ var contextMenu = {
             items: [
                 { text: 'None', id: 'TaskNone', iconCss: 'e-task e-bpmn-icons e-None' },
                 { text: 'Service', id: 'Service', iconCss: 'e-task e-bpmn-icons e-ServiceTask' },
-                { text: 'BusinessRule', id: 'BusinessRule', iconCss: 'e-task e-bpmn-icons e-BusinessRule' },
-                { text: 'InstantiatingReceive', id: 'InstantiatingReceive', iconCss: 'e-task e-bpmn-icons e-InstantiatingReceive' },
+                { text: 'Business Rule', id: 'BusinessRule', iconCss: 'e-task e-bpmn-icons e-BusinessRule' },
+                { text: 'Instantiating Receive', id: 'InstantiatingReceive', iconCss: 'e-task e-bpmn-icons e-InstantiatingReceive' },
                 { text: 'Manual', id: 'Manual', iconCss: 'e-task e-bpmn-icons e-ManualCall' },
                 { text: 'Receive', id: 'Receive', iconCss: 'e-task e-bpmn-icons e-InMessage' },
                 { text: 'Script', id: 'Script', iconCss: 'e-task e-bpmn-icons e-ScriptCall' },
@@ -721,15 +721,15 @@ var contextMenu = {
                 { text: 'Inclusive', iconCss: 'e-gate e-bpmn-icons e-InclusiveGateway', id: 'Inclusive' },
                 { text: 'Parallel', iconCss: 'e-gate e-bpmn-icons e-ParallelGateway', id: 'GatewayParallel' },
                 { text: 'Complex', iconCss: 'e-gate e-bpmn-icons e-ComplexGateway', id: 'Complex' },
-                { text: 'EventBased', iconCss: 'e-gate e-bpmn-icons e-EventBasedGateway', id: 'EventBased' },
-                { text: 'ExclusiveEventBased', iconCss: 'e-gate e-bpmn-icons e-ExclusiveEventBased', id: 'ExclusiveEventBased' },
-                { text: 'ParallelEventBased', iconCss: 'e-gate e-bpmn-icons e-ParallelEventBasedGatewaytostart', id: 'ParallelEventBased' }
+                { text: 'Event Based', iconCss: 'e-gate e-bpmn-icons e-EventBasedGateway', id: 'EventBased' },
+                { text: 'Exclusive Event Based', iconCss: 'e-gate e-bpmn-icons e-ExclusiveEventBased', id: 'ExclusiveEventBased' },
+                { text: 'Parallel Event Based', iconCss: 'e-gate e-bpmn-icons e-ParallelEventBasedGatewaytostart', id: 'ParallelEventBased' }
             ]
         },
         {
             text: 'Message Type', id: 'MessageType', items: [
-                    {text: 'None', id: 'None'}, {text: 'InitiatingMessage', id: 'InitiatingMessage'},
-                    {text: 'NonInitiatingMessage', id: 'NonInitiatingMessage'},
+                    {text: 'Default', id: 'None',iconCss:'e-bpmn-icons'}, {text: 'Initiating Message', id: 'InitiatingMessage',iconCss:'e-bpmn-icons'},
+                    {text: 'Non-Initiating Message', id: 'NonInitiatingMessage',iconCss:'e-bpmn-icons'},
             ]
         },
     ],
@@ -793,6 +793,7 @@ function viewSelectionChange(args)
     items[4].iconCss = diagram.pageSettings.showPageBreaks ? 'sf-icon-check-tick':'';
     items[5].iconCss = diagram.pageSettings.multiplePage ? 'sf-icon-check-tick':'';
     showPageBreaks.checked = diagram.pageSettings.showPageBreaks ? true:false;
+    pageBgColor.value = UtilityMethods.prototype.getHexColor(diagram.pageSettings.background.color);
 
 }
 
@@ -823,13 +824,13 @@ function updateContextMenuSelection(boolean,args)
     if(diagram.selectedItems.nodes.length>0)
     {
         var bpmnNode = diagram.selectedItems.nodes[0];
-        var checked =boolean;
+        var checked = boolean;
         if(bpmnNode.shape.shape === 'Gateway')
         {
             if(!args.parentItem){
                 for(i = 0;i<args.items[21].items.length;i++)
                 {
-                    if(bpmnNode.shape.gateway.type === args.items[21].items[i].text || !checked)
+                    if((bpmnNode.shape.gateway.type === args.items[21].items[i].text || bpmnNode.shape.gateway.type === args.items[21].items[i].id) || !checked)
                     {
                         addTick(args,21,checked);
                     }
@@ -921,7 +922,7 @@ function updateContextMenuSelection(boolean,args)
             if(!args.parentItem)
             {
                 for(i=0;i<args.items[19].items.length;i++){
-                    if(bpmnNode.shape.event.event === args.items[19].items[i].text || !checked)
+                    if((bpmnNode.shape.event.event === args.items[19].items[i].text || bpmnNode.shape.event.event === args.items[19].items[i].id) || !checked)
                     {
                         addTick(args,19,checked);
                     }
@@ -950,6 +951,55 @@ function updateContextMenuSelection(boolean,args)
                 }
                 else{
                     singleItemTick(args,16,false);
+                }
+            }
+        }
+    }
+    if(diagram.selectedItems.connectors.length>0)
+    {
+        var bpmnConnector = diagram.selectedItems.connectors[0];
+        var checked = boolean;
+        if(bpmnConnector.shape.type === 'Bpmn'){
+            if(bpmnConnector.shape.flow === 'Association')
+            {
+                if(!args.parentItem){
+                    for(i=0;i<args.items[9].items.length;i++){
+                        if((bpmnConnector.shape.association === args.items[9].items[i].id || bpmnConnector.shape.association === args.items[9].items[i].text ) || !checked)
+                        {
+                            addTick(args,9,checked);
+                        }
+                    }
+                    singleItemTick(args,5,true);
+                    singleItemTick(args,6,false);
+                    singleItemTick(args,7,false);
+                }
+            }
+            if(bpmnConnector.shape.flow === 'Sequence')
+            {
+                if(!args.parentItem){
+                    for(i=0;i<args.items[8].items.length;i++){
+                        if((bpmnConnector.shape.sequence === args.items[8].items[i].text || bpmnConnector.shape.sequence ===  args.items[8].items[i].id) || !checked)
+                        {
+                            addTick(args,8,checked);
+                        }
+                    }
+                    singleItemTick(args,5,false);
+                    singleItemTick(args,6,true);
+                    singleItemTick(args,7,false);
+                }
+            }
+            if(bpmnConnector.shape.flow === 'Message')
+            {
+                if(!args.parentItem){
+                    for(i=0;i<args.items[22].items.length;i++){
+                        if((bpmnConnector.shape.message === args.items[22].items[i].text || bpmnConnector.shape.message === args.items[22].items[i].id) || !checked)
+                        {
+                            addTick(args,22,checked);
+                        }
+                    }
+                    singleItemTick(args,5,false);
+                    singleItemTick(args,6,false);
+                    singleItemTick(args,7,true);
                 }
             }
         }
@@ -1212,8 +1262,9 @@ function enableEditMenuItems(diagram)
     var toolbarObj = new ej.navigations.Toolbar({
         clicked: function (args) { UtilityMethods.prototype.toolbarClick(args)},
         items: DropDownDataSources.prototype.toolbarItems(),
+        overflowMode: 'Scrollable',
         width:'100%',
-        overflowMode: 'Popup'
+        // overflowMode: 'Popup'
  });
  //Render initialized Toolbar component
  var items = [{ text: 'JPG' }, { text: 'PNG' }, { text: 'BMP' }, { text: 'SVG' }];
@@ -1412,6 +1463,7 @@ var diagram = new ej.diagrams.Diagram({
     rotateChange: function (args) { DiagramClientSideEvents.prototype.rotateChange(args); },
     dragEnter:function (args) { DiagramClientSideEvents.prototype.dragEnter(args); },
     created: function (args) { DiagramClientSideEvents.prototype.created(args);},
+    scrollChange: function (args) { DiagramClientSideEvents.prototype.scrollChange(args);},
     rulerSettings: {
         showRulers: true, dynamicGrid: true, horizontalRuler: { interval: 10,segmentWidth: 100,thickness: 25,markerColor:'#0078d4'},
         verticalRuler: { interval: 10,segmentWidth: 100,thickness: 25,markerColor:'#0078d4'},
@@ -1622,7 +1674,7 @@ function minValue(){
     btnZoomIncrement.appendTo('#btnZoomIncrement');
 var palette = new ej.diagrams.SymbolPalette({
     expandMode: 'Multiple', 
-    symbolMargin: { left: 5, right: 15, top: 15, bottom: 10 }, 
+    symbolMargin: { left: 10, right: 15, top: 15, bottom: 10 }, 
     // symbolHeight: 60, symbolWidth: 55,
     getSymbolInfo: function (symbol) {
         return {  tooltip: symbol.id.replace('_',' ')};
@@ -1646,12 +1698,12 @@ var pageSettingsList = new ej.dropdowns.DropDownList({
 pageSettingsList.appendTo('#pageSettingsList');
 
 var pagePortrait = new ej.buttons.Button({
-    iconCss: 'sf-icon-portrait', isToggle:true,cssClass: `e-flat`
+    iconCss: 'sf-icon-portrait', isToggle:true,cssClass: `e-flat e-primary`
 });
 pagePortrait.appendTo('#pagePortrait');
 
  var pageLandscape = new ej.buttons.Button({
-    iconCss: 'sf-icon-landscape', isToggle:true,cssClass: `e-flat e-active`
+    iconCss: 'sf-icon-landscape', isToggle:true,cssClass: `e-flat e-primary e-active`
 });
 pageLandscape.appendTo('#pageLandscape');
 
@@ -1951,6 +2003,7 @@ connectorProperties.lineWidth = lineWidth;
 var sourceType = new ej.dropdowns.DropDownList({
     dataSource: DropDownDataSources.prototype.decoratorList(),
     fields: { text: 'text', value: 'value' },
+    popupWidth: '140px',
     change: function(args) {
         connectorProperties.sourceType.value = args.value;
         PropertyChange.prototype.connectorPropertyChange({ propertyName: 'sourceType', propertyValue: args });
@@ -1974,6 +2027,7 @@ connectorProperties.sourceSize = sourceSize;
 var targetType = new ej.dropdowns.DropDownList({
     dataSource: DropDownDataSources.prototype.decoratorList(),
     fields: { text: 'text', value: 'value' },
+    popupWidth: '140px',
     change: function(args) {
         connectorProperties.targetType.value = args.value;
         PropertyChange.prototype.connectorPropertyChange({ propertyName: 'targetType', propertyValue: args });

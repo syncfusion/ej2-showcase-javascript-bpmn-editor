@@ -100,7 +100,7 @@ input, button, select, textarea {
 .db-toolbar-editor {
     height: 48px;
     background-color: #e3e3e3;
-    padding: 10px 20px;
+    padding: 10px 10px;
 }
 
 .db-toolbar-container {
@@ -153,7 +153,7 @@ input, button, select, textarea {
 
 .db-palette-parent {
     background-color:#fafafa;
-    width:100%;
+    width:212px;
     height:calc(100% - 28px);
 }
 
@@ -194,6 +194,12 @@ input, button, select, textarea {
 #iconSearch {
     padding-right: 10px;
 }
+.e-symbolpalette .e-clear-searchtext::before {
+    content: '\e58c';
+  }
+  .e-symbolpalette .e-clear-searchtext::before {
+    content: '\ec0f';
+  }
 
 .db-property-editor-container {
     width: 260px;
@@ -1019,10 +1025,10 @@ input[type="color"]::-moz-color-swatch {
     /* border-radius: 3px; */
 }
 
-.db-text-container:hover,
+/* .db-text-container:hover,
 .db-color-container:hover {
     border: 1px solid #B2B2B2;
-}
+} */
 
 .db-color-input {
     width: 100%;
@@ -1694,10 +1700,10 @@ input.db-layer-edit {
     width: 24px;
 }
 
-.e-split-btn-wrapper .e-split-btn,
+/* .e-split-btn-wrapper .e-split-btn,
 .e-split-btn-wrapper:hover .e-split-btn {
     border-right-color: transparent;
-}
+} */
 
 /* Theme Dialog Customization */
 

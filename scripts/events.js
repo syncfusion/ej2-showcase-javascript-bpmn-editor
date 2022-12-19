@@ -60,6 +60,12 @@ var DiagramClientSideEvents = (function () {
             }
         }
     };
+    DiagramClientSideEvents.prototype.scrollChange = function(args)
+    {
+        if(args.panState !=='Start'){
+            btnZoomIncrement.content = Math.round(diagram.scrollSettings.currentZoom * 100) + ' %';
+            }
+    }
     DiagramClientSideEvents.prototype.positionChange = function(args)
     {
         if(diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors).length===1){
@@ -294,7 +300,7 @@ var DiagramClientSideEvents = (function () {
                 diagram.selectedItems.connectors[0].shape.association = 'Directional':
                 diagram.selectedItems.connectors[0].shape.association = 'BiDirectional';
             }
-            if(args.item.id === 'Conditional Flow' || args.item.id === 'Normal')
+            if(args.item.id === 'Conditional Flow' || args.item.id === 'Normal Flow')
             {
                 args.item.id === 'Conditional Flow' ? 
                 diagram.selectedItems.connectors[0].shape.sequence = 'Conditional':
@@ -357,18 +363,21 @@ var DiagramClientSideEvents = (function () {
                             {
                                 hiddenId.splice(hiddenId.indexOf('Sequence'), 1);
                                 hiddenId.splice(hiddenId.indexOf('MessageFlow'), 1);
+                                hiddenId.splice(hiddenId.indexOf('Association'), 1);
                                 hiddenId.splice(hiddenId.indexOf('Direction'), 1);
                             }
                             else if(item.text === 'Sequence' && diagram.selectedItems.connectors[0].shape.flow === 'Sequence')
                             {
                                 hiddenId.splice(hiddenId.indexOf('Association'), 1);
                                 hiddenId.splice(hiddenId.indexOf('MessageFlow'), 1);
+                                hiddenId.splice(hiddenId.indexOf('Sequence'), 1);
                                 hiddenId.splice(hiddenId.indexOf('Condition type'), 1);
                             }
-                            else if(item.text === 'MessageFlow' && diagram.selectedItems.connectors[0].shape.flow === 'Message')
+                            else if(item.text === 'Message Flow' && diagram.selectedItems.connectors[0].shape.flow === 'Message')
                             {
                                 hiddenId.splice(hiddenId.indexOf('Association'), 1);
                                 hiddenId.splice(hiddenId.indexOf('Sequence'), 1);
+                                hiddenId.splice(hiddenId.indexOf('MessageFlow'), 1);
                                 hiddenId.splice(hiddenId.indexOf('MessageType'), 1);
                             }
                         }
@@ -577,7 +586,7 @@ var DiagramClientSideEvents = (function () {
         nodeProperties.strokeWidth.value = node.style.strokeWidth;
         nodeProperties.strokeStyle.value = node.style.strokeDashArray ? node.style.strokeDashArray : 'None';
         nodeProperties.opacity.value = node.style.opacity * 100;
-        node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? document.getElementById('aspectRatioBtn').classList.add('e-active') : document.getElementById('aspectRatioBtn').classList.remove('e-active');
+        nodeProperties.aspectRatio.cssClass = node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? document.getElementById('aspectRatioBtn').classList.add('e-active') : document.getElementById('aspectRatioBtn').classList.remove('e-active');
         node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? aspectRatioBtn.iconCss = 'sf-icon-lock': aspectRatioBtn.iconCss = 'sf-icon-unlock';
         nodeProperties.gradient.value = node.style.gradient.type !== 'None' ? 'Gradient' : 'Solid';
          var gradientElement = document.getElementById('gradientStyle');

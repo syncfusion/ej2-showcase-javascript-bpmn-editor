@@ -168,14 +168,14 @@ var DropDownDataSources = (function () {
             { text: 'None', value: 'None' },
             { text: 'Arrow', value: 'Arrow' },
             { text: 'Diamond', value: 'Diamond' },
-            { text: 'OpenArrow', value: 'OpenArrow' },
+            { text: 'Open Arrow', value: 'OpenArrow' },
             { text: 'Circle', value: 'Circle' },
             { text: 'Square', value: 'Square' },
             { text: 'Fletch', value: 'Fletch' },
-            { text: 'OpenFetch', value: 'OpenFetch' },
-            { text: 'IndentedArrow', value: 'IndentedArrow' },
-            { text: 'OutdentedArrow', value: 'OutdentedArrow' },
-            { text: 'DoubleArrow', value: 'DoubleArrow' }
+            { text: 'Open Fetch', value: 'OpenFetch' },
+            { text: 'Indented Arrow', value: 'IndentedArrow' },
+            { text: 'Outdented Arrow', value: 'OutdentedArrow' },
+            { text: 'Double Arrow', value: 'DoubleArrow' }
         ];
         return decoratorList;
     };
@@ -250,7 +250,7 @@ var DropDownDataSources = (function () {
             { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',  template: '<div></div>', cssClass: 'tb-item-end tb-item-lock-category'},
                             { type: 'Separator', visible: false },
                         {
-                            type: 'Separator',template:'<div style="margin-left:320px;"></div>'
+                            type: 'Separator',template:'<div style="margin-left:330px;"></div>'
                         },
             {
                 cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>',

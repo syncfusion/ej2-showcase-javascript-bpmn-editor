@@ -15,38 +15,38 @@ var DiagramClientSideEvents = (function () {
                 if (selectedItems.length > 1) {
                     multiSelect = true;
                     this.multipleSelectionSettings(selectedItems);
-                        toolbarObj.items[8].tooltipText = 'Group';
-                        toolbarObj.items[8].prefixIcon = 'sf-icon-group';
-                        toolbarObj.items[8].template = '';
-                    multipleSelection(); 
-                    toolbarObj.hideItem(9,false);
-                    toolbarObj.hideItem(18,false);
-                    toolbarObj.hideItem(23,false);
-                    toolbarObj.hideItem(26,false);
+                        toolbarObj.items[7].tooltipText = 'Group';
+                        toolbarObj.items[7].prefixIcon = 'sf-icon-group';
+                    for(var i =7;i<=25;i++){
+                        toolbarObj.items[i].visible = true;
+                    } 
                 }
                 else if (selectedItems.length === 1) {
                     multiSelect = false;
+                    
                     this.singleSelectionSettings(selectedItems[0]);
-                    UtilityMethods.prototype.onClickDisable(false);
-                    toolbarObj.hideItem(9,true);
-                    toolbarObj.hideItem(18,false);
-                    toolbarObj.hideItem(23,false);
-                    toolbarObj.hideItem(26,false);
+                    for(var i=7;i<=25;i++){
+                        if(i<=16)
+                        {
+                            toolbarObj.items[i].visible = false;
+                        }
+                        else{
+                            toolbarObj.items[i].visible = true;
+
+                        }
+                    }
                     if(selectedItems[0].children && selectedItems[0].children.length>0)
                     {
-                        toolbarObj.items[8].tooltipText = 'UnGroup';
-                        toolbarObj.items[8].prefixIcon = 'sf-icon-ungroup';
-                        toolbarObj.items[8].disabled = false;
-                        toolbarObj.items[8].template = '';
+                        toolbarObj.items[7].tooltipText = 'UnGroup';
+                        toolbarObj.items[7].prefixIcon = 'sf-icon-ungroup';
+                        toolbarObj.items[7].visible = true;
                     }
                 }
                 else {
                     this.objectTypeChange('diagram');
-                    UtilityMethods.prototype.onClickDisable(true);
-                    toolbarObj.hideItem(9,true);
-                    toolbarObj.hideItem(18,true);
-                    toolbarObj.hideItem(23,true);
-                    toolbarObj.hideItem(26,true);
+                    for(var i =7;i<=25;i++){
+                        toolbarObj.items[i].visible = false;
+                    } 
                 }
                 if(args.newValue.length>0 && args.newValue[0] instanceof ej.diagrams.Node){
                     diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All|ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles };

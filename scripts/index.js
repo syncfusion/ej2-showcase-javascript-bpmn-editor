@@ -1261,6 +1261,22 @@ function enableEditMenuItems(diagram)
     //Initialize Toolbar component
     var toolbarObj = new ej.navigations.Toolbar({
         clicked: function (args) { UtilityMethods.prototype.toolbarClick(args)},
+        created: function(args) {
+            if(diagram!== undefined){
+                var conTypeBtn = new ej.splitbuttons.DropDownButton({
+                    items: conTypeItems, iconCss:'sf-icon-orthogonal_line',
+                    select: function (args) {UtilityMethods.prototype.onConnectorSelect(args)}
+                });
+                conTypeBtn.appendTo('#conTypeBtn');
+                var btnZoomIncrement = new ej.splitbuttons.DropDownButton({ items: zoomMenuItems, content: Math.round(diagram.scrollSettings.currentZoom*100) + ' %', select: zoomChange,
+                });
+                 btnZoomIncrement.appendTo('#btnZoomIncrement');
+                var hidePropertyBtn = new ej.buttons.Button({
+                    iconCss:'sf-icon-properties',isPrimary: true 
+                });
+                hidePropertyBtn.appendTo('#hideProperty');
+            }
+        },
         items: DropDownDataSources.prototype.toolbarItems(),
         overflowMode: 'Scrollable',
         width:'100%',
@@ -1330,16 +1346,6 @@ function enableToolbarItems(selectedItems) {
         }
     }
 };
-// To hide and show tool bar items on multiple selection
-function multipleSelection()
-{
-    for(i=8;i<26;i++)
-    {
-        if(toolbarObj.items[i].type !=='Separator'){
-            toolbarObj.items[i].template= '';
-        }
-    }
-}
 var uploadObj = new ej.inputs.Uploader({
     asyncSettings: {
         saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',

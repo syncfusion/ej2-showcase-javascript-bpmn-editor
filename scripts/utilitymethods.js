@@ -321,35 +321,6 @@ var UtilityMethods = (function () {
         }
         diagram.dataBind();
     };
-    // To hide and show toolbar items on single selection
-    UtilityMethods.prototype.onClickDisable = function(args)
-    {
-        if(args === false)
-        {
-            for(i=8;i<26;i++)
-            {
-                if(toolbarObj.items[i].type !=='Separator'){
-                    if(i<=17)
-                    {
-                    toolbarObj.items[i].template = '<div></div>';
-                    }
-                    else if(i>17){
-                    toolbarObj.items[i].template = '';
-                    }
-                }
-            }
-        }
-        else{
-            for(i=8;i<26;i++)
-            {
-                if(toolbarObj.items[i].type !=='Separator'){
-                toolbarObj.items[i].template = '<div></div>';
-                }
-               
-            }
-        }
-        toolbarObj.dataBind();
-    };
     // To download diagram json.
     UtilityMethods.prototype.download = function(data)
     {

@@ -15,38 +15,38 @@ var DiagramClientSideEvents = (function () {
                 if (selectedItems.length > 1) {
                     multiSelect = true;
                     this.multipleSelectionSettings(selectedItems);
-                        toolbarObj.items[8].tooltipText = 'Group';
-                        toolbarObj.items[8].prefixIcon = 'sf-icon-group';
-                        toolbarObj.items[8].template = '';
-                    multipleSelection(); 
-                    toolbarObj.hideItem(9,false);
-                    toolbarObj.hideItem(18,false);
-                    toolbarObj.hideItem(23,false);
-                    toolbarObj.hideItem(26,false);
+                        toolbarObj.items[7].tooltipText = 'Group';
+                        toolbarObj.items[7].prefixIcon = 'sf-icon-group';
+                    for(var i =7;i<=25;i++){
+                        toolbarObj.items[i].visible = true;
+                    } 
                 }
                 else if (selectedItems.length === 1) {
                     multiSelect = false;
+                    
                     this.singleSelectionSettings(selectedItems[0]);
-                    UtilityMethods.prototype.onClickDisable(false);
-                    toolbarObj.hideItem(9,true);
-                    toolbarObj.hideItem(18,false);
-                    toolbarObj.hideItem(23,false);
-                    toolbarObj.hideItem(26,false);
+                    for(var i=7;i<=25;i++){
+                        if(i<=16)
+                        {
+                            toolbarObj.items[i].visible = false;
+                        }
+                        else{
+                            toolbarObj.items[i].visible = true;
+
+                        }
+                    }
                     if(selectedItems[0].children && selectedItems[0].children.length>0)
                     {
-                        toolbarObj.items[8].tooltipText = 'UnGroup';
-                        toolbarObj.items[8].prefixIcon = 'sf-icon-ungroup';
-                        toolbarObj.items[8].disabled = false;
-                        toolbarObj.items[8].template = '';
+                        toolbarObj.items[7].tooltipText = 'UnGroup';
+                        toolbarObj.items[7].prefixIcon = 'sf-icon-ungroup';
+                        toolbarObj.items[7].visible = true;
                     }
                 }
                 else {
                     this.objectTypeChange('diagram');
-                    UtilityMethods.prototype.onClickDisable(true);
-                    toolbarObj.hideItem(9,true);
-                    toolbarObj.hideItem(18,true);
-                    toolbarObj.hideItem(23,true);
-                    toolbarObj.hideItem(26,true);
+                    for(var i =7;i<=25;i++){
+                        toolbarObj.items[i].visible = false;
+                    } 
                 }
                 if(args.newValue.length>0 && args.newValue[0] instanceof ej.diagrams.Node){
                     diagram.selectedItems = { constraints: ej.diagrams.SelectorConstraints.All|ej.diagrams.SelectorConstraints.UserHandle, userHandles: handles };
@@ -60,6 +60,12 @@ var DiagramClientSideEvents = (function () {
             }
         }
     };
+    DiagramClientSideEvents.prototype.scrollChange = function(args)
+    {
+        if(args.panState !=='Start'){
+            btnZoomIncrement.content = Math.round(diagram.scrollSettings.currentZoom * 100) + ' %';
+            }
+    }
     DiagramClientSideEvents.prototype.positionChange = function(args)
     {
         if(diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors).length===1){
@@ -294,7 +300,7 @@ var DiagramClientSideEvents = (function () {
                 diagram.selectedItems.connectors[0].shape.association = 'Directional':
                 diagram.selectedItems.connectors[0].shape.association = 'BiDirectional';
             }
-            if(args.item.id === 'Conditional Flow' || args.item.id === 'Normal')
+            if(args.item.id === 'Conditional Flow' || args.item.id === 'Normal Flow')
             {
                 args.item.id === 'Conditional Flow' ? 
                 diagram.selectedItems.connectors[0].shape.sequence = 'Conditional':
@@ -357,18 +363,21 @@ var DiagramClientSideEvents = (function () {
                             {
                                 hiddenId.splice(hiddenId.indexOf('Sequence'), 1);
                                 hiddenId.splice(hiddenId.indexOf('MessageFlow'), 1);
+                                hiddenId.splice(hiddenId.indexOf('Association'), 1);
                                 hiddenId.splice(hiddenId.indexOf('Direction'), 1);
                             }
                             else if(item.text === 'Sequence' && diagram.selectedItems.connectors[0].shape.flow === 'Sequence')
                             {
                                 hiddenId.splice(hiddenId.indexOf('Association'), 1);
                                 hiddenId.splice(hiddenId.indexOf('MessageFlow'), 1);
+                                hiddenId.splice(hiddenId.indexOf('Sequence'), 1);
                                 hiddenId.splice(hiddenId.indexOf('Condition type'), 1);
                             }
-                            else if(item.text === 'MessageFlow' && diagram.selectedItems.connectors[0].shape.flow === 'Message')
+                            else if(item.text === 'Message Flow' && diagram.selectedItems.connectors[0].shape.flow === 'Message')
                             {
                                 hiddenId.splice(hiddenId.indexOf('Association'), 1);
                                 hiddenId.splice(hiddenId.indexOf('Sequence'), 1);
+                                hiddenId.splice(hiddenId.indexOf('MessageFlow'), 1);
                                 hiddenId.splice(hiddenId.indexOf('MessageType'), 1);
                             }
                         }
@@ -577,7 +586,7 @@ var DiagramClientSideEvents = (function () {
         nodeProperties.strokeWidth.value = node.style.strokeWidth;
         nodeProperties.strokeStyle.value = node.style.strokeDashArray ? node.style.strokeDashArray : 'None';
         nodeProperties.opacity.value = node.style.opacity * 100;
-        node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? document.getElementById('aspectRatioBtn').classList.add('e-active') : document.getElementById('aspectRatioBtn').classList.remove('e-active');
+        nodeProperties.aspectRatio.cssClass = node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? document.getElementById('aspectRatioBtn').classList.add('e-active') : document.getElementById('aspectRatioBtn').classList.remove('e-active');
         node.constraints & ej.diagrams.NodeConstraints.AspectRatio ? aspectRatioBtn.iconCss = 'sf-icon-lock': aspectRatioBtn.iconCss = 'sf-icon-unlock';
         nodeProperties.gradient.value = node.style.gradient.type !== 'None' ? 'Gradient' : 'Solid';
          var gradientElement = document.getElementById('gradientStyle');

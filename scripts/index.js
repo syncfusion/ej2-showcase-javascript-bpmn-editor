@@ -495,7 +495,7 @@ var bpmnShapes = [
     },
     {
         id:'Message Flow',
-        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 25 },type: 'Straight',
+        sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 30, y: 22 },type: 'Straight',
         sourceDecorator:{shape:'None'},targetDecorator:{shape:'Arrow',style:{fill:'white'}},
         style:{strokeDashArray:'4 4'}
     },

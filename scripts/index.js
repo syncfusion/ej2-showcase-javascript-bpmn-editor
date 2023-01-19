@@ -503,15 +503,16 @@ var bpmnShapes = [
         id: 'Message', width: 35,
         height: 25,shape: { type: 'Bpmn', shape: 'Message',},
       },
-    {
-        id: 'Data_Object', width: 30, height: 35, 
-        shape: { type: 'Bpmn', shape: 'DataObject', dataObject: { collection: false, type: 'None' } },
-    },
-    {
+        {
         id:'Data_Source', width:30,height:28, shape: {
             type: 'Bpmn', shape: 'DataSource',  
         }
     },
+    {
+        id: 'Data_Object', width: 30, height: 35, 
+        shape: { type: 'Bpmn', shape: 'DataObject', dataObject: { collection: false, type: 'None' } },
+    },
+
    
 ];
 

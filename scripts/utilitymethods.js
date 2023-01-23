@@ -924,11 +924,14 @@ var UtilityMethods = (function () {
         if (diagramContainer.classList.contains(elementType)) {
                 diagramContainer.classList.remove(elementType);
                 document.getElementById('hideProperty').style.backgroundColor = ''
+                document.getElementById('hideProperty').style.color = '#fff'
                 hidePropertyBtn.isPrimary = true;
         }
         else {
             diagramContainer.classList.add(elementType);
             document.getElementById('hideProperty').style.backgroundColor = '#e3e3e3'
+            document.getElementById('hideProperty').style.color = 'black'
+
             hidePropertyBtn.isPrimary = false;
         }
         if (diagram) {

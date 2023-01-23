@@ -255,7 +255,7 @@ var DropDownDataSources = (function () {
             {
                 cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>',align:'Right'
             },
-            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty"></button>',align:'Right'}
+            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty" onClick="hideClicked()"></button>',align:'Right'}
         ];
         return items;
     };

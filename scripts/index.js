@@ -1273,7 +1273,7 @@ function enableEditMenuItems(diagram)
                 });
                  btnZoomIncrement.appendTo('#btnZoomIncrement');
                 var hidePropertyBtn = new ej.buttons.Button({
-                    iconCss:'sf-icon-properties',isPrimary: true 
+                    iconCss:'sf-icon-properties',isPrimary: true
                 });
                 hidePropertyBtn.appendTo('#hideProperty');
             }
@@ -1361,11 +1361,15 @@ uploadObj.appendTo('#fileupload');
  toolbarObj.appendTo('#toolbarEditor');
  conTypeBtn.appendTo('#conTypeBtn');
  hidePropertyBtn = new ej.buttons.Button({
-     iconCss:'sf-icon-properties',isPrimary: true 
+    iconCss:'sf-icon-properties',isPrimary: true
  });
  hidePropertyBtn.appendTo('#hideProperty');
 
- document.getElementById('hideProperty').onclick= (args)=>{
+//  document.getElementById('hideProperty').onmouseup= (args)=>{
+//     UtilityMethods.prototype.hideElements('hide-properties',diagram);
+//  }
+ function hideClicked()
+ {
     UtilityMethods.prototype.hideElements('hide-properties',diagram);
  }
 // To flip diagram objects
@@ -1982,7 +1986,7 @@ var lineColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-border_colour' 
 lineColorIconBtn.appendTo('#lineColorIconBtn');
 
 var lineStyle = new ej.dropdowns.DropDownList({
-    dataSource:DropDownDataSources.prototype.borderStyles(),
+    dataSource:DropDownDataSources.prototype.lineStyles(),
     fields: { text: 'text', value: 'value' },
     popupWidth: '160px',
     itemTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',

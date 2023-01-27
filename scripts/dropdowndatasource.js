@@ -146,6 +146,17 @@ var DropDownDataSources = (function () {
         ];
         return borderStyles;
     };
+    DropDownDataSources.prototype.lineStyles= function()
+    {
+        var lineStyles = [
+            { text: '', value: '', className: 'ddl-svg-style ddl_linestyle_none' },
+            { text: '2 2', value: '2 2', className: 'ddl-svg-style ddl_linestyle_one_two' },
+            { text: '4 4', value: '4 4', className: 'ddl-svg-style ddl_linestyle_three_three' },
+            { text: '5,3', value: '5,3', className: 'ddl-svg-style ddl_linestyle_five_three' },
+            { text: '4,4,1', value: '4,4,1', className: 'ddl-svg-style ddl_linestyle_four_four_one' }
+        ];
+        return lineStyles;
+    };
     DropDownDataSources.prototype.gradientDirections = function()
     {
         var gradientDirections = [
@@ -255,7 +266,7 @@ var DropDownDataSources = (function () {
             {
                 cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>',align:'Right'
             },
-            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty"></button>',align:'Right'}
+            { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty" onClick="hideClicked()"></button>',align:'Right'}
         ];
         return items;
     };

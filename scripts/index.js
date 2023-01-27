@@ -1986,7 +1986,7 @@ var lineColorIconBtn = new ej.buttons.Button({ iconCss: 'sf-icon-border_colour' 
 lineColorIconBtn.appendTo('#lineColorIconBtn');
 
 var lineStyle = new ej.dropdowns.DropDownList({
-    dataSource:DropDownDataSources.prototype.borderStyles(),
+    dataSource:DropDownDataSources.prototype.lineStyles(),
     fields: { text: 'text', value: 'value' },
     popupWidth: '160px',
     itemTemplate: '<div class="db-ddl-template-style"><span class="${className}"></span></div>',

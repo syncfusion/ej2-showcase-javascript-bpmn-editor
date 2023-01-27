@@ -352,7 +352,23 @@ var DiagramClientSideEvents = (function () {
                     hiddenId.splice(hiddenId.indexOf(args.items[i].id), 1);
                 }
             }
-            if (diagram.selectedItems.nodes.length || diagram.selectedItems.connectors.length) {
+            var canAllow = false;
+            if(diagram.selectedItems.nodes.length){
+                if(diagram.selectedItems.nodes[0].children === undefined){
+                    canAllow = true;
+                }
+                else{
+                    var item = args.items[i];
+                    if(item.text === 'Cut' || item.text === 'Copy' || item.text === 'Delete')
+                        {
+                            hiddenId.splice(hiddenId.indexOf(item.id), 1);
+                        } 
+                }
+            }
+            if( diagram.selectedItems.connectors.length){
+                canAllow = true;
+            }
+            if ((diagram.selectedItems.nodes.length || diagram.selectedItems.connectors.length) && canAllow) {
                 
                     var item = args.items[i];
                     if(diagram.selectedItems.nodes.length< 1 && diagram.selectedItems.connectors.length)

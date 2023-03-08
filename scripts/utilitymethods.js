@@ -149,9 +149,6 @@ var UtilityMethods = (function () {
             case 'Print':
                 printSettings.pageHeight = pageSettings.pageHeight;
                 printSettings.pageWidth = pageSettings.pageWidth;
-                printSettings.paperSize = pageSettings.paperSize;
-                printSettings.isPortrait = pageSettings.isPortrait;
-                printSettings.isLandscape = !pageSettings.isPortrait;
                 printDialog.show();
                 break;
             case 'Export':
@@ -256,6 +253,7 @@ var UtilityMethods = (function () {
                 diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
                 diagram.selectedItems.userHandles = [];
                 diagram.drawingObject.type = 'Orthogonal';
+                diagram.drawingObject.shape = {type:'Bpmn',sequence:'Normal'};
                 this.removeSelectedToolbarItem();
                 break;
             case 'Straight':
@@ -264,6 +262,7 @@ var UtilityMethods = (function () {
                 diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
                 diagram.selectedItems.userHandles = [];
                 diagram.drawingObject.type = 'Straight';
+                diagram.drawingObject.shape = {type:'Bpmn',sequence:'Normal'};
                 this.removeSelectedToolbarItem();
                 break;
             case 'Bezier':
@@ -272,6 +271,7 @@ var UtilityMethods = (function () {
                 diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
                 diagram.selectedItems.userHandles = [];
                 diagram.drawingObject.type = 'Bezier';
+                diagram.drawingObject.shape = {type:'Bpmn',sequence:'Normal'};
                 this.removeSelectedToolbarItem();
                 break;
             case 'Show Lines':
@@ -357,6 +357,7 @@ var UtilityMethods = (function () {
         diagram.clearSelection();
         diagram.drawingObject.sourceID = '';
         diagram.drawingObject.type = args.item.text;
+        diagram.drawingObject.shape = {type:'Bpmn',sequence:'Normal'};
         diagram.tool = ej.diagrams.DiagramTools.ContinuousDraw;
         diagram.selectedItems.userHandles = [];
         diagram.dataBind();
@@ -885,8 +886,7 @@ var UtilityMethods = (function () {
         }
         diagram.print({
             region: printRegionDropdown.value, pageHeight: pageHeight, pageWidth: pageWidth,
-            multiplePage: printMultiplePage.checked,
-            pageOrientation:printPortrait.checked ? 'Portrait' : 'Landscape'
+            multiplePage: !printMultiplePage.checked,
         });
         printDialog.hide();
     };

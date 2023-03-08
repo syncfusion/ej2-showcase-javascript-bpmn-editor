@@ -260,11 +260,8 @@ var DropDownDataSources = (function () {
             {prefixIcon: 'sf-icon-Lock tb-icons', tooltipText: 'Lock',align:'Center',visible:false ,     cssClass: 'tb-item-start tb-item-lock-category'}, 
             { prefixIcon: 'sf-icon-delete', tooltipText: 'Delete',align:'Center',visible:false ,   cssClass: 'tb-item-end tb-item-lock-category'},
                             { type: 'Separator', visible: false,align:'Center'},
-                        // {
-                        //     type: 'Separator',template:'<div style="margin-left:330px;"></div>'
-                        // },
             {
-                cssClass: 'tb-item-end tb-zoom-dropdown-btn', template: '<button id="btnZoomIncrement"></button>',align:'Right'
+                cssClass: 'tb-item-end tb-zoom-dropdown-btn',tooltipText:'Zoom', template: '<button id="btnZoomIncrement"></button>',align:'Right'
             },
             { prefixIcon: 'sf-icon-properties' , tooltipText: 'Hide/Show property',template:'<button id="hideProperty" onClick="hideClicked()"></button>',align:'Right'}
         ];

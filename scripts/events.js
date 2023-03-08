@@ -63,7 +63,8 @@ var DiagramClientSideEvents = (function () {
     DiagramClientSideEvents.prototype.scrollChange = function(args)
     {
         if(args.panState !=='Start'){
-            btnZoomIncrement.content = Math.round(diagram.scrollSettings.currentZoom * 100) + ' %';
+            var btn = document.getElementById('btnZoomIncrement').ej2_instances[0];
+            btn.content = Math.round(diagram.scrollSettings.currentZoom * 100) + ' %';
             }
     }
     DiagramClientSideEvents.prototype.positionChange = function(args)
@@ -138,10 +139,15 @@ var DiagramClientSideEvents = (function () {
                diagram.paste(diagram.selectedItems.selectedObjects);
                break;
             case 'Draw':
+                if(diagram.drawingObject !== undefined){
                 diagram.drawingObject.shape = {};
                 diagram.drawingObject.type = diagram.drawingObject.type?diagram.drawingObject.type:'Orthogonal';
                 diagram.drawingObject.sourceID = drawingNode.id;
                 diagram.dataBind();
+                }
+                else{
+                    diagram.drawingObject = {type:'Orthogonal', sourceID: drawingNode.id,shape:{type:'Bpmn',sequence:'Normal'}};
+                }
                 break;
         }
     }
@@ -326,6 +332,9 @@ var DiagramClientSideEvents = (function () {
         if (args.item.id === 'SelectAll'){
             diagram.selectAll();
         }
+        if(args.item.id === 'TextAnnotation'){
+            diagram.addTextAnnotation({ id: 'newAnnotation', text: 'Text', length: 150, angle: 290 }, diagram.selectedItems.nodes[0])
+        }
     };
     DiagramClientSideEvents.prototype.contextMenuOpen = function(args)
     {
@@ -334,7 +343,7 @@ var DiagramClientSideEvents = (function () {
         if (args.element.className !== 'e-menu-parent e-ul ') {
             hiddenId = ['Adhoc', 'Loop', 'taskCompensation', 'Activity-Type', 'Boundary', 'DataObject',
                 'collection', 'DeftCall', 'TriggerResult', 'EventType', 'TaskType', 'GateWay','Copy','Paste','Cut','SelectAll','Delete',
-            'Association','Sequence','MessageFlow','Condition type','Direction','MessageType'];
+            'Association','Sequence','MessageFlow','Condition type','Direction','MessageType','TextAnnotation'];
         }
         for (var i = 0; i < args.items.length; i++) {
             if(args.items[i].text === 'Paste')
@@ -353,8 +362,8 @@ var DiagramClientSideEvents = (function () {
                 }
             }
             var canAllow = false;
-            if(diagram.selectedItems.nodes.length){
-                if(diagram.selectedItems.nodes[0].children === undefined){
+            if(diagram.selectedItems.nodes.length && diagram.selectedItems.nodes[0].shape.shape !== 'TextAnnotation'){
+                if(diagram.selectedItems.nodes[0].children === undefined ){
                     canAllow = true;
                 }
                 else{
@@ -365,10 +374,11 @@ var DiagramClientSideEvents = (function () {
                         } 
                 }
             }
-            if( diagram.selectedItems.connectors.length){
+            if( diagram.selectedItems.connectors.length && !(diagram.selectedItems.connectors[0].targetID.includes('newAnnotation'))){
                 canAllow = true;
             }
-            if ((diagram.selectedItems.nodes.length || diagram.selectedItems.connectors.length) && canAllow) {
+            var selectedObjects = diagram.selectedItems.nodes.concat(diagram.selectedItems.connectors);
+            if ((diagram.selectedItems.nodes.length || diagram.selectedItems.connectors.length) && canAllow && selectedObjects.length === 1) {
                 
                     var item = args.items[i];
                     if(diagram.selectedItems.nodes.length< 1 && diagram.selectedItems.connectors.length)
@@ -429,6 +439,11 @@ var DiagramClientSideEvents = (function () {
                             }
                         }
                     }
+                    if(item.text === 'Add Text Annotation'){
+                        if(diagram.selectedItems.nodes.length && diagram.selectedItems.nodes[0].shape.shape !== 'Message' && diagram.selectedItems.nodes[0].shape.shape !== 'DataSource'){
+                        hiddenId.splice(hiddenId.indexOf(item.id), 1);
+                        }
+                    }
                     if (item.text === 'Data Object') {
                         if ((bpmnShape.shape === 'DataObject')) {
                             hiddenId.splice(hiddenId.indexOf(item.id), 1);
@@ -468,6 +483,14 @@ var DiagramClientSideEvents = (function () {
                     }
                 }
             }
+            }
+            else if(selectedObjects.length>1){
+                let item = args.items[i];
+                if(item.text === 'Cut' || item.text === 'Copy' || item.text === 'Delete')
+                {
+                    if(hiddenId.indexOf(item.id)>-1)
+                    hiddenId.splice(hiddenId.indexOf(item.id), 1);
+                }
             }
         }
         updateContextMenuSelection(true,args);

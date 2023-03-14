@@ -501,7 +501,7 @@ var bpmnShapes = [
     },
     {
         id: 'Message', width: 35,
-        height: 25,shape: { type: 'Bpmn', shape: 'Message',},
+        height: 26,shape: { type: 'Bpmn', shape: 'Message',},
       },
         {
         id:'Data_Source', width:30,height:28, shape: {
@@ -516,88 +516,62 @@ var bpmnShapes = [
    
 ];
 
-//Initialize connectors for symbol palette
-var connectorSymbols = [
-    {
-        id: 'Link1', type: 'Orthogonal', sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },
-        targetDecorator: { shape: 'Arrow', style:{strokeColor: '#757575', fill: '#757575'} }, style: { strokeWidth: 2, strokeColor: '#757575' }
-    },
-    {
-        id: 'Link2', type: 'Orthogonal', sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },
-        targetDecorator: { shape: 'Arrow', style:{strokeColor: '#757575', fill: '#757575'} }, style: { strokeWidth: 2, strokeDashArray: '4 4', strokeColor: '#757575' }
-    },
-    {
-        id: 'Link3', type: 'Straight', sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 },
-        targetDecorator: { shape: 'Arrow', style:{strokeColor: '#757575', fill: '#757575'} }, style: { strokeWidth: 2, strokeColor: '#757575' }
-    },
-    {
-        id: 'link4', sourcePoint: { x: 0, y: 0 }, targetPoint: { x: 40, y: 40 }, type: 'Orthogonal',
-        targetDecorator: { style:{strokeColor: '#757575', fill: '#757575'} },
-        shape: {
-            type: 'Bpmn',
-            flow: 'Association',
-            association: 'Directional'
-        }, style: {
-            strokeDashArray: '2,2', strokeColor: '#757575'
-        },
-    },
-];
 // Initialize connectors for diagram
 var connectors = [
     {
-        id:'connector1',sourceID:'Start1',targetID:'Task1',type:'Orthogonal'
+        id:'connector1',sourceID:'Start1',targetID:'Task1',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector2',sourceID:'Task1',targetID:'Task2',type:'Orthogonal'
+        id:'connector2',sourceID:'Task1',targetID:'Task2',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector3',sourceID:'Task2',targetID:'Gateway1',type:'Orthogonal'
+        id:'connector3',sourceID:'Task2',targetID:'Gateway1',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector4',sourceID:'Gateway1',targetID:'Task3',annotations:[{content:'Book is on Loan'}],type:'Orthogonal'
+        id:'connector4',sourceID:'Gateway1',targetID:'Task3',annotations:[{content:'Book is on Loan'}],type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector5',sourceID:'Task3',targetID:'Gateway2',type:'Orthogonal'
+        id:'connector5',sourceID:'Task3',targetID:'Gateway2',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector6',sourceID:'Gateway2',targetID:'Intermediate1',sourcePortID:'right',targetPortID:'left',type:'Orthogonal'
+        id:'connector6',sourceID:'Gateway2',targetID:'Intermediate1',sourcePortID:'right',targetPortID:'left',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector7',sourceID:'Intermediate1',targetID:'Task4',type:'Orthogonal'
+        id:'connector7',sourceID:'Intermediate1',targetID:'Task4',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector8',sourceID:'Task4',targetID:'End1',type:'Orthogonal'
+        id:'connector8',sourceID:'Task4',targetID:'End1',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector9',sourceID:'Gateway2',targetID:'Intermediate2',sourcePortID:'top',targetPortID:'left',type:'Orthogonal'
+        id:'connector9',sourceID:'Gateway2',targetID:'Intermediate2',sourcePortID:'top',targetPortID:'left',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector10',sourceID:'Gateway2',targetID:'Intermediate3',sourcePortID:'bottom',targetPortID:'left',type:'Orthogonal'
+        id:'connector10',sourceID:'Gateway2',targetID:'Intermediate3',sourcePortID:'bottom',targetPortID:'left',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector11',sourceID:'Intermediate2',targetID:'Task7',type:'Orthogonal'
+        id:'connector11',sourceID:'Intermediate2',targetID:'Task7',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector12',sourceID:'Intermediate3',targetID:'Task4',sourcePortID:'right',targetPortID:'bottom',type:'Orthogonal'
+        id:'connector12',sourceID:'Intermediate3',targetID:'Task4',sourcePortID:'right',targetPortID:'bottom',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector13',sourceID:'Task7',targetID:'Task8',type:'Orthogonal'
+        id:'connector13',sourceID:'Task7',targetID:'Task8',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector14',sourceID:'Task8',targetID:'Intermediate4',sourcePortID:'top',targetPortID:'right',type:'Orthogonal'
+        id:'connector14',sourceID:'Task8',targetID:'Intermediate4',sourcePortID:'top',targetPortID:'right',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector15',sourceID:'Intermediate4',targetID:'Task2',sourcePortID:'left',targetPortID:'top',type:'Orthogonal'
+        id:'connector15',sourceID:'Intermediate4',targetID:'Task2',sourcePortID:'left',targetPortID:'top',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
         id:'connector16',sourceID:'Gateway1',targetID:'Task5',sourcePortID:'bottom',targetPortID:'left',
-        annotations:[{content:'Book is Avaliable'}],type:'Orthogonal'
+        annotations:[{content:'Book is Avaliable'}],type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector17',sourceID:'Task5',targetID:'Task6',type:'Orthogonal'
+        id:'connector17',sourceID:'Task5',targetID:'Task6',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
     {
-        id:'connector18',sourceID:'Task6',targetID:'End1',sourcePortID:'right',targetPortID:'bottom',type:'Orthogonal'
+        id:'connector18',sourceID:'Task6',targetID:'End1',sourcePortID:'right',targetPortID:'bottom',type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}
     },
 ]
 //...
@@ -733,6 +707,9 @@ var contextMenu = {
                     {text: 'Non-Initiating Message', id: 'NonInitiatingMessage',iconCss:'e-bpmn-icons'},
             ]
         },
+        {
+            text:'Add Text Annotation',id:'TextAnnotation',iconCss:'e-bpmn-icons e-TextAnnotation'
+        }
     ],
     showCustomMenuOnly: true,
 };
@@ -1266,6 +1243,7 @@ function enableEditMenuItems(diagram)
             if(diagram!== undefined){
                 var conTypeBtn = new ej.splitbuttons.DropDownButton({
                     items: conTypeItems, iconCss:'sf-icon-orthogonal_line',
+                    cssClass:(diagram.tool === 16 && diagram.drawingObject.shape.type === 'Bpmn')? 'tb-item-middle tb-item-selected' : 'tb-item-middle',
                     select: function (args) {UtilityMethods.prototype.onConnectorSelect(args)}
                 });
                 conTypeBtn.appendTo('#conTypeBtn');
@@ -1453,7 +1431,7 @@ var diagram = new ej.diagrams.Diagram({
     width: '100%', height: '100%',
     nodes: nodes,
     connectors:connectors,
-    drawingObject:{type:'Orthogonal'},
+    drawingObject:{type:'Orthogonal',shape:{type:'Bpmn',sequence:'Normal'}},
     pageSettings:{showPageBreaks:true},
     pageSettings: {
         background: { color: '#FFFFFF' }, width: 600, height: 1500, margin: { left: 5, top: 5 },
@@ -2176,9 +2154,6 @@ var toolbarTextAlignmentLeft = new ej.navigations.Toolbar({
         { prefixIcon: 'sf-icon-align-text-left', tooltipText: 'Align Right', cssClass: 'tb-item-start' },
         { prefixIcon: 'sf-icon-align-text-horizontal-center', tooltipText: 'Align Center', cssClass: 'tb-item-middle' },
         { prefixIcon: 'sf-icon-align-text-rignt', tooltipText: 'Align Left', cssClass: 'tb-item-middle' },
-        // { prefixIcon: 'sf-icon-align-text-top', tooltipText: 'Align Bottom', cssClass: 'tb-item-middle' },
-        // { prefixIcon: 'sf-icon-align-text-vertical-center', tooltipText: 'Align Middle', cssClass: 'tb-item-middle' },
-        // { prefixIcon: 'sf-icon-align-text-bottom', tooltipText: 'Align Top', cssClass: 'tb-item-end' }
     ]
 });
 toolbarTextAlignmentLeft.appendTo('#toolbarTextAlignmentLeft');
@@ -2186,12 +2161,9 @@ var toolbarTextAlignmentTop = new ej.navigations.Toolbar({
     overflowMode: 'Scrollable',
     clicked: function (args) { toolbarTextAlignChange(args); },
     items: [
-        // { prefixIcon: 'sf-icon-align-text-left', tooltipText: 'Align Right', cssClass: 'tb-item-start' },
-        // { prefixIcon: 'sf-icon-align-text-horizontal-center', tooltipText: 'Align Center', cssClass: 'tb-item-middle' },
-        // { prefixIcon: 'sf-icon-align-text-rignt', tooltipText: 'Align Left', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-align-text-top', tooltipText: 'Align Bottom', cssClass: 'tb-item-middle' },
+        { prefixIcon: 'sf-icon-align-text-top', tooltipText: 'Align Top', cssClass: 'tb-item-middle' },
         { prefixIcon: 'sf-icon-align-text-vertical-center', tooltipText: 'Align Middle', cssClass: 'tb-item-middle' },
-        { prefixIcon: 'sf-icon-align-text-bottom', tooltipText: 'Align Top', cssClass: 'tb-item-end' }
+        { prefixIcon: 'sf-icon-align-text-bottom', tooltipText: 'Align Bottom', cssClass: 'tb-item-end' }
     ]
 });
 toolbarTextAlignmentTop.appendTo('#toolbarTextAlignmentTop');
@@ -2226,6 +2198,12 @@ function toolbarTextSubAlignChange(args) {
 };
 function toolbarTextAlignChange(args) {
     var propertyName = args.item.tooltipText.replace('Align ', '');
+    if(propertyName === 'Top'){
+        propertyName = 'Bottom';
+    }
+    else if(propertyName === 'Bottom'){
+        propertyName = 'Top';
+    }
     PropertyChange.prototype.textPropertiesChange(propertyName, propertyName);
 };
 
@@ -2253,14 +2231,7 @@ var printDialog = new ej.popups.Dialog({
     visible: false,
     showCloseIcon: true,
     content: '<div id="printDialogContent"><div class="row"><div class="row">Region</div> <div class="row db-dialog-child-prop-row">' +
-    '<input type="text" id="printRegionDropdown"/> </div> </div><div class="row db-dialog-prop-row"><div class="row">Print Settings</div>' +
-    '<div class="row db-dialog-child-prop-row"><input type="text" id="printPaperSizeDropdown"/> </div> </div>' +
-    '<div id="printCustomSize" class="row db-dialog-prop-row" style="display:none; height: 28px;"> <div class="col-xs-6 db-col-left">' +
-    '<div class="db-text-container"><div class="db-text"><span>W</span></div><div class="db-text-input"><input id="printPageWidth" type="text" />' +
-    '</div> </div> </div> <div class="col-xs-6 db-col-right"><div class="db-text-container"> <div class="db-text"><span>H</span></div>' +
-    '<div class="db-text-input"><input id="printPageHeight" type="text" /></div></div></div></div><div id="printOrientation" class="row db-dialog-prop-row" style="height: 28px; padding: 5px 0px;">' +
-    '<div class="col-xs-3 db-prop-col-style" style="margin-right: 8px;"><input id="printPortrait" type="radio"></div> <div class="col-xs-3 db-prop-col-style">' +
-    '<input id="printLandscape" type="radio"></div></div> <div class="row db-dialog-prop-row" style="margin-top: 16px"> <input id="printMultiplePage" type="checkbox" /> </div> </div>'
+    '<input type="text" id="printRegionDropdown"/> </div> </div><div class="row db-dialog-prop-row" style="margin-top: 16px"> <input id="printMultiplePage" type="checkbox" checked=true/> </div> </div>'
 });
 printDialog.appendTo('#printDialog');
 

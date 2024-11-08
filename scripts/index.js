@@ -1327,8 +1327,8 @@ function enableToolbarItems(selectedItems) {
 };
 var uploadObj = new ej.inputs.Uploader({
     asyncSettings: {
-        saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
-        removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
+        saveUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Save',
+        removeUrl: 'https://services.syncfusion.com/js/production/api/FileUploader/Remove'
     },
     success: onUploadSuccess,
     showFileList:false
